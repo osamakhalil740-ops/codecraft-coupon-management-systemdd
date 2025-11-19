@@ -56,6 +56,32 @@ export const translations = {
             description: "Scale through partner referrals with automated credit allocation and performance insights."
           }
         ]
+      },
+      howItWorks: {
+        title: "How It Works",
+        step1: {
+          title: "Create Your Campaign",
+          description: "Set up your coupon campaign with custom terms, rewards, and targeting options in minutes."
+        },
+        step2: {
+          title: "Share with Partners",
+          description: "Distribute your campaigns through our affiliate network and partner ecosystem for maximum reach."
+        },
+        step3: {
+          title: "Track & Optimize",
+          description: "Monitor performance in real-time and optimize your campaigns based on detailed analytics."
+        }
+      },
+      workflow: {
+        title: "Simple B2B Workflow",
+        description: "From creation to conversion, our platform handles the entire coupon lifecycle seamlessly."
+      },
+      ctaSection: {
+        highlight: "Ready to grow?",
+        title: "Start Your Campaign Today",
+        subtitle: "Join thousands of businesses already growing through strategic partnerships",
+        primary: "Get Started Free",
+        secondary: "Book a Demo"
       }
     },
     loginPage: {
@@ -74,8 +100,15 @@ export const translations = {
       loginButton: "Sign In",
       signupButton: "Create Account",
       processing: "Processing...",
-      referred: "You were referred by: {{referrer}}"
+      referred: "You were referred by: {{referrer}}",
+      dontHaveAccount: "Don't have an account?",
+      signUp: "Sign up",
+      welcomeBack: "Welcome back"
     },
+    welcomeBack: "Welcome back",
+    Email: "Email",
+    Password: "Password",
+    "Sign In": "Sign In",
     dashboard: {
       welcome: "Welcome back",
       yourCredits: "Your Credits",
@@ -219,7 +252,9 @@ export const translations = {
     },
     qrCodeModal: {
       title: "Share this QR Code or Link"
-    }
+    },
+    CodeCraft: "CodeCraft",
+    English: "English"
   },
   ar: {
     common: {
@@ -277,6 +312,32 @@ export const translations = {
             description: "توسع من خلال إحالات الشركاء مع تخصيص الائتمان التلقائي ورؤى الأداء."
           }
         ]
+      },
+      howItWorks: {
+        title: "كيف يعمل",
+        step1: {
+          title: "أنشئ حملتك",
+          description: "قم بإعداد حملة القسائم الخاصة بك مع شروط وجوائز وخيارات استهداف مخصصة في دقائق."
+        },
+        step2: {
+          title: "شارك مع الشركاء",
+          description: "وزع حملاتك من خلال شبكة التسويق التابع ونظام الشركاء للوصول الأقصى."
+        },
+        step3: {
+          title: "تتبع وحسن",
+          description: "راقب الأداء في الوقت الفعلي وحسن حملاتك بناءً على التحليلات التفصيلية."
+        }
+      },
+      workflow: {
+        title: "سير عمل B2B بسيط",
+        description: "من الإنشاء إلى التحويل، منصتنا تتعامل مع دورة حياة القسيمة بأكملها بسلاسة."
+      },
+      ctaSection: {
+        highlight: "مستعد للنمو؟",
+        title: "ابدأ حملتك اليوم",
+        subtitle: "انضم إلى الآلاف من الشركات التي تنمو بالفعل من خلال الشراكات الاستراتيجية",
+        primary: "ابدأ مجاناً",
+        secondary: "احجز عرضاً توضيحياً"
       }
     },
     loginPage: {
