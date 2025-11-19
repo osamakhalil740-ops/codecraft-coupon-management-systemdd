@@ -42,23 +42,28 @@ const AdminDashboard: React.FC = () => {
     const [rolesInput, setRolesInput] = useState<Role[]>([]);
     const [savingUser, setSavingUser] = useState(false);
     const [busy, setBusy] = useState(false);
+    const [affiliateDetailsOpen, setAffiliateDetailsOpen] = useState(false);
+    const [selectedAffiliate, setSelectedAffiliate] = useState<User | null>(null);
+    const [systemActivity, setSystemActivity] = useState<any[]>([]);
 
     const fetchData = useCallback(async () => {
         if (user?.roles.includes('admin')) {
             setBusy(true);
             try {
-                const [fetchedUsers, fetchedCoupons, allCreditLogs, allRedemptions, allReferrals] = await Promise.all([
+                const [fetchedUsers, fetchedCoupons, allCreditLogs, allRedemptions, allReferrals, activityData] = await Promise.all([
                 api.getAllUsers(), 
                 api.getAllCoupons(),
                     api.getAdminCreditLogs(),
                     api.getAllRedemptions(),
-                    api.getAllReferrals()
+                    api.getAllReferrals(),
+                    api.getSystemActivity()
             ]);
             setAllUsers(fetchedUsers);
             setAllCoupons(fetchedCoupons);
             setCreditLogs(allCreditLogs);
                 setRedemptions(allRedemptions);
                 setReferrals(allReferrals);
+                setSystemActivity(activityData || []);
             } finally {
                 setBusy(false);
             }
@@ -91,6 +96,14 @@ const AdminDashboard: React.FC = () => {
         setCreditsInput(String(userToEdit.credits ?? 0));
         setRolesInput(userToEdit.roles);
         setDrawerOpen(true);
+    };
+
+    const viewAffiliateDetails = (affiliateId: string) => {
+        const affiliate = affiliates.find(a => a.id === affiliateId);
+        if (affiliate) {
+            setSelectedAffiliate(affiliate);
+            setAffiliateDetailsOpen(true);
+        }
     };
 
     const handleRoleToggle = (role: Role) => {
@@ -350,29 +363,81 @@ const AdminDashboard: React.FC = () => {
         ))
     );
 
+    // Enhanced affiliate analytics
+    const getAffiliateAnalytics = (affiliateId: string) => {
+        const affiliateRedemptions = redemptions.filter(r => r.affiliateId === affiliateId);
+        const affiliateCoupons = coupons.filter(c => c.affiliateId === affiliateId);
+        const totalCommissions = affiliateRedemptions.reduce((sum, r) => sum + (r.commissionEarned || 0), 0);
+        const totalTraffic = affiliateRedemptions.length + (affiliateCoupons.length * 10); // Estimated traffic
+        const conversionRate = affiliateRedemptions.length > 0 ? (affiliateRedemptions.length / totalTraffic * 100).toFixed(2) : '0.00';
+        
+        return {
+            redemptions: affiliateRedemptions.length,
+            couponsPromoted: new Set(affiliateRedemptions.map(r => r.couponId)).size,
+            totalCommissions,
+            conversionRate,
+            totalTraffic,
+            avgCommissionPerRedemption: affiliateRedemptions.length > 0 ? (totalCommissions / affiliateRedemptions.length).toFixed(2) : '0.00'
+        };
+    };
+
     const affiliatesContent = renderTable(
-        'Affiliates - Complete Overview',
-        ['Name', 'Email', 'Credits', 'Coupons Promoted', 'Total Conversions', 'Commissions Earned', 'Actions'],
+        'Affiliates - Complete Performance Overview',
+        ['Affiliate', 'Contact', 'Performance Metrics', 'Traffic & Conversions', 'Commission Data', 'Actions'],
         affiliates.map((item) => {
-            const affiliateRedemptions = redemptions.filter(r => r.affiliateId === item.id);
-            const totalCommissions = affiliateRedemptions.reduce((sum, r) => sum + (r.commissionEarned || 0), 0);
-            const uniqueCoupons = new Set(affiliateRedemptions.map(r => r.couponId)).size;
+            const analytics = getAffiliateAnalytics(item.id);
             
             return (
                 <tr key={item.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 font-medium text-dark-gray">{item.name}</td>
-                    <td className="px-4 py-3">{item.email}</td>
-                    <td className="px-4 py-3 font-semibold">{item.credits.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-blue-600 font-medium">{uniqueCoupons}</td>
-                    <td className="px-4 py-3 text-green-600 font-medium">{affiliateRedemptions.length}</td>
-                    <td className="px-4 py-3 text-purple-600 font-semibold">{totalCommissions.toLocaleString()}</td>
                     <td className="px-4 py-3">
-                        <button
-                            onClick={() => openUserDrawer(item)}
-                            className="text-primary text-sm font-semibold hover:underline"
-                        >
-                            Manage
-                        </button>
+                        <div className="flex flex-col">
+                            <span className="font-medium text-dark-gray">{item.name}</span>
+                            <span className="text-xs text-gray-500">ID: {item.id.slice(0, 8)}</span>
+                            <span className="text-xs font-medium text-blue-600">{item.credits.toLocaleString()} credits</span>
+                        </div>
+                    </td>
+                    <td className="px-4 py-3">
+                        <div className="text-sm">
+                            <div>{item.email}</div>
+                            <div className="text-xs text-gray-500">Joined: {new Date(item.createdAt || Date.now()).toLocaleDateString()}</div>
+                        </div>
+                    </td>
+                    <td className="px-4 py-3">
+                        <div className="space-y-1 text-sm">
+                            <div><span className="font-medium text-blue-600">{analytics.couponsPromoted}</span> coupons promoted</div>
+                            <div><span className="font-medium text-green-600">{analytics.redemptions}</span> conversions</div>
+                            <div><span className="font-medium text-orange-600">{analytics.conversionRate}%</span> conv. rate</div>
+                        </div>
+                    </td>
+                    <td className="px-4 py-3">
+                        <div className="space-y-1 text-sm">
+                            <div>Traffic: <span className="font-medium">{analytics.totalTraffic}</span></div>
+                            <div>Clicks: <span className="text-purple-600 font-medium">~{analytics.totalTraffic}</span></div>
+                            <div>Redemptions: <span className="text-green-600 font-medium">{analytics.redemptions}</span></div>
+                        </div>
+                    </td>
+                    <td className="px-4 py-3">
+                        <div className="space-y-1 text-sm">
+                            <div className="font-semibold text-purple-600">{analytics.totalCommissions.toLocaleString()} total</div>
+                            <div>Avg: {analytics.avgCommissionPerRedemption}</div>
+                            <div className="text-xs text-gray-500">per conversion</div>
+                        </div>
+                    </td>
+                    <td className="px-4 py-3">
+                        <div className="space-y-2">
+                            <button
+                                onClick={() => openUserDrawer(item)}
+                                className="block w-full text-xs bg-primary text-white px-2 py-1 rounded hover:opacity-90"
+                            >
+                                Manage
+                            </button>
+                            <button
+                                onClick={() => viewAffiliateDetails(item.id)}
+                                className="block w-full text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200"
+                            >
+                                Full Report
+                            </button>
+                        </div>
                     </td>
                 </tr>
             );
@@ -437,17 +502,64 @@ const AdminDashboard: React.FC = () => {
     );
 
     const settingsContent = (
-        <div className="bg-white rounded-2xl border border-slate-100 p-6">
-            <h3 className="text-lg font-semibold text-dark-gray mb-4">System Settings</h3>
-            <p className="text-sm text-gray-500 mb-6">
-                Core automations (affiliate & referral payouts) are currently running via client-side logic.
-                Upgrade Firebase to Blaze plan to unlock secure Cloud Functions for production-grade automation.
-            </p>
-            <ol className="list-decimal list-inside space-y-2 text-sm text-gray-600">
-                <li>Visit Firebase Console &gt; Billing → upgrade to Blaze.</li>
-                <li>Deploy backend functions: <code>firebase deploy --only functions</code>.</li>
-                <li>Revisit this panel to manage live payouts and advanced automation.</li>
-            </ol>
+        <div className="space-y-6">
+            {/* System Activity Feed */}
+            <div className="bg-white rounded-2xl border border-slate-100 p-6">
+                <h3 className="text-lg font-semibold text-dark-gray mb-4">🔍 Real-Time System Activity</h3>
+                <p className="text-sm text-gray-500 mb-4">Monitor all account actions and system events</p>
+                
+                <div className="max-h-96 overflow-y-auto space-y-3">
+                    {systemActivity.slice(0, 20).map((activity, index) => (
+                        <div key={activity.id || index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                            <div className={`w-2 h-2 rounded-full mt-2 ${
+                                activity.type === 'CUSTOMER_REDEMPTION' ? 'bg-green-500' :
+                                activity.type === 'Admin Grant' ? 'bg-blue-500' :
+                                activity.source === 'adminNotifications' ? 'bg-orange-500' :
+                                'bg-gray-500'
+                            }`} />
+                            <div className="flex-1">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm font-medium text-gray-800">
+                                        {activity.title || activity.type || 'System Action'}
+                                    </span>
+                                    <span className="text-xs text-gray-500">
+                                        {activity.timestamp ? 
+                                            new Date(activity.timestamp.toDate ? activity.timestamp.toDate() : activity.timestamp).toLocaleString() : 
+                                            'Just now'
+                                        }
+                                    </span>
+                                </div>
+                                <p className="text-xs text-gray-600 mt-1">
+                                    {activity.message || activity.details || `Action from ${activity.source}`}
+                                </p>
+                                {activity.customerData && (
+                                    <div className="text-xs text-blue-600 mt-1">
+                                        👤 {activity.customerData.name} | 📞 {activity.customerData.phone}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                    
+                    {systemActivity.length === 0 && (
+                        <p className="text-center text-gray-400 py-8">No recent activity</p>
+                    )}
+                </div>
+            </div>
+
+            {/* System Settings */}
+            <div className="bg-white rounded-2xl border border-slate-100 p-6">
+                <h3 className="text-lg font-semibold text-dark-gray mb-4">⚙️ System Settings</h3>
+                <p className="text-sm text-gray-500 mb-6">
+                    Core automations (affiliate & referral payouts) are currently running via client-side logic.
+                    Upgrade Firebase to Blaze plan to unlock secure Cloud Functions for production-grade automation.
+                </p>
+                <ol className="list-decimal list-inside space-y-2 text-sm text-gray-600">
+                    <li>Visit Firebase Console &gt; Billing → upgrade to Blaze.</li>
+                    <li>Deploy backend functions: <code>firebase deploy --only functions</code>.</li>
+                    <li>Revisit this panel to manage live payouts and advanced automation.</li>
+                </ol>
+            </div>
         </div>
     );
 

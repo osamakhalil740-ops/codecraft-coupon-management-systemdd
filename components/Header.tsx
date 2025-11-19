@@ -56,17 +56,29 @@ const Header: React.FC = () => {
                 <span className="text-xs text-gray-500 font-medium">credits</span>
               </div>
               
-              <Link
-                to="/dashboard"
-                className={`text-sm font-medium transition-colors ${
-                  isSuperAdmin ? 'text-red-600 hover:text-red-800 font-bold' : 'text-gray-600 hover:text-primary'
-                }`}
-              >
-                {isSuperAdmin ? '👑 Super Admin' :
-                 user.roles.includes('shop-owner') ? 'Business Hub' :
-                 user.roles.includes('affiliate') ? 'Marketing Hub' :
-                 user.roles.includes('admin') ? 'Admin Panel' : 'My Deals'}
-              </Link>
+              {/* Role-specific navigation with clear indicators */}
+              <div className="flex items-center gap-2">
+                <div className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                  isSuperAdmin ? 'bg-red-100 text-red-800' :
+                  user.roles.includes('admin') ? 'bg-orange-100 text-orange-800' :
+                  user.roles.includes('shop-owner') ? 'bg-blue-100 text-blue-800' :
+                  user.roles.includes('affiliate') ? 'bg-green-100 text-green-800' :
+                  'bg-purple-100 text-purple-800'
+                }`}>
+                  {isSuperAdmin ? '👑 SUPER ADMIN' :
+                   user.roles.includes('admin') ? '🛡️ ADMIN' :
+                   user.roles.includes('shop-owner') ? '🏪 SHOP OWNER' :
+                   user.roles.includes('affiliate') ? '📢 AFFILIATE' :
+                   '🛍️ CUSTOMER'}
+                </div>
+                
+                <Link
+                  to="/dashboard"
+                  className="text-sm font-medium text-white bg-primary px-3 py-1 rounded-lg hover:opacity-90 transition-all"
+                >
+                  Dashboard
+                </Link>
+              </div>
               
               <button
                 onClick={handleLogout}

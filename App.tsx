@@ -38,17 +38,18 @@ const App: React.FC = () => {
       return <Navigate to="/super-admin" />;
     }
     
+    // Clear role-based routing - no mixing between roles
     if (isAdminUser) {
-      return <Navigate to="/admin" />;
+      return <Navigate to="/admin" replace />;
     }
     if (user.roles.includes('shop-owner')) {
-      return <Navigate to="/shop-owner" />;
+      return <Navigate to="/shop-owner" replace />;
     }
     if (user.roles.includes('affiliate')) {
-      return <Navigate to="/affiliate" />;
+      return <Navigate to="/affiliate" replace />;
     }
     if (user.roles.includes('user')) {
-      return <Navigate to="/customer" />;
+      return <Navigate to="/customer" replace />;
     }
     
     return <Navigate to="/login" />;

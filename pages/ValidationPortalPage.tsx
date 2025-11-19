@@ -22,6 +22,8 @@ const ValidationPortalPage: React.FC = () => {
     const [customerName, setCustomerName] = useState('');
     const [customerPhone, setCustomerPhone] = useState('');
     const [customerEmail, setCustomerEmail] = useState('');
+    const [customerAddress, setCustomerAddress] = useState('');
+    const [isSubmittingData, setIsSubmittingData] = useState(false);
     
     const queryParams = new URLSearchParams(location.search);
     const affiliateId = queryParams.get('affiliateId');
@@ -57,17 +59,31 @@ const ValidationPortalPage: React.FC = () => {
             setRedeemMessage('Please provide your name and phone number to redeem this coupon.');
             return;
         }
+
+        // Basic phone validation
+        const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+        if (!phoneRegex.test(customerPhone.trim())) {
+            setRedeemMessage('Please provide a valid phone number (at least 10 digits).');
+            return;
+        }
         
         setIsRedeeming(true);
         setRedeemMessage('');
         
-        // Collect customer data and send to both admin and shop owner
+        // Collect comprehensive customer data
+        setIsSubmittingData(true);
         const customerData = {
-            name: customerName,
-            phone: customerPhone,
-            email: customerEmail || user.email,
+            name: customerName.trim(),
+            phone: customerPhone.trim(),
+            email: customerEmail.trim() || user.email,
+            address: customerAddress.trim(),
             userId: user.id,
-            redeemedAt: new Date().toISOString()
+            userEmail: user.email,
+            couponId: id,
+            couponTitle: coupon?.offerTitle || 'Unknown Coupon',
+            shopOwnerName: coupon?.shopOwnerName || 'Unknown Shop',
+            redeemedAt: new Date().toISOString(),
+            redemptionLocation: window.location.href
         };
         
         // Call the secure API endpoint which triggers the Cloud Function
@@ -75,9 +91,12 @@ const ValidationPortalPage: React.FC = () => {
         setRedeemMessage(result.message);
 
         if(result.success) {
+            // Send customer data to admin and shop owner via email/notification
+            await api.notifyAdminAndShopOwner(customerData);
             setTimeout(() => navigate('/dashboard'), 2000);
         }
         setIsRedeeming(false);
+        setIsSubmittingData(false);
     }
 
     if (loading) return <div className="text-center p-10">{t('common.loading')}</div>;
@@ -146,6 +165,22 @@ const ValidationPortalPage: React.FC = () => {
                                     className="mt-1 w-full form-input"
                                 />
                             </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Address (Optional)</label>
+                                <textarea
+                                    value={customerAddress}
+                                    onChange={(e) => setCustomerAddress(e.target.value)}
+                                    placeholder="Enter your address"
+                                    className="mt-1 w-full form-input"
+                                    rows={2}
+                                />
+                            </div>
+                        </div>
+                        
+                        <div className="bg-blue-50 p-3 rounded-md border border-blue-200">
+                            <p className="text-xs text-blue-700">
+                                🔒 <strong>Privacy Notice:</strong> Your information will be securely shared with the shop owner and admin to verify this coupon redemption and may be used for future service improvements.
+                            </p>
                         </div>
                     </div>
                 )}

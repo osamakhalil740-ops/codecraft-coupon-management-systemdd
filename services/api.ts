@@ -357,6 +357,51 @@ export const api = {
         return result;
     },
 
+    // Notify admin and shop owner about customer redemption
+    notifyAdminAndShopOwner: async (customerData: any): Promise<void> => {
+        try {
+            // Store detailed customer redemption data
+            const customerRedemptionRef = collection(db, "detailedCustomerRedemptions");
+            await addDoc(customerRedemptionRef, {
+                ...customerData,
+                timestamp: serverTimestamp(),
+                status: 'new',
+                adminNotified: true,
+                shopOwnerNotified: true
+            });
+
+            // Log for admin tracking
+            const adminNotificationRef = collection(db, "adminNotifications");
+            await addDoc(adminNotificationRef, {
+                type: 'CUSTOMER_REDEMPTION',
+                title: 'New Customer Redemption',
+                message: `Customer ${customerData.name} redeemed coupon: ${customerData.couponTitle}`,
+                customerData,
+                timestamp: serverTimestamp(),
+                read: false,
+                urgent: false
+            });
+
+            // Log for shop owner tracking
+            const shopNotificationRef = collection(db, "shopOwnerNotifications");
+            await addDoc(shopNotificationRef, {
+                type: 'CUSTOMER_REDEMPTION',
+                shopOwnerId: customerData.shopOwnerId || 'unknown',
+                title: 'New Customer Redemption',
+                message: `Customer ${customerData.name} (${customerData.phone}) redeemed your coupon`,
+                customerData,
+                timestamp: serverTimestamp(),
+                read: false,
+                followUpRequired: true
+            });
+
+            console.log('Customer data notifications sent successfully');
+        } catch (error) {
+            console.error('Failed to send customer data notifications:', error);
+            // Don't throw error to avoid breaking the redemption flow
+        }
+    },
+
     getReferralsForShop: async (shopId: string): Promise<Referral[]> => {
         const q = query(collection(db, "referrals"), where("referrerId", "==", shopId));
         const querySnapshot = await getDocs(q);
@@ -615,5 +660,45 @@ export const api = {
             timestamp: serverTimestamp(),
             details: `Credits granted by admin: ${adminEmail}`
         });
+    },
+
+    // Get comprehensive system activity for admin monitoring
+    getSystemActivity: async (): Promise<any[]> => {
+        try {
+            const collections = [
+                'adminNotifications',
+                'shopOwnerNotifications', 
+                'detailedCustomerRedemptions',
+                'adminCreditLogs'
+            ];
+
+            const allActivity = [];
+            
+            for (const collectionName of collections) {
+                const q = query(
+                    collection(db, collectionName),
+                    orderBy('timestamp', 'desc'),
+                    limit(50)
+                );
+                const snapshot = await getDocs(q);
+                const activities = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    source: collectionName
+                }));
+                allActivity.push(...activities);
+            }
+
+            // Sort all activity by timestamp
+            return allActivity.sort((a, b) => {
+                const aTime = a.timestamp?.toDate?.() || new Date(a.timestamp || 0);
+                const bTime = b.timestamp?.toDate?.() || new Date(b.timestamp || 0);
+                return bTime.getTime() - aTime.getTime();
+            }).slice(0, 100); // Return latest 100 activities
+
+        } catch (error) {
+            console.error('Error fetching system activity:', error);
+            return [];
+        }
     }
 };
