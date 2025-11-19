@@ -83,7 +83,7 @@ const UserDashboard: React.FC = () => {
                         <p className="text-green-100 mt-2">Hi {user.name}! Discover amazing deals and earn rewards.</p>
                     </div>
                     <div className="text-right">
-                        <div className="text-sm text-green-200">Your Credits</div>
+                        <div className="text-sm text-green-200">Usable Balance</div>
                         <div className="text-4xl font-bold">{user.credits.toLocaleString()}</div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@ const UserDashboard: React.FC = () => {
             {/* Customer Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard 
-                    title="Points Earned" 
+                    title="Reward Credits" 
                     value={`${totalPointsEarned.toLocaleString()}`}
                     icon={<StarIcon className="h-6 w-6"/>} 
                     color="yellow" 
@@ -110,7 +110,7 @@ const UserDashboard: React.FC = () => {
                     color="green" 
                 />
                 <StatCard 
-                    title="Current Balance" 
+                    title="Usable Balance" 
                     value={`${user.credits.toLocaleString()}`}
                     icon={<CreditCardIcon className="h-6 w-6"/>} 
                     color="purple" 
@@ -143,7 +143,7 @@ const UserDashboard: React.FC = () => {
                                             🎁 Get Deal
                                         </Link>
                                         <div className="bg-blue-100 text-blue-800 font-semibold py-2 px-3 rounded-lg text-center text-sm">
-                                            +{coupon.customerRewardPoints || 0} pts
+                                            +{coupon.customerRewardPoints || 0} credits
                                         </div>
                                     </div>
                                 </CouponCard>
@@ -201,14 +201,14 @@ const UserDashboard: React.FC = () => {
                     <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-xl border border-yellow-200">
                         <h4 className="font-bold text-orange-900 mb-3">🌟 Rewards Program</h4>
                         <ul className="text-sm text-orange-800 space-y-2">
-                            <li>• Earn points with every deal</li>
-                            <li>• Points = Credits for future use</li>
-                            <li>• Higher tier = Better rewards</li>
+                            <li>• Earn credits with every deal</li>
+                            <li>• Credits = Real usable balance</li>
+                            <li>• Use balance for purchases/services</li>
                             <li>• Share deals with friends</li>
                         </ul>
                         <div className="mt-4 pt-3 border-t border-yellow-300">
                             <p className="text-xs text-orange-700">
-                                You've earned <span className="font-bold">{totalPointsEarned}</span> points total!
+                                You've earned <span className="font-bold">{totalPointsEarned}</span> credits total!
                             </p>
                         </div>
                     </div>

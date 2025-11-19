@@ -331,6 +331,32 @@ export const api = {
         }
     },
 
+    redeemCouponWithCustomerData: async (couponId: string, affiliateId?: string | null, customerId?: string, customerData?: any): Promise<{ success: boolean; message: string }> => {
+        // First redeem the coupon normally
+        const result = await api.redeemCoupon(couponId, affiliateId, customerId);
+        
+        if (result.success && customerData) {
+            try {
+                // Store customer data for admin and shop owner access
+                const customerRedemptionsRef = collection(db, "customerRedemptions");
+                await addDoc(customerRedemptionsRef, {
+                    couponId,
+                    customerId,
+                    customerName: customerData.name,
+                    customerPhone: customerData.phone,
+                    customerEmail: customerData.email,
+                    redeemedAt: serverTimestamp(),
+                    affiliateId: affiliateId || null,
+                });
+            } catch (error) {
+                console.error("Failed to store customer data:", error);
+                // Don't fail the whole redemption if customer data storage fails
+            }
+        }
+        
+        return result;
+    },
+
     getReferralsForShop: async (shopId: string): Promise<Referral[]> => {
         const q = query(collection(db, "referrals"), where("referrerId", "==", shopId));
         const querySnapshot = await getDocs(q);
@@ -576,5 +602,18 @@ export const api = {
         const keys = querySnapshot.docs.map(fromFirestore) as CreditKey[];
         // Sort client-side to avoid needing composite index
         return keys.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    },
+
+    // Admin credit grant logging
+    logAdminCreditGrant: async (shopId: string, shopName: string, amount: number, adminEmail: string): Promise<void> => {
+        const adminLogsRef = collection(db, "adminCreditLogs");
+        await addDoc(adminLogsRef, {
+            type: 'Admin Grant',
+            shopId,
+            shopName,
+            amount,
+            timestamp: serverTimestamp(),
+            details: `Credits granted by admin: ${adminEmail}`
+        });
     }
 };

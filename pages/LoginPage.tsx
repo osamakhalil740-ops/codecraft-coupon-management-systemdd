@@ -6,6 +6,7 @@ import { Role } from '../types';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { LogoIcon } from '../components/icons/LogoIcon';
 import { useTranslation } from '../hooks/useTranslation';
+import { getAllCountries, getCitiesForCountry, getDistrictsForCity } from '../utils/countryData';
 
 const LoginPage: React.FC = () => {
   const { t } = useTranslation();
@@ -19,6 +20,12 @@ const LoginPage: React.FC = () => {
   const [category, setCategory] = useState('');
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
+  const [district, setDistrict] = useState('');
+  
+  // Dynamic location data
+  const [availableCountries] = useState(getAllCountries());
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
+  const [availableDistricts, setAvailableDistricts] = useState<string[]>([]);
 
   // Common fields
   const [email, setEmail] = useState('');
@@ -42,6 +49,26 @@ const LoginPage: React.FC = () => {
     }
   }, []);
 
+  // Handle country change
+  useEffect(() => {
+    if (country) {
+      const cities = getCitiesForCountry(country);
+      setAvailableCities(cities);
+      setCity('');
+      setDistrict('');
+      setAvailableDistricts([]);
+    }
+  }, [country]);
+
+  // Handle city change
+  useEffect(() => {
+    if (country && city) {
+      const districts = getDistrictsForCity(country, city);
+      setAvailableDistricts(districts);
+      setDistrict('');
+    }
+  }, [country, city]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -52,7 +79,7 @@ const LoginPage: React.FC = () => {
         await login(email, password);
       } else {
         const finalName = role === 'shop-owner' ? shopName : name;
-        const shopDetails = role === 'shop-owner' ? { category, country, city } : undefined;
+        const shopDetails = role === 'shop-owner' ? { category, country, city, district } : undefined;
         await signup(email, password, finalName, role, referredBy, shopDetails);
         localStorage.removeItem('referralId');
       }
@@ -81,16 +108,39 @@ const LoginPage: React.FC = () => {
             <label htmlFor="category" className="block text-sm font-medium text-gray-700">{t('loginPage.categoryLabel')}</label>
             <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} required className="mt-1 block w-full form-input" />
           </div>
-           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="country" className="block text-sm font-medium text-gray-700">{t('loginPage.countryLabel')}</label>
-              <input type="text" id="country" value={country} onChange={(e) => setCountry(e.target.value)} required className="mt-1 block w-full form-input" />
-            </div>
-            <div>
-              <label htmlFor="city" className="block text-sm font-medium text-gray-700">{t('loginPage.cityLabel')}</label>
-              <input type="text" id="city" value={city} onChange={(e) => setCity(e.target.value)} required className="mt-1 block w-full form-input" />
-            </div>
-          </div>
+           <div>
+             <label htmlFor="country" className="block text-sm font-medium text-gray-700">{t('loginPage.countryLabel')}</label>
+             <select id="country" value={country} onChange={(e) => setCountry(e.target.value)} required className="mt-1 block w-full form-select">
+               <option value="">Select a country</option>
+               {availableCountries.map((countryOption) => (
+                 <option key={countryOption} value={countryOption}>{countryOption}</option>
+               ))}
+             </select>
+           </div>
+           
+           {country && (
+             <div>
+               <label htmlFor="city" className="block text-sm font-medium text-gray-700">{t('loginPage.cityLabel')}</label>
+               <select id="city" value={city} onChange={(e) => setCity(e.target.value)} required className="mt-1 block w-full form-select">
+                 <option value="">Select a city</option>
+                 {availableCities.map((cityOption) => (
+                   <option key={cityOption} value={cityOption}>{cityOption}</option>
+                 ))}
+               </select>
+             </div>
+           )}
+           
+           {city && availableDistricts.length > 0 && (
+             <div>
+               <label htmlFor="district" className="block text-sm font-medium text-gray-700">District/Area</label>
+               <select id="district" value={district} onChange={(e) => setDistrict(e.target.value)} className="mt-1 block w-full form-select">
+                 <option value="">Select a district (optional)</option>
+                 {availableDistricts.map((districtOption) => (
+                   <option key={districtOption} value={districtOption}>{districtOption}</option>
+                 ))}
+               </select>
+             </div>
+           )}
         </>
       );
     }

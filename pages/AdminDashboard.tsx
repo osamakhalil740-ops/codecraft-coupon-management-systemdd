@@ -104,14 +104,21 @@ const AdminDashboard: React.FC = () => {
         setSavingUser(true);
         try {
             const creditsNumber = Number(creditsInput);
-            if (!Number.isFinite(creditsNumber)) {
-                alert("Credits must be a valid number");
+            if (!Number.isFinite(creditsNumber) || creditsNumber < 0) {
+                alert("Credits must be a valid positive number");
                 return;
             }
+            // Admin can assign any amount of credits (no limit)
             await Promise.all([
                 api.updateUserCredits(selectedUser.id, creditsNumber),
                 api.updateUserRoles(selectedUser.id, rolesInput)
             ]);
+            
+            // Log admin credit grant if credits increased
+            if (creditsNumber > selectedUser.credits) {
+                await api.logAdminCreditGrant(selectedUser.id, selectedUser.name, creditsNumber - selectedUser.credits, user?.email || 'admin');
+            }
+            
             setDrawerOpen(false);
             setSelectedUser(null);
             fetchData();
@@ -157,10 +164,14 @@ const AdminDashboard: React.FC = () => {
                             <label className="text-sm font-semibold text-gray-700">Credits</label>
                             <input
                                 type="number"
+                                min="0"
                                 value={creditsInput}
                                 onChange={(e) => setCreditsInput(e.target.value)}
                                 className="mt-1 w-full form-input"
                             />
+                            <p className="text-xs text-gray-500 mt-1">
+                                ✨ Admin privilege: You can assign any amount of credits without limits
+                            </p>
                         </div>
                         <div>
                             <p className="text-sm font-semibold text-gray-700 mb-2">Roles</p>
@@ -340,24 +351,32 @@ const AdminDashboard: React.FC = () => {
     );
 
     const affiliatesContent = renderTable(
-        'Affiliates',
-        ['Name', 'Email', 'Credits', 'Total Roles', 'Actions'],
-        affiliates.map((item) => (
-            <tr key={item.id} className="hover:bg-slate-50">
-                <td className="px-4 py-3 font-medium text-dark-gray">{item.name}</td>
-                <td className="px-4 py-3">{item.email}</td>
-                <td className="px-4 py-3 font-semibold">{item.credits.toLocaleString()}</td>
-                <td className="px-4 py-3">{item.roles.join(', ')}</td>
-                <td className="px-4 py-3">
-                    <button
-                        onClick={() => openUserDrawer(item)}
-                        className="text-primary text-sm font-semibold hover:underline"
-                    >
-                        Manage
+        'Affiliates - Complete Overview',
+        ['Name', 'Email', 'Credits', 'Coupons Promoted', 'Total Conversions', 'Commissions Earned', 'Actions'],
+        affiliates.map((item) => {
+            const affiliateRedemptions = redemptions.filter(r => r.affiliateId === item.id);
+            const totalCommissions = affiliateRedemptions.reduce((sum, r) => sum + (r.commissionEarned || 0), 0);
+            const uniqueCoupons = new Set(affiliateRedemptions.map(r => r.couponId)).size;
+            
+            return (
+                <tr key={item.id} className="hover:bg-slate-50">
+                    <td className="px-4 py-3 font-medium text-dark-gray">{item.name}</td>
+                    <td className="px-4 py-3">{item.email}</td>
+                    <td className="px-4 py-3 font-semibold">{item.credits.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-blue-600 font-medium">{uniqueCoupons}</td>
+                    <td className="px-4 py-3 text-green-600 font-medium">{affiliateRedemptions.length}</td>
+                    <td className="px-4 py-3 text-purple-600 font-semibold">{totalCommissions.toLocaleString()}</td>
+                    <td className="px-4 py-3">
+                        <button
+                            onClick={() => openUserDrawer(item)}
+                            className="text-primary text-sm font-semibold hover:underline"
+                        >
+                            Manage
                         </button>
                     </td>
                 </tr>
-        ))
+            );
+        })
     );
 
     const couponsContent = renderTable(

@@ -14,6 +14,7 @@ interface ShopDetails {
     category: string;
     country: string;
     city: string;
+    district?: string;
 }
 
 interface AuthContextType {
@@ -56,6 +57,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
          country: userData.country || '',
          city: userData.city || '',
          category: userData.category || '',
+         district: userData.district || '',
          shopDescription: userData.shopDescription || '',
          addressLine1: userData.addressLine1 || '',
          addressLine2: userData.addressLine2 || '',
@@ -118,6 +120,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           country: role === 'shop-owner' ? shopDetails?.country : '',
           city: role === 'shop-owner' ? shopDetails?.city : '',
           category: role === 'shop-owner' ? shopDetails?.category : '',
+          district: role === 'shop-owner' ? shopDetails?.district : '',
           shopDescription: '',
           addressLine1: '',
           addressLine2: '',

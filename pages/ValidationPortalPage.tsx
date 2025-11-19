@@ -18,6 +18,10 @@ const ValidationPortalPage: React.FC = () => {
     const [error, setError] = useState('');
     const [isRedeeming, setIsRedeeming] = useState(false);
     const [redeemMessage, setRedeemMessage] = useState('');
+    const [showCustomerForm, setShowCustomerForm] = useState(false);
+    const [customerName, setCustomerName] = useState('');
+    const [customerPhone, setCustomerPhone] = useState('');
+    const [customerEmail, setCustomerEmail] = useState('');
     
     const queryParams = new URLSearchParams(location.search);
     const affiliateId = queryParams.get('affiliateId');
@@ -41,11 +45,33 @@ const ValidationPortalPage: React.FC = () => {
 
     const handleRedeem = async () => {
         if (!id || !user) return;
+        
+        // Show customer form first
+        if (!showCustomerForm) {
+            setShowCustomerForm(true);
+            return;
+        }
+        
+        // Validate customer data
+        if (!customerName.trim() || !customerPhone.trim()) {
+            setRedeemMessage('Please provide your name and phone number to redeem this coupon.');
+            return;
+        }
+        
         setIsRedeeming(true);
         setRedeemMessage('');
         
+        // Collect customer data and send to both admin and shop owner
+        const customerData = {
+            name: customerName,
+            phone: customerPhone,
+            email: customerEmail || user.email,
+            userId: user.id,
+            redeemedAt: new Date().toISOString()
+        };
+        
         // Call the secure API endpoint which triggers the Cloud Function
-        const result = await api.redeemCoupon(id, affiliateId, user.id);
+        const result = await api.redeemCouponWithCustomerData(id, affiliateId, user.id, customerData);
         setRedeemMessage(result.message);
 
         if(result.success) {
@@ -78,7 +104,49 @@ const ValidationPortalPage: React.FC = () => {
                 {!user && <p className="text-center text-alert">{t('validationPortal.errors.mustBeLoggedIn')}</p>}
                 {user && coupon.customerRewardPoints > 0 && (
                     <div className="text-center p-3 bg-blue-50 rounded-lg border border-blue-200 mb-4">
-                        <p className="text-blue-800 font-semibold">🎁 You'll earn {coupon.customerRewardPoints} points for using this coupon!</p>
+                        <p className="text-blue-800 font-semibold">🎁 You'll earn {coupon.customerRewardPoints} credits for using this coupon!</p>
+                    </div>
+                )}
+                
+                {showCustomerForm && canRedeem && (
+                    <div className="bg-gray-50 p-4 rounded-lg border mb-4">
+                        <h4 className="font-semibold text-gray-800 mb-3">📝 Customer Information Required</h4>
+                        <p className="text-sm text-gray-600 mb-3">Please provide your contact details so the shop owner can verify and contact you later.</p>
+                        
+                        <div className="space-y-3">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Full Name *</label>
+                                <input
+                                    type="text"
+                                    value={customerName}
+                                    onChange={(e) => setCustomerName(e.target.value)}
+                                    placeholder="Enter your full name"
+                                    className="mt-1 w-full form-input"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Phone Number *</label>
+                                <input
+                                    type="tel"
+                                    value={customerPhone}
+                                    onChange={(e) => setCustomerPhone(e.target.value)}
+                                    placeholder="Enter your phone number"
+                                    className="mt-1 w-full form-input"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Email (Optional)</label>
+                                <input
+                                    type="email"
+                                    value={customerEmail}
+                                    onChange={(e) => setCustomerEmail(e.target.value)}
+                                    placeholder="Enter your email"
+                                    className="mt-1 w-full form-input"
+                                />
+                            </div>
+                        </div>
                     </div>
                 )}
                 
@@ -88,7 +156,9 @@ const ValidationPortalPage: React.FC = () => {
                         disabled={isRedeeming || coupon.usesLeft <= 0}
                         className="w-full bg-success text-white font-bold py-3 px-4 rounded-md hover:opacity-90 disabled:opacity-50"
                     >
-                        {isRedeeming ? t('validationPortal.processing') : `${t('validationPortal.redeemButton')} (${t('validationPortal.usesLeft')}: ${coupon.usesLeft})`}
+                        {isRedeeming ? t('validationPortal.processing') : 
+                         !showCustomerForm ? 'Redeem Coupon' : 
+                         `${t('validationPortal.redeemButton')} (${t('validationPortal.usesLeft')}: ${coupon.usesLeft})`}
                     </button>
                 )}
                  {redeemMessage && <p className={`mt-4 text-center text-sm ${redeemMessage.includes('success') ? 'text-success' : 'text-alert'}`}>{redeemMessage}</p>}

@@ -45,7 +45,7 @@ const App: React.FC = () => {
       return <Navigate to="/shop-owner" />;
     }
     if (user.roles.includes('affiliate')) {
-      return <Navigate to="/marketer" />;
+      return <Navigate to="/affiliate" />;
     }
     if (user.roles.includes('user')) {
       return <Navigate to="/customer" />;
@@ -87,13 +87,13 @@ const App: React.FC = () => {
             <Route path="/refer/:shopId" element={<ReferralHandlerPage />} />
             
             <Route path="/shop-owner" element={<ProtectedRoute roles={['shop-owner']}><ShopOwnerDashboard /></ProtectedRoute>} />
-            <Route path="/marketer" element={<ProtectedRoute roles={['affiliate']}><MarketerDashboard /></ProtectedRoute>} />
+            <Route path="/affiliate" element={<ProtectedRoute roles={['affiliate']}><AffiliateDashboard /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
             <Route path="/super-admin" element={<SuperAdminDashboard />} />
             <Route path="/customer" element={<ProtectedRoute roles={['user']}><UserDashboard /></ProtectedRoute>} />
             
             {/* Legacy routes for backward compatibility */}
-            <Route path="/affiliate" element={<ProtectedRoute roles={['affiliate']}><MarketerDashboard /></ProtectedRoute>} />
+            <Route path="/marketer" element={<ProtectedRoute roles={['affiliate']}><AffiliateDashboard /></ProtectedRoute>} />
             <Route path="/user" element={<ProtectedRoute roles={['user']}><UserDashboard /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute roles={['shop-owner']}><ProfilePage /></ProtectedRoute>} />
 

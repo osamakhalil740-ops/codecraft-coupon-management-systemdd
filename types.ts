@@ -14,6 +14,7 @@ export interface Shop {
   city: string;
   category: string;
   // Detailed address fields
+  district: string;
   shopDescription: string;
   addressLine1: string;
   addressLine2: string;

@@ -20,7 +20,7 @@ import {
 import { db } from '../firebase';
 import { doc, updateDoc, deleteDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
-type SuperAdminTab = 'overview' | 'users' | 'credits' | 'system' | 'security' | 'logs';
+type SuperAdminTab = 'overview' | 'users' | 'credits' | 'system' | 'logs';
 
 const SuperAdminDashboard: React.FC = () => {
     const { user, isSuperAdmin } = useAuth();
@@ -245,7 +245,6 @@ const SuperAdminDashboard: React.FC = () => {
                             { id: 'users', label: 'User Management', icon: UserGroupIcon },
                             { id: 'credits', label: 'Credit Management', icon: BanknotesIcon },
                             { id: 'system', label: 'System Control', icon: ShieldCheckIcon },
-                            { id: 'security', label: 'Security', icon: ExclamationTriangleIcon },
                             { id: 'logs', label: 'Activity Logs', icon: BanknotesIcon }
                         ].map((tab) => {
                             const Icon = tab.icon;
