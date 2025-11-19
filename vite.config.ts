@@ -18,6 +18,17 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      assetsInclude: ['**/*.json'],
+      build: {
+        outDir: 'dist',
+        assetsDir: 'assets',
+        copyPublicDir: true,
+        rollupOptions: {
+          output: {
+            manualChunks: undefined
+          }
+        }
       }
     };
 });
