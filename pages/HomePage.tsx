@@ -129,26 +129,27 @@ const HomePage: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
                     {/* Shop Owner Path */}
                     <div className="bg-white rounded-xl p-6 shadow-xl border border-blue-200 hover:shadow-2xl transition-all transform hover:scale-105">
                         <div className="text-center">
-                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-2xl">🏪</span>
+                            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span className="text-3xl">🏪</span>
                             </div>
-                            <h3 className="text-xl font-bold text-blue-800 mb-3">Shop Owner</h3>
-                            <p className="text-sm text-gray-600 mb-4">
-                                Create and manage coupons for your business. Track redemptions and grow your customer base.
+                            <h3 className="text-2xl font-bold text-blue-800 mb-4">Shop Owner</h3>
+                            <p className="text-base text-gray-600 mb-6">
+                                Create and manage coupons for your business. Track redemptions and grow your customer base with complete data visibility.
                             </p>
-                            <ul className="text-xs text-gray-500 space-y-1 mb-6 text-left">
+                            <ul className="text-sm text-gray-600 space-y-2 mb-8 text-left">
                                 <li>✓ Create unlimited coupons</li>
                                 <li>✓ Track customer redemptions</li>
                                 <li>✓ Full customer data visibility</li>
                                 <li>✓ Affiliate partnership tracking</li>
+                                <li>✓ Complete redemption analytics</li>
                             </ul>
                             <Link 
                                 to="/login?role=shop-owner"
-                                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors inline-block text-center"
+                                className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-bold hover:bg-blue-700 transition-colors inline-block text-center text-lg"
                             >
                                 Start Your Business
                             </Link>
@@ -158,22 +159,23 @@ const HomePage: React.FC = () => {
                     {/* Affiliate Path */}
                     <div className="bg-white rounded-xl p-6 shadow-xl border border-green-200 hover:shadow-2xl transition-all transform hover:scale-105">
                         <div className="text-center">
-                            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-2xl">📈</span>
+                            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span className="text-3xl">📈</span>
                             </div>
-                            <h3 className="text-xl font-bold text-green-800 mb-3">Affiliate Marketer</h3>
-                            <p className="text-sm text-gray-600 mb-4">
-                                Promote business coupons and earn commissions on every successful redemption.
+                            <h3 className="text-2xl font-bold text-green-800 mb-4">Affiliate Marketer</h3>
+                            <p className="text-base text-gray-600 mb-6">
+                                Promote business coupons and earn commissions on every successful redemption. Access complete customer data.
                             </p>
-                            <ul className="text-xs text-gray-500 space-y-1 mb-6 text-left">
+                            <ul className="text-sm text-gray-600 space-y-2 mb-8 text-left">
                                 <li>✓ Earn commission per redemption</li>
                                 <li>✓ Access to all active coupons</li>
+                                <li>✓ View customer redemption data</li>
                                 <li>✓ Real-time performance tracking</li>
-                                <li>✓ Multiple promotion channels</li>
+                                <li>✓ Complete analytics dashboard</li>
                             </ul>
                             <Link 
                                 to="/login?role=affiliate"
-                                className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors inline-block text-center"
+                                className="w-full bg-green-600 text-white py-4 px-6 rounded-lg font-bold hover:bg-green-700 transition-colors inline-block text-center text-lg"
                             >
                                 Start Earning
                             </Link>
@@ -183,49 +185,25 @@ const HomePage: React.FC = () => {
                     {/* Customer Path */}
                     <div className="bg-white rounded-xl p-6 shadow-xl border border-purple-200 hover:shadow-2xl transition-all transform hover:scale-105">
                         <div className="text-center">
-                            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-2xl">🎁</span>
+                            <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span className="text-3xl">🎁</span>
                             </div>
-                            <h3 className="text-xl font-bold text-purple-800 mb-3">Customer</h3>
-                            <p className="text-sm text-gray-600 mb-4">
-                                Discover amazing deals, redeem coupons, and earn reward points with every purchase.
+                            <h3 className="text-2xl font-bold text-purple-800 mb-4">Customer</h3>
+                            <p className="text-base text-gray-600 mb-6">
+                                Discover amazing deals, redeem coupons, and earn reward points with every purchase from local businesses.
                             </p>
-                            <ul className="text-xs text-gray-500 space-y-1 mb-6 text-left">
+                            <ul className="text-sm text-gray-600 space-y-2 mb-8 text-left">
                                 <li>✓ Access exclusive discounts</li>
                                 <li>✓ Earn reward points</li>
                                 <li>✓ Easy coupon redemption</li>
                                 <li>✓ Discover local businesses</li>
+                                <li>✓ Personalized deal recommendations</li>
                             </ul>
                             <Link 
                                 to="/marketplace"
-                                className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-purple-700 transition-colors inline-block text-center"
+                                className="w-full bg-purple-600 text-white py-4 px-6 rounded-lg font-bold hover:bg-purple-700 transition-colors inline-block text-center text-lg"
                             >
                                 Explore Deals
-                            </Link>
-                        </div>
-                    </div>
-
-                    {/* Network Partner Path */}
-                    <div className="bg-white rounded-xl p-6 shadow-xl border border-orange-200 hover:shadow-2xl transition-all transform hover:scale-105">
-                        <div className="text-center">
-                            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-2xl">🤝</span>
-                            </div>
-                            <h3 className="text-xl font-bold text-orange-800 mb-3">Network Partner</h3>
-                            <p className="text-sm text-gray-600 mb-4">
-                                Refer new businesses and affiliates to earn substantial referral bonuses.
-                            </p>
-                            <ul className="text-xs text-gray-500 space-y-1 mb-6 text-left">
-                                <li>✓ 10,000 credits per referral</li>
-                                <li>✓ Lifetime earning potential</li>
-                                <li>✓ Build your network</li>
-                                <li>✓ Exclusive partner benefits</li>
-                            </ul>
-                            <Link 
-                                to="/partners"
-                                className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-orange-700 transition-colors inline-block text-center"
-                            >
-                                Join Network
                             </Link>
                         </div>
                     </div>

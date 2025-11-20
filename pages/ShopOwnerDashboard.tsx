@@ -700,45 +700,95 @@ const ShopOwnerDashboard: React.FC = () => {
                             <table className="w-full text-sm">
                                 <thead className="bg-gray-50 text-xs text-gray-700 uppercase">
                                     <tr>
-                                        <th className="px-6 py-3 text-left">Customer Info</th>
-                                        <th className="px-6 py-3 text-left">Contact Details</th>
-                                        <th className="px-6 py-3 text-left">Demographics</th>
-                                        <th className="px-6 py-3 text-left">Redemption History</th>
-                                        <th className="px-6 py-3 text-left">Source</th>
+                                        <th className="px-6 py-3 text-left">Customer Identity</th>
+                                        <th className="px-6 py-3 text-left">Complete Contact Information</th>
+                                        <th className="px-6 py-3 text-left">Demographics & Profile</th>
+                                        <th className="px-6 py-3 text-left">Redemption Details</th>
+                                        <th className="px-6 py-3 text-left">Acquisition Source</th>
+                                        <th className="px-6 py-3 text-left">Customer Value</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
                                     {customerData.map((customer) => (
                                         <tr key={customer.id} className="hover:bg-gray-50">
                                             <td className="px-6 py-4">
-                                                <div className="text-sm font-medium text-gray-900">{customer.customerName || 'N/A'}</div>
+                                                <div className="text-sm font-medium text-gray-900">{customer.customerName || 'Anonymous Customer'}</div>
                                                 <div className="text-xs text-gray-500">User ID: {customer.userId?.slice(0, 8)}</div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-sm text-gray-900">{customer.customerPhone || 'N/A'}</div>
-                                                <div className="text-xs text-gray-500">{customer.customerEmail || 'N/A'}</div>
-                                                <div className="text-xs text-gray-500">{customer.customerAddress || 'N/A'}</div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-sm text-gray-900">
-                                                    Age: {customer.customerAge || 'N/A'}
-                                                </div>
-                                                <div className="text-xs text-gray-500">
-                                                    Gender: {customer.customerGender || 'N/A'}
+                                                <div className="text-xs text-blue-600">
+                                                    Redemption ID: {customer.id?.slice(0, 8)}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <div className="text-sm text-gray-900">{customer.couponTitle}</div>
-                                                <div className="text-xs text-gray-500">
-                                                    {customer.redeemedAt?.toLocaleDateString()}
+                                                <div className="space-y-1">
+                                                    <div className="text-sm font-medium text-gray-900">📞 {customer.customerPhone || 'No phone provided'}</div>
+                                                    <div className="text-sm text-gray-700">✉️ {customer.customerEmail || 'No email provided'}</div>
+                                                    {customer.customerAddress && (
+                                                        <div className="text-xs text-gray-600">📍 {customer.customerAddress}</div>
+                                                    )}
+                                                    <div className="text-xs text-gray-500">
+                                                        Contact Status: {(customer.customerPhone && customer.customerEmail) ? 'Complete' : 'Partial'}
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                                    customer.affiliateId ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
-                                                }`}>
-                                                    {customer.affiliateId ? `Via ${customer.affiliateName || 'Affiliate'}` : 'Direct'}
-                                                </span>
+                                                <div className="space-y-1">
+                                                    <div className="text-sm text-gray-900">
+                                                        👤 Age: {customer.customerAge || 'Not provided'}
+                                                    </div>
+                                                    <div className="text-sm text-gray-700">
+                                                        ⚧ Gender: {customer.customerGender || 'Not specified'}
+                                                    </div>
+                                                    <div className="text-xs text-blue-600">
+                                                        Profile: {(customer.customerAge && customer.customerGender) ? 'Complete' : 'Basic'}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm font-medium text-gray-900">{customer.couponTitle}</div>
+                                                    <div className="text-xs text-gray-600">
+                                                        🗓️ {customer.redeemedAt?.toLocaleDateString()} at {customer.redeemedAt?.toLocaleTimeString()}
+                                                    </div>
+                                                    <div className="text-xs text-green-600">
+                                                        💰 Discount: {customer.discountType === 'percentage' ? `${customer.discountValue}% OFF` : `$${customer.discountValue} OFF`}
+                                                    </div>
+                                                    <div className="text-xs text-purple-600">
+                                                        🎁 Points earned: {customer.customerRewardPoints || 0}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                                        customer.affiliateId ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+                                                    }`}>
+                                                        {customer.affiliateId ? `Via ${customer.affiliateName || 'Affiliate'}` : 'Direct Customer'}
+                                                    </span>
+                                                    {customer.affiliateId && (
+                                                        <div className="text-xs text-blue-600">
+                                                            Affiliate ID: {customer.affiliateId?.slice(0, 8)}
+                                                        </div>
+                                                    )}
+                                                    <div className="text-xs text-gray-500">
+                                                        {customer.affiliateId ? 'Affiliate-driven acquisition' : 'Organic customer'}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm font-medium text-green-600">
+                                                        💰 Commission Paid: {customer.commissionEarned || 0} credits
+                                                    </div>
+                                                    <div className="text-xs text-blue-600">
+                                                        📊 Acquisition Cost: {customer.affiliateId ? `${customer.commissionEarned || 0} credits` : 'Free'}
+                                                    </div>
+                                                    <div className="text-xs text-purple-600">
+                                                        🎯 Customer LTV: Potential high value
+                                                    </div>
+                                                    <div className="text-xs text-gray-600">
+                                                        📈 ROI: {customer.affiliateId ? 'Measured' : 'Direct profit'}
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
