@@ -14,19 +14,31 @@ const AffiliateDashboard: React.FC = () => {
     const { t } = useTranslation();
     const [coupons, setCoupons] = useState<Coupon[]>([]);
     const [redemptions, setRedemptions] = useState<Redemption[]>([]);
+    const [customerData, setCustomerData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [modalInfo, setModalInfo] = useState<{url: string} | null>(null);
     const [activeTab, setActiveTab] = useState<'coupons' | 'redemptions'>('coupons');
 
     const fetchData = useCallback(async () => {
         if (user) {
+            console.log('🔄 Fetching affiliate data for user:', user.id);
             setLoading(true);
-            const [allCoupons, affiliateRedemptions] = await Promise.all([
+            
+            const [allCoupons, affiliateRedemptions, affiliateCustomers] = await Promise.all([
                 api.getAllCoupons(),
                 api.getRedemptionsForAffiliate(user.id),
+                api.getCustomerDataForAffiliate(user.id),
             ]);
+            
+            console.log('📊 Affiliate data fetched:', {
+                coupons: allCoupons.length,
+                redemptions: affiliateRedemptions.length,
+                customers: affiliateCustomers.length
+            });
+            
             setCoupons(allCoupons);
             setRedemptions(affiliateRedemptions);
+            setCustomerData(affiliateCustomers);
             setLoading(false);
         }
     }, [user]);
@@ -37,8 +49,11 @@ const AffiliateDashboard: React.FC = () => {
     
     if (!user) return null;
     
+    // Calculate affiliate performance stats
     const totalPointsEarned = redemptions.reduce((sum, redemption) => sum + (redemption.commissionEarned || 0), 0);
     const totalExecutions = redemptions.length;
+    const totalCustomers = customerData.length;
+    const uniqueShops = new Set(redemptions.map(r => r.shopOwnerId)).size;
 
     const handleGetLink = (couponId: string) => {
         const url = `${window.location.origin}/#/coupon/${couponId}?affiliateId=${user.id}`;
@@ -51,10 +66,11 @@ const AffiliateDashboard: React.FC = () => {
             
             <h1 className="text-3xl font-bold text-dark-gray">{t('affiliate.dashboardTitle')}</h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <StatCard title={t('affiliate.stats.totalPoints')} value={totalPointsEarned.toLocaleString()} icon={<BanknotesIcon className="h-6 w-6"/>} color="green" />
                 <StatCard title={t('affiliate.stats.totalExecutions')} value={totalExecutions} icon={<CheckCircleIcon className="h-6 w-6"/>} color="blue" />
-                <StatCard title="Customer Data Access" value={redemptions.length} icon={<CheckCircleIcon className="h-6 w-6"/>} color="purple" />
+                <StatCard title="Total Customers" value={totalCustomers} icon={<CheckCircleIcon className="h-6 w-6"/>} color="purple" />
+                <StatCard title="Partner Shops" value={uniqueShops} icon={<CheckCircleIcon className="h-6 w-6"/>} color="orange" />
             </div>
 
             {/* Navigation Tabs */}
@@ -113,8 +129,35 @@ const AffiliateDashboard: React.FC = () => {
                 <div className="space-y-6">
                     <div className="bg-white rounded-xl shadow-lg border overflow-hidden">
                         <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-2">👥 Customer Redemption Data</h2>
-                            <p className="text-gray-600">Complete customer information for all coupons you've promoted</p>
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <h2 className="text-2xl font-bold text-gray-800 mb-2">👥 Customer Redemption Data</h2>
+                                    <p className="text-gray-600">Complete customer information for all coupons you've promoted</p>
+                                    <p className="text-sm text-green-700 mt-1">
+                                        📊 Showing data from {customerData.length > 0 ? new Set(customerData.map(item => item.source || 'standard')).size : 0} data sources
+                                    </p>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={fetchData}
+                                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all font-medium flex items-center gap-2"
+                                        disabled={loading}
+                                    >
+                                        🔄 {loading ? 'Refreshing...' : 'Refresh Data'}
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            console.log('🔍 Affiliate Debug - User ID:', user.id);
+                                            console.log('🔍 Affiliate Debug - Customer Data:', customerData);
+                                            console.log('🔍 Affiliate Debug - Redemptions:', redemptions);
+                                            console.log('🔍 Affiliate Debug - Stats:', { totalPointsEarned, totalExecutions, totalCustomers, uniqueShops });
+                                        }}
+                                        className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all font-medium flex items-center gap-2"
+                                    >
+                                        🔧 Debug
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         
                         <div className="overflow-x-auto">
@@ -129,28 +172,31 @@ const AffiliateDashboard: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
-                                    {redemptions.map((redemption) => (
-                                        <tr key={redemption.id} className="hover:bg-gray-50">
+                                    {customerData.map((customer, index) => (
+                                        <tr key={customer.id || `customer-${index}`} className="hover:bg-gray-50">
                                             <td className="px-6 py-4">
                                                 <div className="text-sm text-gray-900">
-                                                    {redemption.redeemedAt ? new Date(redemption.redeemedAt).toLocaleDateString() : 'N/A'}
+                                                    {customer.redeemedAt ? new Date(customer.redeemedAt).toLocaleDateString() : 'N/A'}
                                                 </div>
                                                 <div className="text-xs text-gray-500">
-                                                    {redemption.redeemedAt ? new Date(redemption.redeemedAt).toLocaleTimeString() : 'N/A'}
+                                                    {customer.redeemedAt ? new Date(customer.redeemedAt).toLocaleTimeString() : 'N/A'}
+                                                </div>
+                                                <div className="text-xs text-blue-500">
+                                                    Source: {customer.source || 'standard'}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <div className="text-sm font-medium text-gray-900">{redemption.couponTitle || 'N/A'}</div>
-                                                <div className="text-xs text-gray-500">ID: {redemption.couponId?.slice(0, 8)}</div>
+                                                <div className="text-sm font-medium text-gray-900">{customer.couponTitle || 'N/A'}</div>
+                                                <div className="text-xs text-gray-500">ID: {customer.couponId?.slice(0, 8)}</div>
                                                 <div className="text-xs text-blue-600">
-                                                    {redemption.discountType === 'percentage' ? `${redemption.discountValue}% OFF` : `$${redemption.discountValue} OFF`}
+                                                    {customer.discountType === 'percentage' ? `${customer.discountValue}% OFF` : `$${customer.discountValue} OFF`}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="space-y-1">
-                                                    {redemption.customerName ? (
+                                                    {customer.customerName ? (
                                                         <div className="text-sm font-medium text-gray-900">
-                                                            {redemption.customerName}
+                                                            {customer.customerName}
                                                         </div>
                                                     ) : (
                                                         <div className="text-sm font-medium text-red-600">
@@ -158,9 +204,9 @@ const AffiliateDashboard: React.FC = () => {
                                                         </div>
                                                     )}
                                                     
-                                                    {redemption.customerPhone ? (
+                                                    {customer.customerPhone ? (
                                                         <div className="text-xs text-gray-700">
-                                                            📞 {redemption.customerPhone}
+                                                            📞 {customer.customerPhone}
                                                         </div>
                                                     ) : (
                                                         <div className="text-xs text-red-600">
@@ -168,9 +214,9 @@ const AffiliateDashboard: React.FC = () => {
                                                         </div>
                                                     )}
                                                     
-                                                    {redemption.customerEmail ? (
+                                                    {customer.customerEmail ? (
                                                         <div className="text-xs text-gray-700">
-                                                            ✉️ {redemption.customerEmail}
+                                                            ✉️ {customer.customerEmail}
                                                         </div>
                                                     ) : (
                                                         <div className="text-xs text-orange-600">
@@ -178,27 +224,39 @@ const AffiliateDashboard: React.FC = () => {
                                                         </div>
                                                     )}
                                                     
-                                                    {redemption.customerAddress && (
+                                                    {customer.customerAddress && (
                                                         <div className="text-xs text-gray-600">
-                                                            📍 {redemption.customerAddress}
+                                                            📍 {customer.customerAddress}
                                                         </div>
                                                     )}
                                                     
-                                                    {redemption.customerAge && (
+                                                    {customer.customerAge && (
                                                         <div className="text-xs text-gray-600">
-                                                            👤 Age: {redemption.customerAge}{redemption.customerGender ? `, ${redemption.customerGender}` : ''}
+                                                            👤 Age: {customer.customerAge}{customer.customerGender ? `, ${customer.customerGender}` : ''}
                                                         </div>
                                                     )}
                                                     
                                                     <div className="text-xs text-blue-600">
-                                                        Customer ID: {redemption.userId?.slice(0, 8) || redemption.customerId?.slice(0, 8) || 'Unknown'}
+                                                        Customer ID: {customer.userId?.slice(0, 8) || customer.customerId?.slice(0, 8) || 'Unknown'}
                                                     </div>
+                                                    
+                                                    {customer.isVerifiedCustomer && (
+                                                        <div className="text-xs text-green-600">
+                                                            ✅ Verified Customer
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {customer.hasCompleteProfile && (
+                                                        <div className="text-xs text-purple-600">
+                                                            📋 Complete Profile
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                {redemption.shopOwnerName ? (
+                                                {customer.shopOwnerName ? (
                                                     <div className="text-sm font-medium text-gray-900">
-                                                        {redemption.shopOwnerName}
+                                                        {customer.shopOwnerName}
                                                     </div>
                                                 ) : (
                                                     <div className="text-sm font-medium text-red-600">
@@ -206,33 +264,69 @@ const AffiliateDashboard: React.FC = () => {
                                                     </div>
                                                 )}
                                                 <div className="text-xs text-gray-500">
-                                                    Shop ID: {redemption.shopOwnerId?.slice(0, 8) || 'Unknown'}
+                                                    Shop ID: {customer.shopOwnerId?.slice(0, 8) || 'Unknown'}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="text-sm font-medium text-green-600">
-                                                    💰 {redemption.commissionEarned || 0} credits
+                                                    💰 {customer.commissionEarned || 0} credits
                                                 </div>
                                                 <div className="text-xs text-blue-600">
-                                                    🎁 Customer earned: {redemption.customerRewardPoints || 0} points
+                                                    🎁 Customer earned: {customer.customerRewardPoints || 0} points
                                                 </div>
+                                                {customer.affiliatePromotionSuccess && (
+                                                    <div className="text-xs text-green-600">
+                                                        ✅ Promotion Success
+                                                    </div>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
-                            {redemptions.length === 0 && (
+                            {customerData.length === 0 && !loading && (
                                 <div className="text-center py-8 text-gray-500">
-                                    No redemptions yet. Start promoting coupons to see customer data here.
+                                    <div className="mb-4">
+                                        No customer redemptions yet. Start promoting coupons to see customer data here.
+                                    </div>
+                                    <button 
+                                        onClick={fetchData}
+                                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all"
+                                    >
+                                        🔄 Refresh Data
+                                    </button>
+                                </div>
+                            )}
+                            
+                            {loading && (
+                                <div className="text-center py-8 text-blue-600">
+                                    <div className="animate-spin inline-block w-6 h-6 border-2 border-current border-t-transparent rounded-full" role="status">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                    <div className="mt-2">Loading customer data...</div>
                                 </div>
                             )}
                         </div>
                     </div>
                     
-                    {redemptions.length > 0 && (
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    {customerData.length > 0 && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-blue-700">{customerData.length}</div>
+                                    <div className="text-sm text-blue-600">Total Customers</div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-green-700">{customerData.filter(c => c.isVerifiedCustomer).length}</div>
+                                    <div className="text-sm text-green-600">Verified Customers</div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-purple-700">{customerData.filter(c => c.hasCompleteProfile).length}</div>
+                                    <div className="text-sm text-purple-600">Complete Profiles</div>
+                                </div>
+                            </div>
                             <p className="text-blue-800 text-sm">
-                                <strong>📊 Data Access:</strong> As an affiliate, you have full access to customer information for coupons you've promoted. This data helps you understand your audience and improve your marketing strategies.
+                                <strong>📊 Affiliate Analytics:</strong> As an affiliate, you have complete access to customer information for coupons you've promoted. This includes contact details, demographics, and redemption patterns to help you optimize your marketing strategies.
                             </p>
                         </div>
                     )}

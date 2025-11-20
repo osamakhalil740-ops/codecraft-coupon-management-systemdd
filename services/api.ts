@@ -616,6 +616,23 @@ export const api = {
                     const customerDocRef = await addDoc(shopCustomerDataRef, comprehensiveCustomerData);
                     console.log('✅ Stored customer data in shopCustomerData collection with ID:', customerDocRef.id);
 
+                    // 2. If affiliate exists, ALSO store in affiliateCustomerData collection for Affiliate dashboard
+                    if (affiliateId && affiliateName) {
+                        console.log('🤝 Storing affiliate customer data for affiliate:', affiliateId);
+                        
+                        const affiliateCustomerData = {
+                            ...comprehensiveCustomerData,
+                            // Affiliate-specific tracking
+                            affiliateDataSource: 'affiliate_promotion',
+                            affiliatePromotionSuccess: true,
+                            affiliateEarningsConfirmed: true
+                        };
+                        
+                        const affiliateCustomerDataRef = collection(db, "affiliateCustomerData");
+                        const affiliateDocRef = await addDoc(affiliateCustomerDataRef, affiliateCustomerData);
+                        console.log('✅ Stored affiliate customer data in affiliateCustomerData collection with ID:', affiliateDocRef.id);
+                    }
+
                     // 2. Also update the redemption record with customer data for complete tracking
                     console.log('🔄 Updating redemption record with customer data...');
                     const redemptionsCollection = collection(db, "redemptions");
@@ -749,22 +766,102 @@ export const api = {
         try {
             console.log('🔍 Fetching redemptions for affiliate:', affiliateId);
             
-            // Get standard redemptions
-            const q1 = query(collection(db, "redemptions"), where("affiliateId", "==", affiliateId), orderBy("redeemedAt", "desc"));
-            const querySnapshot1 = await getDocs(q1);
-            const standardRedemptions = querySnapshot1.docs.map(fromFirestore) as Redemption[];
+            let allRedemptions: any[] = [];
             
-            // Get detailed customer redemptions for this affiliate
-            const q2 = query(collection(db, "detailedCustomerRedemptions"), where("affiliateId", "==", affiliateId), orderBy("timestamp", "desc"));
-            const querySnapshot2 = await getDocs(q2);
-            const detailedRedemptions = querySnapshot2.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-                redeemedAt: doc.data().timestamp?.toDate?.() || new Date(doc.data().timestamp || Date.now())
-            })) as Redemption[];
+            // 1. Get standard redemptions from main collection
+            try {
+                const q1 = query(collection(db, "redemptions"), where("affiliateId", "==", affiliateId), orderBy("redeemedAt", "desc"));
+                const querySnapshot1 = await getDocs(q1);
+                const standardRedemptions = querySnapshot1.docs.map(fromFirestore) as Redemption[];
+                console.log(`📊 Found ${standardRedemptions.length} standard redemptions for affiliate`);
+                allRedemptions = [...standardRedemptions];
+            } catch (standardError) {
+                console.log('⚠️ Error with standard redemptions, trying without ordering...');
+                const q1 = query(collection(db, "redemptions"), where("affiliateId", "==", affiliateId));
+                const querySnapshot1 = await getDocs(q1);
+                const standardRedemptions = querySnapshot1.docs.map(fromFirestore) as Redemption[];
+                console.log(`📊 Found ${standardRedemptions.length} standard redemptions (no ordering) for affiliate`);
+                allRedemptions = [...standardRedemptions];
+            }
             
-            // Combine and deduplicate
-            const allRedemptions = [...standardRedemptions, ...detailedRedemptions];
+            // 2. Get detailed customer redemptions for this affiliate
+            try {
+                const q2 = query(collection(db, "detailedCustomerRedemptions"), where("affiliateId", "==", affiliateId), orderBy("timestamp", "desc"));
+                const querySnapshot2 = await getDocs(q2);
+                const detailedRedemptions = querySnapshot2.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    redeemedAt: doc.data().timestamp?.toDate?.() || new Date(doc.data().timestamp || Date.now())
+                })) as Redemption[];
+                console.log(`📊 Found ${detailedRedemptions.length} detailed redemptions for affiliate`);
+                
+                // Merge avoiding duplicates
+                const existingKeys = new Set(allRedemptions.map(item => `${item.couponId}-${item.userId || item.customerId}`));
+                const newDetailedRedemptions = detailedRedemptions.filter(item => 
+                    !existingKeys.has(`${item.couponId}-${item.userId || item.customerId}`)
+                );
+                allRedemptions = [...allRedemptions, ...newDetailedRedemptions];
+                
+            } catch (detailedError) {
+                console.log('⚠️ Error with detailed redemptions, trying without ordering...');
+                const q2 = query(collection(db, "detailedCustomerRedemptions"), where("affiliateId", "==", affiliateId));
+                const querySnapshot2 = await getDocs(q2);
+                const detailedRedemptions = querySnapshot2.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    redeemedAt: doc.data().timestamp?.toDate?.() || new Date(doc.data().timestamp || Date.now())
+                })) as Redemption[];
+                console.log(`📊 Found ${detailedRedemptions.length} detailed redemptions (no ordering) for affiliate`);
+                
+                // Merge avoiding duplicates
+                const existingKeys = new Set(allRedemptions.map(item => `${item.couponId}-${item.userId || item.customerId}`));
+                const newDetailedRedemptions = detailedRedemptions.filter(item => 
+                    !existingKeys.has(`${item.couponId}-${item.userId || item.customerId}`)
+                );
+                allRedemptions = [...allRedemptions, ...newDetailedRedemptions];
+            }
+            
+            // 3. Get affiliate-specific customer data collection
+            try {
+                console.log('🤝 Fetching affiliate-specific customer data...');
+                const q3 = query(collection(db, "affiliateCustomerData"), where("affiliateId", "==", affiliateId), orderBy("timestamp", "desc"));
+                const querySnapshot3 = await getDocs(q3);
+                const affiliateCustomerData = querySnapshot3.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    redeemedAt: doc.data().timestamp?.toDate?.() || doc.data().redeemedAt?.toDate?.() || new Date(),
+                    source: 'affiliateCustomerData'
+                })) as Redemption[];
+                console.log(`📊 Found ${affiliateCustomerData.length} affiliate customer records`);
+                
+                // Merge avoiding duplicates
+                const existingKeys = new Set(allRedemptions.map(item => `${item.couponId}-${item.userId || item.customerId}`));
+                const newAffiliateData = affiliateCustomerData.filter(item => 
+                    !existingKeys.has(`${item.couponId}-${item.userId || item.customerId}`)
+                );
+                allRedemptions = [...allRedemptions, ...newAffiliateData];
+                
+            } catch (affiliateDataError) {
+                console.log('⚠️ Error with affiliate customer data, trying without ordering...');
+                const q3 = query(collection(db, "affiliateCustomerData"), where("affiliateId", "==", affiliateId));
+                const querySnapshot3 = await getDocs(q3);
+                const affiliateCustomerData = querySnapshot3.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    redeemedAt: doc.data().timestamp?.toDate?.() || doc.data().redeemedAt?.toDate?.() || new Date(),
+                    source: 'affiliateCustomerData'
+                })) as Redemption[];
+                console.log(`📊 Found ${affiliateCustomerData.length} affiliate customer records (no ordering)`);
+                
+                // Merge avoiding duplicates
+                const existingKeys = new Set(allRedemptions.map(item => `${item.couponId}-${item.userId || item.customerId}`));
+                const newAffiliateData = affiliateCustomerData.filter(item => 
+                    !existingKeys.has(`${item.couponId}-${item.userId || item.customerId}`)
+                );
+                allRedemptions = [...allRedemptions, ...newAffiliateData];
+            }
+            
+            // 4. Final deduplication and sorting
             const uniqueRedemptions = allRedemptions.reduce((unique, redemption) => {
                 const key = `${redemption.couponId}-${redemption.userId || redemption.customerId}`;
                 if (!unique.find(item => `${item.couponId}-${item.userId || item.customerId}` === key)) {
@@ -773,12 +870,120 @@ export const api = {
                 return unique;
             }, [] as Redemption[]);
             
-            console.log(`✅ Found ${uniqueRedemptions.length} redemptions for affiliate ${affiliateId}`);
-            return uniqueRedemptions.sort((a, b) => 
+            // Sort by redemption date
+            const sortedRedemptions = uniqueRedemptions.sort((a, b) => 
                 new Date(b.redeemedAt).getTime() - new Date(a.redeemedAt).getTime()
             );
+            
+            console.log(`✅ Returning ${sortedRedemptions.length} total redemptions for affiliate ${affiliateId}`);
+            console.log('📝 Sample affiliate redemption data:', sortedRedemptions.length > 0 ? {
+                sample: sortedRedemptions[0],
+                totalRecords: sortedRedemptions.length,
+                sources: [...new Set(sortedRedemptions.map(item => item.source || 'standard'))]
+            } : 'No data');
+            
+            return sortedRedemptions;
         } catch (error) {
             console.error('❌ Error fetching redemptions for affiliate:', error);
+            return [];
+        }
+    },
+
+    // NEW: Get customer data specifically for affiliates
+    getCustomerDataForAffiliate: async (affiliateId: string): Promise<any[]> => {
+        try {
+            console.log('🤝 Fetching customer data for affiliate:', affiliateId);
+            
+            let allCustomerData: any[] = [];
+            
+            // 1. Get data from affiliateCustomerData collection (primary source)
+            try {
+                const affiliateCustomerDataCollection = collection(db, "affiliateCustomerData");
+                const q = query(
+                    affiliateCustomerDataCollection, 
+                    where("affiliateId", "==", affiliateId),
+                    orderBy("timestamp", "desc")
+                );
+                
+                const snapshot = await getDocs(q);
+                const customerData = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    source: 'affiliateCustomerData',
+                    redeemedAt: doc.data().timestamp?.toDate?.() || doc.data().redeemedAt?.toDate?.() || doc.data().createdAt?.toDate?.() || new Date()
+                }));
+                
+                console.log(`📊 Found ${customerData.length} customer records in affiliateCustomerData for affiliate ${affiliateId}`);
+                allCustomerData = [...customerData];
+            } catch (orderError) {
+                console.log('⚠️ Affiliate timestamp ordering failed, trying without ordering...');
+                const affiliateCustomerDataCollection = collection(db, "affiliateCustomerData");
+                const q = query(affiliateCustomerDataCollection, where("affiliateId", "==", affiliateId));
+                
+                const snapshot = await getDocs(q);
+                const customerData = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    source: 'affiliateCustomerData',
+                    redeemedAt: doc.data().timestamp?.toDate?.() || doc.data().redeemedAt?.toDate?.() || doc.data().createdAt?.toDate?.() || new Date()
+                }));
+                
+                console.log(`📊 Found ${customerData.length} customer records in affiliateCustomerData (no ordering) for affiliate ${affiliateId}`);
+                allCustomerData = [...customerData];
+            }
+            
+            // 2. Also check redemptions collection for additional customer data
+            try {
+                console.log('📋 Also checking redemptions collection for affiliate customer data...');
+                
+                const redemptionsCollection = collection(db, "redemptions");
+                const redemptionQuery = query(redemptionsCollection, where("affiliateId", "==", affiliateId));
+                const redemptionSnapshot = await getDocs(redemptionQuery);
+                
+                const redemptionData = redemptionSnapshot.docs
+                    .map(doc => ({
+                        id: doc.id,
+                        ...doc.data(),
+                        source: 'redemptions',
+                        redeemedAt: doc.data().redeemedAt?.toDate?.() || new Date()
+                    }))
+                    .filter(redemption => redemption.customerName || redemption.customerPhone || redemption.customerEmail);
+                
+                console.log(`📊 Found ${redemptionData.length} redemptions with customer data for affiliate`);
+                
+                // Merge with existing data (avoid duplicates based on couponId + userId)
+                const existingKeys = new Set(allCustomerData.map(item => `${item.couponId}-${item.userId}`));
+                const newRedemptionData = redemptionData.filter(item => 
+                    !existingKeys.has(`${item.couponId}-${item.userId}`)
+                );
+                
+                allCustomerData = [...allCustomerData, ...newRedemptionData];
+                console.log(`📊 Total affiliate customer records after merging: ${allCustomerData.length}`);
+            } catch (redemptionError) {
+                console.error('❌ Error fetching from redemptions collection for affiliate:', redemptionError);
+            }
+            
+            // 3. Sort all data by redemption date (newest first)
+            allCustomerData.sort((a, b) => {
+                const dateA = new Date(a.redeemedAt).getTime();
+                const dateB = new Date(b.redeemedAt).getTime();
+                return dateB - dateA;
+            });
+            
+            console.log(`✅ Returning ${allCustomerData.length} total customer records for affiliate ${affiliateId}`);
+            
+            // Log sample data for debugging if we have records
+            if (allCustomerData.length > 0) {
+                console.log('📝 Sample affiliate customer data:', {
+                    sampleRecord: allCustomerData[0],
+                    totalRecords: allCustomerData.length,
+                    sources: [...new Set(allCustomerData.map(item => item.source))]
+                });
+            }
+            
+            return allCustomerData;
+        } catch (error) {
+            console.error('❌ Error fetching customer data for affiliate:', error);
             return [];
         }
     },
