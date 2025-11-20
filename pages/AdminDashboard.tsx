@@ -546,16 +546,37 @@ const AdminDashboard: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="space-y-1">
-                                            <div className="text-sm font-medium text-gray-900">{record.customerName || 'Anonymous'}</div>
-                                            <div className="text-xs text-gray-700">📞 {record.customerPhone || 'No phone'}</div>
-                                            <div className="text-xs text-gray-700">✉️ {record.customerEmail || 'No email'}</div>
+                                            {record.customerName ? (
+                                                <div className="text-sm font-medium text-gray-900">{record.customerName}</div>
+                                            ) : (
+                                                <div className="text-sm font-medium text-red-600">⚠️ Customer name missing</div>
+                                            )}
+                                            
+                                            {record.customerPhone ? (
+                                                <div className="text-xs text-gray-700">📞 {record.customerPhone}</div>
+                                            ) : (
+                                                <div className="text-xs text-red-600">📞 Phone number required but missing</div>
+                                            )}
+                                            
+                                            {record.customerEmail ? (
+                                                <div className="text-xs text-gray-700">✉️ {record.customerEmail}</div>
+                                            ) : (
+                                                <div className="text-xs text-orange-600">✉️ Email not provided</div>
+                                            )}
+                                            
                                             {record.customerAddress && (
                                                 <div className="text-xs text-gray-600">📍 {record.customerAddress}</div>
                                             )}
+                                            
                                             {record.customerAge && (
-                                                <div className="text-xs text-gray-600">👤 {record.customerAge}y, {record.customerGender || 'N/A'}</div>
+                                                <div className="text-xs text-gray-600">
+                                                    👤 {record.customerAge}y{record.customerGender ? `, ${record.customerGender}` : ''}
+                                                </div>
                                             )}
-                                            <div className="text-xs text-blue-600">User ID: {record.userId?.slice(0, 8)}</div>
+                                            
+                                            <div className="text-xs text-blue-600">
+                                                Customer ID: {record.userId?.slice(0, 8) || record.customerId?.slice(0, 8) || 'Missing ID'}
+                                            </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">

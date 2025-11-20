@@ -148,36 +148,65 @@ const AffiliateDashboard: React.FC = () => {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="space-y-1">
-                                                    <div className="text-sm font-medium text-gray-900">
-                                                        {redemption.customerName || 'Anonymous Customer'}
-                                                    </div>
-                                                    <div className="text-xs text-gray-700">
-                                                        📞 {redemption.customerPhone || 'No phone provided'}
-                                                    </div>
-                                                    <div className="text-xs text-gray-700">
-                                                        ✉️ {redemption.customerEmail || 'No email provided'}
-                                                    </div>
+                                                    {redemption.customerName ? (
+                                                        <div className="text-sm font-medium text-gray-900">
+                                                            {redemption.customerName}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-sm font-medium text-red-600">
+                                                            ⚠️ Customer name not provided
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {redemption.customerPhone ? (
+                                                        <div className="text-xs text-gray-700">
+                                                            📞 {redemption.customerPhone}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-xs text-red-600">
+                                                            📞 Phone number required but not provided
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {redemption.customerEmail ? (
+                                                        <div className="text-xs text-gray-700">
+                                                            ✉️ {redemption.customerEmail}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-xs text-orange-600">
+                                                            ✉️ Email not provided
+                                                        </div>
+                                                    )}
+                                                    
                                                     {redemption.customerAddress && (
                                                         <div className="text-xs text-gray-600">
                                                             📍 {redemption.customerAddress}
                                                         </div>
                                                     )}
+                                                    
                                                     {redemption.customerAge && (
                                                         <div className="text-xs text-gray-600">
-                                                            👤 Age: {redemption.customerAge}, {redemption.customerGender || 'N/A'}
+                                                            👤 Age: {redemption.customerAge}{redemption.customerGender ? `, ${redemption.customerGender}` : ''}
                                                         </div>
                                                     )}
+                                                    
                                                     <div className="text-xs text-blue-600">
-                                                        User ID: {redemption.userId?.slice(0, 8)}
+                                                        Customer ID: {redemption.userId?.slice(0, 8) || redemption.customerId?.slice(0, 8) || 'Unknown'}
                                                     </div>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <div className="text-sm font-medium text-gray-900">
-                                                    {redemption.shopOwnerName || 'Unknown Shop'}
-                                                </div>
+                                                {redemption.shopOwnerName ? (
+                                                    <div className="text-sm font-medium text-gray-900">
+                                                        {redemption.shopOwnerName}
+                                                    </div>
+                                                ) : (
+                                                    <div className="text-sm font-medium text-red-600">
+                                                        ⚠️ Shop name not available
+                                                    </div>
+                                                )}
                                                 <div className="text-xs text-gray-500">
-                                                    Shop ID: {redemption.shopOwnerId?.slice(0, 8)}
+                                                    Shop ID: {redemption.shopOwnerId?.slice(0, 8) || 'Unknown'}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
