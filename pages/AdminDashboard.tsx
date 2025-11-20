@@ -413,33 +413,362 @@ const AdminDashboard: React.FC = () => {
         }`;
     };
 
-    // Overview content
+    // Auto-load intelligence data on page load
+    useEffect(() => {
+        if (allUsers.length > 0 && allCoupons.length > 0) {
+            fetchIntelligenceData();
+        }
+    }, [allUsers.length, allCoupons.length, fetchIntelligenceData]);
+
+    // Overview content with Data Intelligence Section
     const overviewContent = (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard 
-                title="Total Users" 
-                value={allUsers.length.toString()} 
-                icon={<UserGroupIcon className="h-6 w-6" />} 
-                color="blue" 
-            />
-            <StatCard 
-                title="Total Coupons" 
-                value={allCoupons.length.toString()} 
-                icon={<TicketIcon className="h-6 w-6" />} 
-                color="green" 
-            />
-            <StatCard 
-                title="Total Redemptions" 
-                value={redemptions.length.toString()} 
-                icon={<BanknotesIcon className="h-6 w-6" />} 
-                color="purple" 
-            />
-            <StatCard 
-                title="Total Referrals" 
-                value={referrals.length.toString()} 
-                icon={<GiftIcon className="h-6 w-6" />} 
-                color="orange" 
-            />
+        <div className="space-y-8">
+            {/* Basic Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <StatCard 
+                    title="Total Users" 
+                    value={allUsers.length.toString()} 
+                    icon={<UserGroupIcon className="h-6 w-6" />} 
+                    color="blue" 
+                />
+                <StatCard 
+                    title="Total Coupons" 
+                    value={allCoupons.length.toString()} 
+                    icon={<TicketIcon className="h-6 w-6" />} 
+                    color="green" 
+                />
+                <StatCard 
+                    title="Total Redemptions" 
+                    value={redemptions.length.toString()} 
+                    icon={<BanknotesIcon className="h-6 w-6" />} 
+                    color="purple" 
+                />
+                <StatCard 
+                    title="Total Referrals" 
+                    value={referrals.length.toString()} 
+                    icon={<GiftIcon className="h-6 w-6" />} 
+                    color="orange" 
+                />
+            </div>
+
+            {/* DATA INTELLIGENCE SECTION - VISIBLE IMMEDIATELY */}
+            <div className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 text-white p-8 rounded-xl shadow-lg">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h2 className="text-3xl font-bold mb-2">🧠 Data Intelligence Center</h2>
+                        <p className="text-purple-100">Complete system-wide analytics and insights dashboard</p>
+                        <p className="text-sm text-blue-200 mt-1">
+                            Last updated: {intelligenceData.lastUpdated ? new Date(intelligenceData.lastUpdated).toLocaleString() : 'Loading...'}
+                        </p>
+                    </div>
+                    <div className="text-right">
+                        <button
+                            onClick={fetchIntelligenceData}
+                            disabled={busy}
+                            className="px-6 py-3 bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-lg transition-all font-medium"
+                        >
+                            {busy ? '🔄 Loading...' : '🔄 Refresh Data'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {busy && (
+                <div className="text-center py-12">
+                    <div className="animate-spin inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+                    <p className="mt-4 text-gray-600">Loading comprehensive intelligence data...</p>
+                </div>
+            )}
+
+            {intelligenceData.globalAnalytics && (
+                <>
+                    {/* Global System Health Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-blue-100 text-sm">System Health</p>
+                                    <p className="text-3xl font-bold">{intelligenceData.globalAnalytics.systemHealth.healthScore}%</p>
+                                </div>
+                                <div className="text-blue-200">💚</div>
+                            </div>
+                        </div>
+                        <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-green-100 text-sm">Network Efficiency</p>
+                                    <p className="text-3xl font-bold">{intelligenceData.globalAnalytics.networkEfficiency}%</p>
+                                </div>
+                                <div className="text-green-200">📈</div>
+                            </div>
+                        </div>
+                        <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-purple-100 text-sm">Total Revenue</p>
+                                    <p className="text-3xl font-bold">${intelligenceData.globalAnalytics.totalRevenue.toLocaleString()}</p>
+                                </div>
+                                <div className="text-purple-200">💰</div>
+                            </div>
+                        </div>
+                        <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-orange-100 text-sm">Total Customers</p>
+                                    <p className="text-3xl font-bold">{intelligenceData.globalAnalytics.totalUniqueCustomers.toLocaleString()}</p>
+                                </div>
+                                <div className="text-orange-200">👥</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Complete Shop Insights Table */}
+                    <div className="bg-white rounded-xl shadow-lg border overflow-hidden">
+                        <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b">
+                            <h3 className="text-2xl font-bold text-gray-800 mb-2">🏪 Complete Shop Insights</h3>
+                            <p className="text-gray-600">Comprehensive analysis of all shop owner performance and customer acquisition</p>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead className="bg-gray-50 text-xs text-gray-700 uppercase">
+                                    <tr>
+                                        <th className="px-6 py-3 text-left">Shop Details</th>
+                                        <th className="px-6 py-3 text-left">Coupon Performance</th>
+                                        <th className="px-6 py-3 text-left">Customer Analytics</th>
+                                        <th className="px-6 py-3 text-left">Affiliate Network</th>
+                                        <th className="px-6 py-3 text-left">Revenue & Growth</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {intelligenceData.shopInsights?.slice(0, 5).map((shop: any) => (
+                                        <tr key={shop.shopId} className="hover:bg-gray-50">
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="font-medium text-gray-900">{shop.shopName}</div>
+                                                    <div className="text-xs text-gray-500">{shop.shopEmail}</div>
+                                                    <div className="text-xs text-blue-600">{shop.shopCredits?.toLocaleString() || 0} credits</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm">📊 {shop.totalCoupons} coupons</div>
+                                                    <div className="text-sm">🎯 {shop.totalRedemptions} redemptions</div>
+                                                    <div className="text-xs text-green-600">Best: {shop.topPerformingCoupons?.[0]?.couponTitle || 'N/A'}</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm">👥 {shop.uniqueCustomers} customers</div>
+                                                    <div className="text-xs text-blue-600">📈 {shop.directVsAffiliate?.direct || 0} direct</div>
+                                                    <div className="text-xs text-purple-600">🤝 {shop.directVsAffiliate?.affiliate || 0} via affiliates</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm">🤝 {shop.affiliatePartnerships} partners</div>
+                                                    <div className="text-xs text-green-600">💰 ${shop.totalCommissionsPaid?.toLocaleString() || 0} paid</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm font-medium text-green-600">${shop.totalRevenue?.toLocaleString() || 0}</div>
+                                                    <div className="text-xs text-blue-600">Net: ${((shop.totalRevenue || 0) - (shop.totalCommissionsPaid || 0)).toLocaleString()}</div>
+                                                    <div className={`text-xs ${(shop.totalRevenue || 0) > (shop.totalCommissionsPaid || 0) ? 'text-green-600' : 'text-orange-600'}`}>
+                                                        {(shop.totalRevenue || 0) > (shop.totalCommissionsPaid || 0) ? '✅ Profitable' : '📈 Building'}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* Complete Affiliate Insights Table */}
+                    <div className="bg-white rounded-xl shadow-lg border overflow-hidden">
+                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border-b">
+                            <h3 className="text-2xl font-bold text-gray-800 mb-2">📈 Complete Affiliate Insights</h3>
+                            <p className="text-gray-600">Comprehensive analysis of affiliate performance and customer acquisition</p>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead className="bg-gray-50 text-xs text-gray-700 uppercase">
+                                    <tr>
+                                        <th className="px-6 py-3 text-left">Affiliate Details</th>
+                                        <th className="px-6 py-3 text-left">Promotion Activity</th>
+                                        <th className="px-6 py-3 text-left">Customer Quality</th>
+                                        <th className="px-6 py-3 text-left">Network Reach</th>
+                                        <th className="px-6 py-3 text-left">Earnings</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {intelligenceData.affiliateInsights?.slice(0, 5).map((affiliate: any) => (
+                                        <tr key={affiliate.affiliateId} className="hover:bg-gray-50">
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="font-medium text-gray-900">{affiliate.affiliateName}</div>
+                                                    <div className="text-xs text-gray-500">{affiliate.affiliateEmail}</div>
+                                                    <div className="text-xs text-blue-600">{affiliate.affiliateCredits?.toLocaleString() || 0} credits</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm">🎫 {affiliate.totalCouponsPromoted} coupons</div>
+                                                    <div className="text-sm">✅ {affiliate.totalRedemptions} conversions</div>
+                                                    <div className="text-xs text-gray-600">Avg: {affiliate.performanceMetrics?.avgRedemptionsPerDay?.toFixed(1) || '0'}/day</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm">👥 {affiliate.totalCustomers} customers</div>
+                                                    <div className="text-xs text-green-600">✅ {affiliate.customerQuality?.verified || 0} verified</div>
+                                                    <div className="text-xs text-blue-600">📋 {affiliate.customerQuality?.completeProfiles || 0} complete</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm">🏪 {affiliate.shopsWorkedWith} shops</div>
+                                                    <div className="text-xs text-purple-600">Best: {affiliate.detailedShopsPerformance?.[0]?.shopName || 'N/A'}</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm font-medium text-green-600">💰 ${affiliate.totalCommissionsEarned?.toLocaleString() || 0}</div>
+                                                    <div className="text-xs text-gray-600">Avg: ${affiliate.averageCommissionPerRedemption || 0}</div>
+                                                    <div className="text-xs text-blue-600">Status: {affiliate.performanceMetrics?.networkGrowthRate || 'Starting'}</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* Full Customer Activity Table */}
+                    <div className="bg-white rounded-xl shadow-lg border overflow-hidden">
+                        <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 border-b">
+                            <h3 className="text-2xl font-bold text-gray-800 mb-2">👥 Full Customer Activity</h3>
+                            <p className="text-gray-600">Complete customer behavior and cross-shop activity analysis</p>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead className="bg-gray-50 text-xs text-gray-700 uppercase">
+                                    <tr>
+                                        <th className="px-6 py-3 text-left">Customer Details</th>
+                                        <th className="px-6 py-3 text-left">Activity Summary</th>
+                                        <th className="px-6 py-3 text-left">Network Engagement</th>
+                                        <th className="px-6 py-3 text-left">Value & Behavior</th>
+                                        <th className="px-6 py-3 text-left">Last Activity</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {intelligenceData.customerActivity?.slice(0, 8).map((customer: any) => (
+                                        <tr key={customer.customerId} className="hover:bg-gray-50">
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="font-medium text-gray-900">{customer.customerName || 'Anonymous'}</div>
+                                                    <div className="text-xs text-gray-500">{customer.customerEmail || 'No email'}</div>
+                                                    <div className="text-xs text-blue-600">{customer.customerPhone || 'No phone'}</div>
+                                                    <div className={`text-xs ${customer.isVerified ? 'text-green-600' : 'text-orange-600'}`}>
+                                                        {customer.isVerified ? '✅ Verified' : '⏳ Unverified'}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm">🎫 {customer.totalRedemptions} redemptions</div>
+                                                    <div className="text-xs text-blue-600">💰 ${customer.totalSavings?.toLocaleString() || 0} saved</div>
+                                                    <div className="text-xs text-gray-600">Source: {customer.acquisitionSource}</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm">🏪 {customer.shopsVisited} shops visited</div>
+                                                    <div className="text-xs text-purple-600">🤝 {customer.affiliatesUsed} affiliates used</div>
+                                                    <div className="text-xs text-gray-600">Cross-shop: {customer.shopsVisited > 1 ? 'Active' : 'Single shop'}</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm">Avg: ${((customer.totalSavings || 0) / Math.max(1, customer.totalRedemptions)).toFixed(2)}</div>
+                                                    <div className="text-xs text-green-600">Value: {(customer.totalSavings || 0) > 100 ? 'High' : (customer.totalSavings || 0) > 50 ? 'Medium' : 'New'}</div>
+                                                    <div className={`text-xs ${customer.hasCompleteProfile ? 'text-green-600' : 'text-orange-600'}`}>
+                                                        Profile: {customer.hasCompleteProfile ? 'Complete' : 'Incomplete'}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="space-y-1">
+                                                    <div className="text-sm">{new Date(customer.lastActivity).toLocaleDateString()}</div>
+                                                    <div className="text-xs text-gray-500">{new Date(customer.lastActivity).toLocaleTimeString()}</div>
+                                                    <div className="text-xs text-blue-600">
+                                                        {Math.floor((Date.now() - customer.lastActivity) / (1000 * 60 * 60 * 24))} days ago
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* Global Performance Metrics */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div className="bg-white rounded-xl shadow-lg border p-6">
+                            <h4 className="text-xl font-bold text-gray-800 mb-4">📊 Performance Trends</h4>
+                            <div className="grid grid-cols-3 gap-4">
+                                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                                    <div className="text-2xl font-bold text-blue-600">{intelligenceData.globalAnalytics.dailyWeeklyMonthlyMetrics?.daily?.redemptions || 0}</div>
+                                    <div className="text-sm text-blue-800">Today</div>
+                                </div>
+                                <div className="text-center p-4 bg-green-50 rounded-lg">
+                                    <div className="text-2xl font-bold text-green-600">{intelligenceData.globalAnalytics.dailyWeeklyMonthlyMetrics?.weekly?.redemptions || 0}</div>
+                                    <div className="text-sm text-green-800">This Week</div>
+                                </div>
+                                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                                    <div className="text-2xl font-bold text-purple-600">{intelligenceData.globalAnalytics.dailyWeeklyMonthlyMetrics?.monthly?.redemptions || 0}</div>
+                                    <div className="text-sm text-purple-800">This Month</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="bg-white rounded-xl shadow-lg border p-6">
+                            <h4 className="text-xl font-bold text-gray-800 mb-4">💰 Revenue/Payout Tracking</h4>
+                            <div className="space-y-3">
+                                <div className="flex justify-between">
+                                    <span className="text-gray-600">Total Discounts:</span>
+                                    <span className="font-semibold text-red-600">${intelligenceData.globalAnalytics.revenuePayoutTracking?.totalDiscountsGiven?.toLocaleString() || 0}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-gray-600">Total Commissions:</span>
+                                    <span className="font-semibold text-orange-600">${intelligenceData.globalAnalytics.revenuePayoutTracking?.totalCommissionsPaid?.toLocaleString() || 0}</span>
+                                </div>
+                                <div className="flex justify-between border-t pt-2">
+                                    <span className="text-gray-600">Net Impact:</span>
+                                    <span className="font-semibold text-green-600">${intelligenceData.globalAnalytics.revenuePayoutTracking?.netPlatformImpact?.toLocaleString() || 0}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {!intelligenceData.globalAnalytics && !busy && (
+                <div className="bg-white rounded-xl shadow-lg border p-8 text-center">
+                    <div className="text-gray-400 text-6xl mb-4">📊</div>
+                    <h3 className="text-xl font-semibold text-gray-800 mb-2">Loading Intelligence Data...</h3>
+                    <p className="text-gray-600 mb-4">Click "Refresh Data" to load comprehensive analytics</p>
+                    <button
+                        onClick={fetchIntelligenceData}
+                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all font-medium"
+                    >
+                        🔄 Load Intelligence Data
+                    </button>
+                </div>
+            )}
         </div>
     );
 
