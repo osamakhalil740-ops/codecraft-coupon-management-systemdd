@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useRealTimeTracking } from '../hooks/useRealTimeTracking';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 import { Coupon, Referral, CreateCouponData, CreditRequest, CreditKey } from '../types';
@@ -184,6 +185,12 @@ const ReferralSection: React.FC = () => {
 const ShopOwnerDashboard: React.FC = () => {
     const { user, refreshUser } = useAuth();
     const { t } = useTranslation();
+    
+    // Real-time tracking integration for shop owner
+    const { trackingData, trackUserAction } = useRealTimeTracking(
+        user?.roles || [], 
+        user?.id
+    );
     const [coupons, setCoupons] = useState<Coupon[]>([]);
     const [referrals, setReferrals] = useState<Referral[]>([]);
     const [creditRequests, setCreditRequests] = useState<CreditRequest[]>([]);
@@ -194,6 +201,18 @@ const ShopOwnerDashboard: React.FC = () => {
     const [couponRedemptions, setCouponRedemptions] = useState<any[]>([]);
     const [affiliateActivity, setAffiliateActivity] = useState<any[]>([]);
     const [customerData, setCustomerData] = useState<any[]>([]);
+    
+    // Real-time customer data integration
+    useEffect(() => {
+        if (trackingData && trackingData.customerData && trackingData.customerData.length > 0) {
+            // Filter customer data for this shop owner
+            const shopCustomerData = trackingData.customerData.filter(
+                customer => customer.shopOwnerId === user?.id
+            );
+            setCustomerData(shopCustomerData);
+            console.log(`🔴 LIVE: Shop owner received ${shopCustomerData.length} customer interactions`);
+        }
+    }, [trackingData?.customerData, user?.id]);
     const [activeTab, setActiveTab] = useState<'overview' | 'redemptions' | 'affiliates' | 'customers'>('overview');
     
     // Credit request form

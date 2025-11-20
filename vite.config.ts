@@ -24,11 +24,22 @@ export default defineConfig(({ mode }) => {
         outDir: 'dist',
         assetsDir: 'assets',
         copyPublicDir: true,
+        minify: 'esbuild',
         rollupOptions: {
           output: {
-            manualChunks: undefined
-          }
-        }
+            manualChunks: undefined,
+            format: 'es',
+            hoistTransitiveImports: false,
+          },
+          external: [],
+          preserveEntrySignatures: 'strict'
+        },
+        commonjsOptions: {
+          include: [/node_modules/],
+          transformMixedEsModules: true,
+        },
+        target: 'es2020',
+        sourcemap: true
       }
     };
 });

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { api } from '../services/api';
 import { Shop, AdminCreditLog, Coupon, Redemption, Referral, Role, CreditRequest, CreditKey } from '../types';
 import { useAuth } from '../hooks/useAuth';
+import { useRealTimeTracking } from '../hooks/useRealTimeTracking';
 import StatCard from '../components/StatCard';
 import {
     UserGroupIcon,
@@ -24,6 +25,13 @@ type SuperAdminTab = 'overview' | 'users' | 'credits' | 'system' | 'logs' | 'int
 
 const SuperAdminDashboard: React.FC = () => {
     const { user, isSuperAdmin } = useAuth();
+    
+    // CRITICAL: Real-time tracking integration for super admin
+    const { trackingData, trackUserAction } = useRealTimeTracking(
+        user?.roles || [], 
+        user?.id
+    );
+    
     const [activeTab, setActiveTab] = useState<SuperAdminTab>('overview');
     const [allUsers, setAllUsers] = useState<Shop[]>([]);
     const [allCoupons, setAllCoupons] = useState<Coupon[]>([]);
@@ -41,9 +49,79 @@ const SuperAdminDashboard: React.FC = () => {
     const [allCustomerData, setAllCustomerData] = useState<any[]>([]);
     const [intelligenceData, setIntelligenceData] = useState<any>({});
 
+    // CRITICAL: Real-time data integration for all three sections
+    useEffect(() => {
+        if (!trackingData) return;
+        
+        console.log('🔴 SUPER ADMIN: Real-time data update received:', {
+            redemptions: trackingData.redemptions?.length || 0,
+            customerData: trackingData.customerData?.length || 0,
+            systemActivity: trackingData.systemActivity?.length || 0
+        });
+        
+        if (trackingData.redemptions && trackingData.redemptions.length > 0) {
+            setRedemptions(trackingData.redemptions);
+            console.log('🔴 SUPER ADMIN: Updated redemptions with real-time data');
+        }
+        if (trackingData.customerData && trackingData.customerData.length > 0) {
+            setAllCustomerData(trackingData.customerData);
+            console.log('🔴 SUPER ADMIN: Updated customer data with real-time data');
+        }
+        
+        // Auto-refresh intelligence data when real-time updates come in
+        if (activeTab === 'intelligence' && trackingData && ((trackingData.redemptions && trackingData.redemptions.length > 0) || (trackingData.customerData && trackingData.customerData.length > 0))) {
+            console.log('🔴 SUPER ADMIN: Refreshing intelligence data due to real-time updates');
+            fetchIntelligenceData();
+        }
+    }, [trackingData, activeTab]);
+
     // Security controls
     const [systemMaintenance, setSystemMaintenance] = useState(false);
     const [newUserRegistration, setNewUserRegistration] = useState(true);
+
+    // CRITICAL: Use the new getFullIntelligenceData function
+    const fetchIntelligenceData = useCallback(async () => {
+        if (!isSuperAdmin) return;
+        
+        try {
+            setLoading(true);
+            console.log('🔍 SUPER ADMIN: Fetching comprehensive intelligence data with real-time integration...');
+            
+            // Use the new comprehensive function
+            const intelligenceData = await api.getFullIntelligenceData();
+            setIntelligenceData(intelligenceData);
+            
+            console.log('✅ SUPER ADMIN: Intelligence data loaded successfully');
+        } catch (error) {
+            console.error('❌ SUPER ADMIN: Error loading intelligence data:', error);
+            setIntelligenceData({
+                error: 'Failed to load intelligence data. Retrying...',
+                lastUpdated: new Date().toISOString()
+            });
+            
+            // Retry after 3 seconds
+            setTimeout(() => {
+                console.log('🔄 SUPER ADMIN: Retrying intelligence data fetch...');
+                fetchIntelligenceData();
+            }, 3000);
+        } finally {
+            setLoading(false);
+        }
+    }, [isSuperAdmin]);
+
+    // Track super admin actions
+    const trackSuperAdminAction = useCallback((action: string, details?: any) => {
+        if (user?.id) {
+            trackUserAction({
+                userId: user.id,
+                userName: user.name || 'Super Admin',
+                action,
+                details,
+                page: `/super-admin/${activeTab}`,
+                priority: 'high' // Super admin actions are high priority
+            });
+        }
+    }, [user, activeTab, trackUserAction]);
 
     useEffect(() => {
         if (!isSuperAdmin) {
@@ -51,6 +129,94 @@ const SuperAdminDashboard: React.FC = () => {
         }
         fetchAllData();
     }, [isSuperAdmin]);
+
+    // CRITICAL: Auto-load intelligence data immediately when tab is opened
+    useEffect(() => {
+        if (activeTab === 'intelligence') {
+            console.log('🎯 SUPER ADMIN: Intelligence tab opened - loading data immediately...');
+            fetchIntelligenceData();
+        }
+        // Track tab changes
+        trackSuperAdminAction('tab_change', { tab: activeTab });
+    }, [activeTab, trackSuperAdminAction, fetchIntelligenceData]);
+
+    // Auto-refresh intelligence data - User-friendly timing for better experience
+    useEffect(() => {
+        let intervalId: NodeJS.Timeout;
+        
+        if (activeTab === 'intelligence') {
+            console.log('🔄 SUPER ADMIN: Setting up auto-refresh for intelligence data...');
+            
+            // Initial immediate load
+            fetchIntelligenceData();
+            
+            // Auto-refresh every 2 minutes for better user experience
+            intervalId = setInterval(() => {
+                console.log('🔄 SUPER ADMIN: Auto-refreshing intelligence data (2-minute interval)...');
+                fetchIntelligenceData();
+            }, 120000); // 2 minutes instead of 15 seconds
+        }
+        
+        return () => {
+            if (intervalId) {
+                clearInterval(intervalId);
+                console.log('🔴 SUPER ADMIN: Intelligence auto-refresh stopped');
+            }
+        };
+    }, [activeTab, fetchIntelligenceData]);
+
+    // ENHANCED: Real-time intelligence listeners for Super Admin
+    useEffect(() => {
+        let cleanupRealTimeListeners: (() => void) | null = null;
+        
+        if (activeTab === 'intelligence') {
+            console.log('🔴 SUPER ADMIN: Setting up real-time intelligence listeners...');
+            
+            cleanupRealTimeListeners = api.setupRealTimeIntelligenceListeners((update) => {
+                console.log(`🔴 SUPER ADMIN: Real-time intelligence update received:`, update.type);
+                
+                // Update local state based on real-time updates
+                switch (update.type) {
+                    case 'shops':
+                        setAllUsers(update.data);
+                        break;
+                    case 'redemptions':
+                        setRedemptions(update.data);
+                        break;
+                    case 'coupons':
+                        setAllCoupons(update.data);
+                        break;
+                    case 'customers':
+                        setAllCustomerData(prev => {
+                            const merged = [...prev, ...update.data];
+                            // Deduplicate by userId + couponId
+                            const unique = merged.reduce((acc, item) => {
+                                const key = `${item.userId}-${item.couponId}`;
+                                if (!acc.has(key)) {
+                                    acc.set(key, item);
+                                }
+                                return acc;
+                            }, new Map());
+                            return Array.from(unique.values());
+                        });
+                        break;
+                }
+                
+                // Trigger intelligence data refresh after state updates
+                setTimeout(() => {
+                    console.log('🔄 SUPER ADMIN: Refreshing intelligence data due to real-time update...');
+                    fetchIntelligenceData();
+                }, 500);
+            });
+        }
+        
+        return () => {
+            if (cleanupRealTimeListeners) {
+                cleanupRealTimeListeners();
+                console.log('🔴 SUPER ADMIN: Real-time intelligence listeners cleaned up');
+            }
+        };
+    }, [activeTab, fetchIntelligenceData]);
 
     const fetchAllData = async () => {
         try {
@@ -76,47 +242,6 @@ const SuperAdminDashboard: React.FC = () => {
             console.error('Failed to fetch super admin data:', error);
         } finally {
             setLoading(false);
-        }
-    };
-
-    const fetchIntelligenceData = async () => {
-        try {
-            console.log('🔍 Fetching comprehensive intelligence data...');
-            
-            // Fetch all customer data from multiple sources
-            const allShopIds = allUsers.filter(u => u.roles.includes('shop-owner')).map(u => u.id);
-            const allAffiliateIds = allUsers.filter(u => u.roles.includes('affiliate')).map(u => u.id);
-            
-            const [shopCustomerData, affiliateCustomerData] = await Promise.all([
-                Promise.all(allShopIds.map(shopId => api.getCustomerDataForShop(shopId))),
-                Promise.all(allAffiliateIds.map(affiliateId => api.getCustomerDataForAffiliate(affiliateId)))
-            ]);
-            
-            // Flatten and combine customer data
-            const allCustomers = [
-                ...shopCustomerData.flat(),
-                ...affiliateCustomerData.flat()
-            ];
-            
-            // Deduplicate customer data
-            const uniqueCustomers = allCustomers.reduce((unique, customer) => {
-                const key = `${customer.couponId}-${customer.userId}`;
-                if (!unique.find(item => `${item.couponId}-${item.userId}` === key)) {
-                    unique.push(customer);
-                }
-                return unique;
-            }, [] as any[]);
-            
-            setAllCustomerData(uniqueCustomers);
-            
-            // Calculate intelligence insights
-            const intelligence = calculateIntelligenceInsights(uniqueCustomers, allUsers, allCoupons, redemptions);
-            setIntelligenceData(intelligence);
-            
-            console.log(`📊 Intelligence data compiled: ${uniqueCustomers.length} customers, ${Object.keys(intelligence).length} insights`);
-            
-        } catch (error) {
-            console.error('❌ Error fetching intelligence data:', error);
         }
     };
 

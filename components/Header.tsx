@@ -1,101 +1,215 @@
-
-import React from 'react';
+﻿import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { LogoIcon } from './icons/LogoIcon';
 import { useTranslation } from '../hooks/useTranslation';
-import { GlobeAltIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const Header: React.FC = () => {
   const { user, logout, isSuperAdmin } = useAuth();
+  const { t, language, setLanguage } = useTranslation();
   const navigate = useNavigate();
-  const { t, setLanguage, language } = useTranslation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
+    setIsMobileMenuOpen(false);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-sm bg-white/80 border-b border-slate-900/10">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2 text-xl font-bold text-primary transition-transform hover:scale-105">
-          <LogoIcon className="h-8 w-8" />
-          <span>CodeCraft</span>
-        </Link>
-        <nav className="hidden md:flex items-center gap-6">
-            <Link to="/marketplace" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">{t('header.marketplace')}</Link>
-            <Link to="/partner-with-us" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">{t('header.partner')}</Link>
-            <Link to="/affiliate-network" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">{t('header.affiliate')}</Link>
-        </nav>
-        <div className="flex items-center gap-4">
-            <div className="relative">
-                <select 
-                    value={language} 
-                    onChange={(e) => setLanguage(e.target.value as 'en' | 'ar')}
-                    className="appearance-none bg-transparent border-none text-sm font-medium text-gray-600 hover:text-primary focus:ring-0 pr-6 cursor-pointer"
-                >
-                    <option value="en">English</option>
-                    <option value="ar">العربية</option>
-                </select>
-                <GlobeAltIcon className="h-4 w-4 absolute top-1/2 right-0 -translate-y-1/2 pointer-events-none text-gray-500" />
-            </div>
+    <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+        <div className="flex justify-between items-center h-14 sm:h-16">
+          {/* Logo */}
+          <div className="flex items-center flex-shrink-0">
+            <Link to="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xs sm:text-sm">CC</span>
+              </div>
+              <span className="text-lg sm:text-xl font-bold text-gray-900 hidden sm:block">CodeCraft</span>
+              <span className="text-lg font-bold text-gray-900 sm:hidden">CC</span>
+            </Link>
+          </div>
 
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex space-x-6 xl:space-x-8 items-center">
+            <Link to="/marketplace" className="text-gray-600 hover:text-gray-900 font-medium transition-colors whitespace-nowrap">
+              {t('header.marketplace')}
+            </Link>
+            
+            {/* Desktop Language Switcher */}
+            <div className="flex items-center space-x-1">
+              <button
+                onClick={() => setLanguage('en')}
+                className={'px-2 py-1 text-xs sm:text-sm rounded transition-colors ' + (language === 'en' ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-600 hover:text-gray-900')}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage('ar')}
+                className={'px-2 py-1 text-xs sm:text-sm rounded transition-colors ' + (language === 'ar' ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-600 hover:text-gray-900')}
+              >
+                ع
+              </button>
+            </div>
+            
+            {!user && (
+              <Link to="/login" className="text-gray-600 hover:text-gray-900 font-medium transition-colors whitespace-nowrap">
+                {t('header.loginSignup')}
+              </Link>
+            )}
+          </nav>
+
+          {/* User Menu for Desktop */}
           {user ? (
-            <div className="flex items-center gap-4">
-              {/* Role-specific credits display */}
-              <div className="hidden md:flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 px-4 py-2 rounded-full shadow-soft">
-                <span className="text-sm font-medium text-gray-700">
+            <div className="hidden lg:flex items-center gap-3 xl:gap-4">
+              {/* Credits Display */}
+              <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 px-3 py-1.5 rounded-full shadow-sm">
+                <span className="text-xs font-medium text-gray-700">
                   {user.roles.includes('shop-owner') ? '🏪' : 
-                   user.roles.includes('affiliate') ? '📢' : 
-                   user.roles.includes('admin') ? '👑' : '🛍️'}
+                   user.roles.includes('affiliate') ? '🤝' : 
+                   user.roles.includes('admin') ? '👑' : '🎫'}
                 </span>
                 <span className="text-sm font-bold text-gray-800">
                   {user.credits.toLocaleString()}
                 </span>
-                <span className="text-xs text-gray-500 font-medium">credits</span>
+                <span className="text-xs text-gray-500 font-medium">{t('common.credits')}</span>
               </div>
               
-              {/* Role-specific navigation with clear indicators */}
-              <div className="flex items-center gap-2">
-                <div className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                  isSuperAdmin ? 'bg-red-100 text-red-800' :
-                  user.roles.includes('admin') ? 'bg-orange-100 text-orange-800' :
-                  user.roles.includes('shop-owner') ? 'bg-blue-100 text-blue-800' :
-                  user.roles.includes('affiliate') ? 'bg-green-100 text-green-800' :
-                  'bg-purple-100 text-purple-800'
-                }`}>
-                  {isSuperAdmin ? '👑 SUPER ADMIN' :
-                   user.roles.includes('admin') ? '🛡️ ADMIN' :
-                   user.roles.includes('shop-owner') ? '🏪 SHOP OWNER' :
-                   user.roles.includes('affiliate') ? '📢 AFFILIATE' :
-                   '🛍️ CUSTOMER'}
-                </div>
-                
-                <Link
-                  to="/dashboard"
-                  className="text-sm font-medium text-white bg-primary px-3 py-1 rounded-lg hover:opacity-90 transition-all"
-                >
-                  Dashboard
-                </Link>
-              </div>
+              <Link
+                to="/dashboard"
+                className={'text-sm font-medium transition-colors whitespace-nowrap ' + (isSuperAdmin ? 'text-red-600 hover:text-red-800 font-bold' : 'text-gray-600 hover:text-primary')}
+              >
+                {isSuperAdmin ? '👑 Super Admin' :
+                 user.roles.includes('shop-owner') ? 'Business Hub' :
+                 user.roles.includes('affiliate') ? 'Marketing Hub' :
+                 user.roles.includes('admin') ? 'Admin Panel' : 'My Deals'}
+              </Link>
               
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg shadow-sm hover:shadow-lg hover:opacity-90 transition-all transform hover:scale-105"
+                className="px-3 py-1.5 text-sm font-medium text-white bg-primary rounded-lg shadow-sm hover:shadow-lg hover:opacity-90 transition-all transform hover:scale-105 whitespace-nowrap"
               >
                 {t('header.logout')}
               </button>
             </div>
           ) : (
-            <Link
-              to="/login"
-              className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg shadow-sm hover:shadow-lg hover:opacity-90 transition-all transform hover:scale-105"
-            >
-              {t('header.loginSignup')}
-            </Link>
+            <div className="hidden lg:flex items-center">
+              <Link
+                to="/login"
+                className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
+              >
+                {t('header.loginSignup')}
+              </Link>
+            </div>
           )}
+
+          {/* Mobile Menu Button and Credits */}
+          <div className="flex lg:hidden items-center gap-2">
+            {/* Mobile Credits Display */}
+            {user && (
+              <div className="flex items-center gap-1 bg-white/80 backdrop-blur-sm border border-gray-200 px-2 py-1 rounded-full shadow-sm">
+                <span className="text-xs font-bold text-gray-800">
+                  {user.credits.toLocaleString()}
+                </span>
+                <span className="text-xs text-gray-500 font-medium">{t('common.credits')}</span>
+              </div>
+            )}
+            
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+            >
+              {isMobileMenuOpen ? (
+                <XMarkIcon className="block h-5 w-5" />
+              ) : (
+                <Bars3Icon className="block h-5 w-5" />
+              )}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200 shadow-lg">
+              {/* Mobile Navigation Links */}
+              <Link
+                to="/marketplace"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                onClick={closeMobileMenu}
+              >
+                {t('header.marketplace')}
+              </Link>
+
+              {/* Mobile Language Switcher */}
+              <div className="px-3 py-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-500">Language:</span>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setLanguage('en');
+                        closeMobileMenu();
+                      }}
+                      className={'px-3 py-1 text-sm rounded transition-colors ' + (language === 'en' ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-600 hover:text-gray-900 bg-gray-100')}
+                    >
+                      English
+                    </button>
+                    <button
+                      onClick={() => {
+                        setLanguage('ar');
+                        closeMobileMenu();
+                      }}
+                      className={'px-3 py-1 text-sm rounded transition-colors ' + (language === 'ar' ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-600 hover:text-gray-900 bg-gray-100')}
+                    >
+                      العربية
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {user ? (
+                <>
+                  {/* Mobile User Menu */}
+                  <div className="border-t border-gray-200 pt-3 mt-3">
+                    <Link
+                      to="/dashboard"
+                      className={'block px-3 py-2 rounded-md text-base font-medium transition-colors hover:bg-gray-50 ' + (isSuperAdmin ? 'text-red-600 hover:text-red-800' : 'text-gray-600 hover:text-gray-900')}
+                      onClick={closeMobileMenu}
+                    >
+                      {isSuperAdmin ? '👑 Super Admin' :
+                       user.roles.includes('shop-owner') ? 'Business Dashboard' :
+                       user.roles.includes('affiliate') ? 'Marketing Dashboard' :
+                       user.roles.includes('admin') ? 'Admin Dashboard' : 'My Dashboard'}
+                    </Link>
+                    
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:text-red-800 hover:bg-red-50 transition-colors"
+                    >
+                      {t('header.logout')}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="border-t border-gray-200 pt-3 mt-3">
+                  <Link
+                    to="/login"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:opacity-90 transition-opacity text-center"
+                    onClick={closeMobileMenu}
+                  >
+                    {t('header.loginSignup')}
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

@@ -45,7 +45,7 @@ exports.redeemCouponCallable = functions.https.onCall(async (request) => {
     try {
         // 2. Run as a Transaction for Data Integrity
         await db.runTransaction(async (transaction) => {
-            var _a, _b, _c, _d, _e, _f;
+            var _a, _b, _c, _d, _e, _f, _g;
             // Step 1: All Reads (MUST come before writes)
             const couponRef = db.collection("coupons").doc(couponId);
             const couponDoc = await transaction.get(couponRef);
@@ -90,6 +90,14 @@ exports.redeemCouponCallable = functions.https.onCall(async (request) => {
                     throw new functions.https.HttpsError("failed-precondition", "This coupon has expired.");
                 }
             }
+            // Additional validation for days-based validity
+            if (couponData.validityType === "days" && couponData.validityDays) {
+                const createdAt = ((_e = couponData.createdAt) === null || _e === void 0 ? void 0 : _e.toDate) ? couponData.createdAt.toDate() : new Date();
+                const expiryDate = new Date(createdAt.getTime() + couponData.validityDays * 24 * 60 * 60 * 1000);
+                if (expiryDate < new Date()) {
+                    throw new functions.https.HttpsError("failed-precondition", "This coupon has expired.");
+                }
+            }
             // Step 3: All Writes
             transaction.update(couponRef, {
                 usesLeft: admin.firestore.FieldValue.increment(-1),
@@ -114,7 +122,7 @@ exports.redeemCouponCallable = functions.https.onCall(async (request) => {
                 transaction.set(customerLogRef, {
                     type: "Customer Reward",
                     shopId: redeemingUserId,
-                    shopName: ((_e = redeemingUserDoc.data()) === null || _e === void 0 ? void 0 : _e.name) || "Unknown",
+                    shopName: ((_f = redeemingUserDoc.data()) === null || _f === void 0 ? void 0 : _f.name) || "Unknown",
                     amount: couponData.customerRewardPoints,
                     timestamp: admin.firestore.FieldValue.serverTimestamp(),
                 });
@@ -141,7 +149,7 @@ exports.redeemCouponCallable = functions.https.onCall(async (request) => {
             }
             // Handle Referral Bonus Trigger
             if (shopDoc.exists &&
-                !((_f = shopDoc.data()) === null || _f === void 0 ? void 0 : _f.hasRedeemedFirstCoupon) &&
+                !((_g = shopDoc.data()) === null || _g === void 0 ? void 0 : _g.hasRedeemedFirstCoupon) &&
                 (referrerDoc === null || referrerDoc === void 0 ? void 0 : referrerDoc.exists) &&
                 referralDocRef) {
                 transaction.update(shopRef, { hasRedeemedFirstCoupon: true });

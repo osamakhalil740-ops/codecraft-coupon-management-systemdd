@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Coupon, Redemption } from '../types';
 import { useAuth } from '../hooks/useAuth';
+import { useRealTimeTracking } from '../hooks/useRealTimeTracking';
 import CouponCard from '../components/CouponCard';
 import StatCard from '../components/StatCard';
 import { Link } from 'react-router-dom';
@@ -19,9 +20,28 @@ import {
 const UserDashboard: React.FC = () => {
     const { user } = useAuth();
     const { t } = useTranslation();
+    
+    // Real-time tracking integration for customer activity
+    const { trackingData, trackUserAction } = useRealTimeTracking(
+        user?.roles || [], 
+        user?.id
+    );
+    
     const [coupons, setCoupons] = useState<Coupon[]>([]);
     const [myRedemptions, setMyRedemptions] = useState<Redemption[]>([]);
     const [loading, setLoading] = useState(true);
+
+    // Real-time data integration for user's activity
+    useEffect(() => {
+        if (trackingData && trackingData.redemptions && trackingData.redemptions.length > 0 && user) {
+            // Filter user's redemptions from real-time data
+            const userRedemptions = trackingData.redemptions.filter(
+                redemption => redemption.customerId === user.id || redemption.userId === user.id
+            );
+            setMyRedemptions(userRedemptions);
+            console.log(`🔴 LIVE: User received ${userRedemptions.length} personal redemptions`);
+        }
+    }, [trackingData?.redemptions, user?.id]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,11 +66,15 @@ const UserDashboard: React.FC = () => {
                     return coupon.usesLeft > 0 && !isExpired;
                 });
                 
-                // Filter user's redemptions
+                // Filter user's redemptions - only set if real-time data hasn't arrived
                 const userRedemptions = user ? allRedemptions.filter(r => r.customerId === user.id) : [];
                 
+                // Only set if real-time data hasn't arrived yet
+                if (!trackingData || !trackingData.redemptions || trackingData.redemptions.length === 0) {
+                    setMyRedemptions(userRedemptions);
+                }
+                
                 setCoupons(availableCoupons);
-                setMyRedemptions(userRedemptions);
             } catch (error) {
                 console.error("Failed to fetch data", error);
             } finally {

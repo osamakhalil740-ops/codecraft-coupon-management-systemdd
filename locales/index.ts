@@ -325,7 +325,29 @@ export const translations = {
     "Each coupon you create will cost exactly 50 credits regardless of settings": "Each coupon you create will cost exactly 50 credits regardless of settings",
     "Customer Reward Points": "Customer Reward Points",
     "Points credited to customer when they redeem this coupon": "Points credited to customer when they redeem this coupon",
-    "mm/dd/yyyy": "mm/dd/yyyy"
+    "mm/dd/yyyy": "mm/dd/yyyy",
+    affiliateNetwork: {
+      title: "Join Our Affiliate Network",
+      subtitle: "Partner with us to earn commissions by promoting amazing deals and coupons to your audience. Build your income stream while helping customers save money.",
+      whyJoin: {
+        title: "Why Join Our Network?",
+        description: "As an affiliate partner, you'll earn generous commissions for every coupon redeemed through your unique referral links. Track your performance, access marketing materials, and get paid regularly for your promotional efforts."
+      },
+      ctaButton: "Get Started as Affiliate"
+    },
+    partner: {
+      title: "Partner With Us",
+      subtitle: "Join our platform as a business partner and unlock new opportunities to grow your customer base and increase sales through our coupon ecosystem.",
+      feature1: {
+        title: "Expand Your Reach",
+        description: "Connect with thousands of deal-seeking customers and expand your market presence through our established platform and affiliate network."
+      },
+      feature2: {
+        title: "Boost Your Sales", 
+        description: "Drive more traffic to your business with targeted promotions and coupon campaigns that convert browsers into buyers."
+      },
+      ctaButton: "Start Partnership"
+    }
   },
   ar: {
     common: {
@@ -648,7 +670,29 @@ export const translations = {
     "Each coupon you create will cost exactly 50 credits regardless of settings": "كل قسيمة تنشئها ستكلف بالضبط 50 ائتماناً بغض النظر عن الإعدادات",
     "Customer Reward Points": "نقاط مكافأة العميل",
     "Points credited to customer when they redeem this coupon": "النقاط المضافة للعميل عندما يستردي هذه القسيمة",
-    "mm/dd/yyyy": "يوم/شهر/سنة"
+    "mm/dd/yyyy": "يوم/شهر/سنة",
+    affiliateNetwork: {
+      title: "انضم إلى شبكة التسويق التابع",
+      subtitle: "اشترك معنا لتكسب عمولات من خلال الترويج للعروض والقسائم المذهلة لجمهورك. ابني مصدر دخلك بينما تساعد العملاء في توفير المال.",
+      whyJoin: {
+        title: "لماذا تنضم إلى شبكتنا؟",
+        description: "كشريك تسويق تابع، ستكسب عمولات سخية لكل قسيمة يتم استردادها من خلال روابط الإحالة الفريدة الخاصة بك. تتبع أداءك واحصل على المواد التسويقية واحصل على المدفوعات بانتظام لجهودك الترويجية."
+      },
+      ctaButton: "ابدأ كمسوق تابع"
+    },
+    partner: {
+      title: "شراكة معنا",
+      subtitle: "انضم إلى منصتنا كشريك تجاري واكتشف فرص جديدة لتنمية قاعدة عملائك وزيادة المبيعات من خلال نظام القسائم البيئي الخاص بنا.",
+      feature1: {
+        title: "وسع نطاق وصولك",
+        description: "تواصل مع آلاف العملاء الباحثين عن الصفقات ووسع حضورك في السوق من خلال منصتنا الراسخة وشبكة التسويق التابع."
+      },
+      feature2: {
+        title: "عزز مبيعاتك",
+        description: "جذب المزيد من الزيارات إلى عملك مع العروض الترويجية المستهدفة وحملات القسائم التي تحول المتصفحين إلى مشترين."
+      },
+      ctaButton: "ابدأ الشراكة"
+    }
   }
 };
 

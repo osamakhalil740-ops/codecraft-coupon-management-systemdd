@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useRealTimeTracking } from '../hooks/useRealTimeTracking';
 import StatCard from '../components/StatCard';
 import { BanknotesIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../hooks/useAuth';
@@ -12,6 +13,12 @@ import QRCodeModal from '../components/QRCodeModal';
 const AffiliateDashboard: React.FC = () => {
     const { user } = useAuth();
     const { t } = useTranslation();
+    
+    // Real-time tracking integration for affiliates
+    const { trackingData, trackUserAction } = useRealTimeTracking(
+        user?.roles || [], 
+        user?.id
+    );
     const [coupons, setCoupons] = useState<Coupon[]>([]);
     const [redemptions, setRedemptions] = useState<Redemption[]>([]);
     const [customerData, setCustomerData] = useState<any[]>([]);
@@ -19,9 +26,32 @@ const AffiliateDashboard: React.FC = () => {
     const [modalInfo, setModalInfo] = useState<{url: string} | null>(null);
     const [activeTab, setActiveTab] = useState<'coupons' | 'redemptions'>('coupons');
 
+    // Real-time data integration for affiliate insights
+    useEffect(() => {
+        if (trackingData && trackingData.customerData && trackingData.customerData.length > 0) {
+            // Filter customer data for this affiliate
+            const affiliateCustomerData = trackingData.customerData.filter(
+                customer => customer.affiliateId === user?.id
+            );
+            setCustomerData(affiliateCustomerData);
+            console.log(`🔴 LIVE: Affiliate received ${affiliateCustomerData.length} customer interactions`);
+        }
+    }, [trackingData?.customerData, user?.id]);
+
+    useEffect(() => {
+        if (trackingData && trackingData.redemptions && trackingData.redemptions.length > 0) {
+            // Filter redemptions for this affiliate
+            const affiliateRedemptions = trackingData.redemptions.filter(
+                redemption => redemption.affiliateId === user?.id
+            );
+            setRedemptions(affiliateRedemptions);
+            console.log(`🔴 LIVE: Affiliate received ${affiliateRedemptions.length} redemptions`);
+        }
+    }, [trackingData.redemptions, user?.id]);
+
     const fetchData = useCallback(async () => {
         if (user) {
-            console.log('🔄 Fetching affiliate data for user:', user.id);
+            console.log('🔄 Fetching initial affiliate data for user:', user.id);
             setLoading(true);
             
             const [allCoupons, affiliateRedemptions, affiliateCustomers] = await Promise.all([
@@ -30,18 +60,23 @@ const AffiliateDashboard: React.FC = () => {
                 api.getCustomerDataForAffiliate(user.id),
             ]);
             
-            console.log('📊 Affiliate data fetched:', {
+            console.log('📊 Initial affiliate data fetched:', {
                 coupons: allCoupons.length,
                 redemptions: affiliateRedemptions.length,
                 customers: affiliateCustomers.length
             });
             
             setCoupons(allCoupons);
-            setRedemptions(affiliateRedemptions);
-            setCustomerData(affiliateCustomers);
+            // Only set if real-time data hasn't arrived yet
+            if (trackingData.redemptions.length === 0) {
+                setRedemptions(affiliateRedemptions);
+            }
+            if (trackingData.customerData.length === 0) {
+                setCustomerData(affiliateCustomers);
+            }
             setLoading(false);
         }
-    }, [user]);
+    }, [user, trackingData.redemptions.length, trackingData.customerData.length]);
 
     useEffect(() => {
         fetchData();
