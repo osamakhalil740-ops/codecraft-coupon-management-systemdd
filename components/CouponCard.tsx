@@ -49,7 +49,7 @@ const CouponCard: React.FC<CouponCardProps> = ({ coupon, children, showAffiliate
     const statusColor = expired ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800';
 
     return (
-        <div className={`bg-white p-5 rounded-xl shadow-lg border border-gray-200 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 ${expired ? 'opacity-60' : ''} animate-slideInUp`}>
+        <div className={`enhanced-card card-lift p-5 flex flex-col justify-between ${expired ? 'opacity-60' : ''} bounce-in`}>
             <div>
                 <div className="flex justify-between items-start mb-2">
                     <h3 className="text-xl font-bold text-gray-800 pr-2">{coupon.title}</h3>

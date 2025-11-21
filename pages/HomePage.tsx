@@ -89,38 +89,9 @@ const HomePage: React.FC = () => {
                         </Link>
                     </div>
                 </div>
-                <CouponGenerator />
-                <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 text-white/90">
-                    {metrics.map((metric) => (
-                        <div key={metric.label} className="stat-chip">
-                            <span className="text-3xl font-semibold">{metric.value}</span>
-                            <span className="text-sm uppercase tracking-wide">{metric.label}</span>
-                        </div>
-                    ))}
-                </div>
             </section>
 
-            <section className="space-y-12">
-                <div className="text-center max-w-3xl mx-auto">
-                    <p className="hero-pill mx-auto mb-4 text-sm text-primary/90 bg-primary/5 border-primary/20">
-                        {t('home.benefits.title')}
-                    </p>
-                    <h2 className="text-3xl md:text-4xl font-bold text-dark-gray">
-                        {t('home.benefits.description')}
-                    </h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {benefits.map((benefit) => (
-                        <div key={benefit.title} className="glass-panel p-6 flex flex-col gap-4">
-                            <span className="feature-icon">{benefit.icon}</span>
-                            <h3 className="text-xl font-semibold text-dark-gray">{benefit.title}</h3>
-                            <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* CRITICAL: Choose Your Path - TOP PRIORITY SECTION - Directly under header */}
+            {/* CRITICAL: Choose Your Path - TOP PRIORITY SECTION - Moved to top */}
             <section className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-10 mb-8 shadow-xl border border-indigo-200">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold text-gray-800 mb-4">🚀 Choose Your Path</h2>
@@ -219,6 +190,42 @@ const HomePage: React.FC = () => {
                             Get Started Free →
                         </Link>
                     </div>
+                </div>
+            </section>
+
+            <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#051937] via-[#0f62ff] to-[#7de2fc] text-white px-6 py-14 md:px-12">
+                <div className="blur-blob -right-10 top-10" />
+                <div className="blur-blob -left-12 bottom-0" />
+                <div className="relative z-10 max-w-3xl">
+                    <CouponGenerator />
+                    <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 text-white/90">
+                        {metrics.map((metric) => (
+                            <div key={metric.label} className="stat-chip">
+                                <span className="text-3xl font-semibold">{metric.value}</span>
+                                <span className="text-sm uppercase tracking-wide">{metric.label}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="space-y-12">
+                <div className="text-center max-w-3xl mx-auto">
+                    <p className="hero-pill mx-auto mb-4 text-sm text-primary/90 bg-primary/5 border-primary/20">
+                        {t('home.benefits.title')}
+                    </p>
+                    <h2 className="text-3xl md:text-4xl font-bold text-dark-gray">
+                        {t('home.benefits.description')}
+                    </h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {benefits.map((benefit) => (
+                        <div key={benefit.title} className="glass-panel p-6 flex flex-col gap-4">
+                            <span className="feature-icon">{benefit.icon}</span>
+                            <h3 className="text-xl font-semibold text-dark-gray">{benefit.title}</h3>
+                            <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
+                        </div>
+                    ))}
                 </div>
             </section>
 

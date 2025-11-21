@@ -150,11 +150,11 @@ const SuperAdminDashboard: React.FC = () => {
             // Initial immediate load
             fetchIntelligenceData();
             
-            // Auto-refresh every 2 minutes for better user experience
+            // Auto-refresh every 5 minutes for optimal user experience
             intervalId = setInterval(() => {
-                console.log('🔄 SUPER ADMIN: Auto-refreshing intelligence data (2-minute interval)...');
+                console.log('🔄 SUPER ADMIN: Auto-refreshing intelligence data (5-minute interval)...');
                 fetchIntelligenceData();
-            }, 120000); // 2 minutes instead of 15 seconds
+            }, 300000); // 5 minutes for comfortable reading
         }
         
         return () => {

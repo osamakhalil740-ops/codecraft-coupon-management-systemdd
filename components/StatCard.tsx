@@ -17,13 +17,13 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => {
     };
     
     return (
-        <div className="bg-white p-6 rounded-xl shadow-lg flex items-start gap-4 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 animate-slideInUp">
+        <div className="enhanced-card-subtle card-lift p-6 flex items-start gap-4 slide-up">
             <div className={`p-3 rounded-lg ${colorClasses[color as keyof typeof colorClasses]}`}>
                 {icon}
             </div>
             <div className="flex flex-col">
-                <p className="text-sm font-medium text-gray-500">{title}</p>
-                <p className="text-3xl font-bold text-gray-800">{value}</p>
+                <p className="caption text-gray-500">{title}</p>
+                <p className="heading-sm text-gray-800">{value}</p>
             </div>
         </div>
     );

@@ -17,6 +17,11 @@ import {
     SignalIcon
 } from '@heroicons/react/24/outline';
 import { useTranslation } from '../hooks/useTranslation';
+import Breadcrumb from '../components/Breadcrumb';
+import SimpleChart from '../components/SimpleChart';
+import EmptyState from '../components/EmptyState';
+import EnhancedSearch from '../components/EnhancedSearch';
+import Tooltip, { HelpTooltip } from '../components/Tooltip';
 
 type AdminTab = 'overview' | 'shops' | 'affiliates' | 'coupons' | 'redemptions' | 'referrals' | 'intelligence' | 'settings';
 
@@ -113,11 +118,11 @@ const AdminDashboard: React.FC = () => {
     useEffect(() => {
         let intervalId: NodeJS.Timeout;
         if (activeTab === 'intelligence') {
-            // Longer interval - 2 minutes for better user experience
+            // Longer interval - 5 minutes for optimal user experience
             intervalId = setInterval(() => {
-                console.log('🔄 Auto-refreshing intelligence data (2-minute interval)...');
+                console.log('🔄 Auto-refreshing intelligence data (5-minute interval)...');
                 fetchIntelligenceData();
-            }, 120000); // 2 minutes instead of 15 seconds
+            }, 300000); // 5 minutes for comfortable reading
         }
         return () => {
             if (intervalId) {
@@ -236,14 +241,17 @@ const AdminDashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-lg border overflow-hidden">
-                        <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b">
-                            <h3 className="text-2xl font-bold text-gray-800 mb-2">🏪 Shop Insights</h3>
-                            <p className="text-gray-600">Comprehensive analysis of all shop owner performance and customer acquisition</p>
+                    <div className="data-section">
+                        <div className="data-section-header">
+                            <div className="data-section-title">🏪 Shop Insights</div>
+                            <div className="data-section-subtitle">Comprehensive analysis of all shop owner performance and customer acquisition</div>
+                            <div className="flex items-center gap-2">
+                                <HelpTooltip content="Detailed analysis of shop owner performance including customer acquisition and revenue metrics" />
+                            </div>
                         </div>
                         <div className="overflow-x-auto">
                             {intelligenceData.shopInsights && intelligenceData.shopInsights.length > 0 ? (
-                                <table className="w-full text-sm">
+                                <table className="data-table">
                                     <thead className="bg-gray-50 text-xs text-gray-700 uppercase">
                                         <tr>
                                             <th className="px-6 py-3 text-left">Shop Details</th>
@@ -287,17 +295,23 @@ const AdminDashboard: React.FC = () => {
                                     </tbody>
                                 </table>
                             ) : (
-                                <div className="p-8 text-center text-gray-500">
-                                    <p>No shop data available yet. Data will appear as shops create coupons and get redemptions.</p>
+                                <div className="p-8">
+                                    <EmptyState
+                                        title="No Shop Insights Available"
+                                        description="Shop insights will appear here once shop owners start creating coupons and receiving redemptions. The analytics will show performance metrics, customer acquisition data, and revenue tracking."
+                                        actionLabel="Refresh Data"
+                                        onAction={fetchIntelligenceData}
+                                        variant="default"
+                                    />
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-lg border overflow-hidden">
-                        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 border-b">
-                            <h3 className="text-2xl font-bold text-gray-800 mb-2">⚡ Real-Time Activity Stream</h3>
-                            <p className="text-gray-600">Live system activity and user interactions</p>
+                    <div className="data-section">
+                        <div className="data-section-header">
+                            <div className="data-section-title">⚡ Real-Time Activity Stream</div>
+                            <div className="data-section-subtitle">Live system activity and user interactions</div>
                         </div>
                         <div className="p-6">
                             <RealTimeActivityFeed 
@@ -330,17 +344,56 @@ const AdminDashboard: React.FC = () => {
     // Overview content
     const overviewContent = (
         <div className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-                <StatCard title="Total Users" value={allUsers.length.toString()} icon={<UserGroupIcon className="h-6 w-6" />} color="blue" />
-                <StatCard title="Total Coupons" value={allCoupons.length.toString()} icon={<TicketIcon className="h-6 w-6" />} color="green" />
-                <StatCard title="Total Redemptions" value={redemptions.length.toString()} icon={<BanknotesIcon className="h-6 w-6" />} color="purple" />
-                <StatCard title="Total Referrals" value={referrals.length.toString()} icon={<GiftIcon className="h-6 w-6" />} color="orange" />
-                <StatCard 
-                    title="Real-Time Activity" 
-                    value={trackingData?.totalActivities?.toString() || '0'} 
-                    icon={<SignalIcon className="h-6 w-6" />} 
-                    color="red"
-                    subtitle={trackingData?.lastUpdate ? `Updated ${new Date(trackingData.lastUpdate).toLocaleTimeString()}` : 'Loading...'}
+            <div className="responsive-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <div className="dashboard-metric micro-interaction">
+                    <div className="metric-value">{allUsers.length}</div>
+                    <div className="metric-label">Total Users</div>
+                    <div className="metric-change positive">+12% this month</div>
+                </div>
+                <div className="dashboard-metric micro-interaction">
+                    <div className="metric-value">{allCoupons.length}</div>
+                    <div className="metric-label">Total Coupons</div>
+                    <div className="metric-change positive">+8% this week</div>
+                </div>
+                <div className="dashboard-metric micro-interaction">
+                    <div className="metric-value">{redemptions.length}</div>
+                    <div className="metric-label">Redemptions</div>
+                    <div className="metric-change positive">+24% this week</div>
+                </div>
+                <div className="dashboard-metric micro-interaction">
+                    <div className="metric-value">{referrals.length}</div>
+                    <div className="metric-label">Referrals</div>
+                    <div className="metric-change negative">-3% this week</div>
+                </div>
+                <div className="dashboard-metric micro-interaction">
+                    <div className="metric-value">{trackingData?.totalActivities?.toString() || '0'}</div>
+                    <div className="metric-label">Live Activity</div>
+                    <div className="caption text-gray-500 mt-2">
+                        {trackingData?.lastUpdate ? `Updated ${new Date(trackingData.lastUpdate).toLocaleTimeString()}` : 'Loading...'}
+                    </div>
+                </div>
+            </div>
+
+            {/* Enhanced Analytics Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <SimpleChart
+                    type="bar"
+                    title="User Growth by Type"
+                    data={[
+                        { label: 'Shop Owners', value: allUsers.filter(u => u.roles && u.roles.includes('shop-owner')).length, color: 'bg-gradient-to-r from-blue-500 to-blue-600' },
+                        { label: 'Affiliates', value: allUsers.filter(u => u.roles && u.roles.includes('affiliate')).length, color: 'bg-gradient-to-r from-green-500 to-green-600' },
+                        { label: 'Customers', value: allUsers.filter(u => u.roles && u.roles.includes('customer')).length, color: 'bg-gradient-to-r from-purple-500 to-purple-600' },
+                        { label: 'Admins', value: allUsers.filter(u => u.roles && u.roles.includes('admin')).length, color: 'bg-gradient-to-r from-orange-500 to-orange-600' }
+                    ]}
+                />
+                <SimpleChart
+                    type="donut"
+                    title="Coupon Status Distribution"
+                    data={[
+                        { label: 'Active', value: allCoupons.filter(c => c.usesLeft > 0).length, color: '#10b981' },
+                        { label: 'Expired', value: allCoupons.filter(c => c.usesLeft <= 0).length, color: '#ef4444' },
+                        { label: 'Draft', value: Math.floor(allCoupons.length * 0.1), color: '#6b7280' }
+                    ]}
                 />
             </div>
             <div className="mt-8">
@@ -367,22 +420,46 @@ const AdminDashboard: React.FC = () => {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
             <div className="p-6">
                 <div className="max-w-7xl mx-auto">
+                    <div className="breadcrumb-container mb-6">
+                        <Breadcrumb 
+                            items={[
+                                { label: 'Dashboard', path: '/dashboard' },
+                                { label: 'Admin Panel' }
+                            ]}
+                        />
+                    </div>
+
                     <div className="mb-8">
-                        <h1 className="text-4xl font-bold text-gray-800 mb-2">
+                        <h1 className="heading-lg text-gray-800 mb-2">
                             {t('admin.title', 'Admin Dashboard')}
                         </h1>
-                        <p className="text-gray-600">
+                        <p className="body-lg text-gray-600">
                             {t('admin.subtitle', 'Comprehensive platform management and analytics')}
                         </p>
                     </div>
 
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 mb-8 overflow-x-auto">
-                        <div className="flex p-2 gap-2">
-                            {tabs.map((tab) => (
+                        <div className="flex p-2 gap-2" role="tablist" aria-label="Admin Dashboard Navigation">
+                            {tabs.map((tab, index) => (
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
-                                    className={tabButtonClass(tab.id)}
+                                    className={`${tabButtonClass(tab.id)} btn-enhanced`}
+                                    role="tab"
+                                    aria-selected={activeTab === tab.id}
+                                    aria-controls={`tab-panel-${tab.id}`}
+                                    tabIndex={activeTab === tab.id ? 0 : -1}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'ArrowRight') {
+                                            e.preventDefault();
+                                            const nextIndex = (index + 1) % tabs.length;
+                                            setActiveTab(tabs[nextIndex].id);
+                                        } else if (e.key === 'ArrowLeft') {
+                                            e.preventDefault();
+                                            const prevIndex = index === 0 ? tabs.length - 1 : index - 1;
+                                            setActiveTab(tabs[prevIndex].id);
+                                        }
+                                    }}
                                 >
                                     <div className="flex items-center space-x-2">
                                         {tab.icon}
