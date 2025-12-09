@@ -18,6 +18,9 @@ import {
     SparklesIcon
 } from '@heroicons/react/24/outline';
 import { getAllCountries, getCitiesForCountryAsync } from '../utils/countryData';
+import AdvancedSearch, { SearchFilters } from '../components/AdvancedSearch';
+import LoadingSkeleton from '../components/LoadingSkeleton';
+import EmptyState from '../components/EmptyState';
 
 type ViewMode = 'marketplace' | 'shop-details';
 
@@ -36,6 +39,7 @@ const MarketplacePage: React.FC = () => {
     const [countryFilter, setCountryFilter] = useState('');
     const [cityFilter, setCityFilter] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('');
+    const [searchFilters, setSearchFilters] = useState<SearchFilters>({});
     
     // All available locations from system
     const [allSystemCountries] = useState<string[]>(getAllCountries());
