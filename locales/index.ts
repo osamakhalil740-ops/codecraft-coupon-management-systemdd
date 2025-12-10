@@ -10,7 +10,43 @@ export const translations = {
       areYouSure: "Are you sure?",
       actionCannotBeUndone: "This action cannot be undone.",
       deleteConfirm: "Yes, delete it",
-      optional: "Optional"
+      optional: "Optional",
+      search: "Search",
+      filter: "Filter",
+      filters: "Filters",
+      sort: "Sort",
+      sortBy: "Sort By",
+      clear: "Clear",
+      clearAll: "Clear All",
+      clearFilters: "Clear Filters",
+      noResults: "No results found",
+      noResultsDescription: "Try adjusting your search or filters",
+      backToTop: "Back to top",
+      success: "Success!",
+      error: "Error",
+      tryAgain: "Try again",
+      retry: "Retry",
+      close: "Close",
+      cancel: "Cancel",
+      save: "Save",
+      edit: "Edit",
+      view: "View",
+      viewAll: "View All",
+      showMore: "Show More",
+      showLess: "Show Less",
+      loadMore: "Load More",
+      apply: "Apply",
+      reset: "Reset",
+      submit: "Submit",
+      continue: "Continue",
+      previous: "Previous",
+      next: "Next",
+      total: "Total",
+      active: "Active",
+      inactive: "Inactive",
+      all: "All",
+      recent: "Recent",
+      popular: "Popular"
     },
     header: {
       marketplace: "Marketplace",
@@ -315,6 +351,61 @@ export const translations = {
         title: "No coupons available yet"
       }
     },
+    analytics: {
+      title: "Analytics Dashboard",
+      overview: "Overview",
+      performance: "Performance",
+      geographic: "Geographic",
+      activity: "Activity",
+      totalCoupons: "Total Coupons",
+      activeCoupons: "Active Coupons",
+      redemptions: "Redemptions",
+      revenue: "Estimated Revenue",
+      conversionRate: "Conversion Rate",
+      topPerformers: "Top Performing Coupons",
+      geographicDistribution: "Geographic Distribution",
+      recentActivity: "Recent Activity",
+      noData: "No data available",
+      noDataDescription: "Data will appear once you have activity",
+      couponCreated: "Coupon created",
+      couponRedeemed: "Coupon redeemed",
+      couponExpired: "Coupon expired",
+      fromCouponUsage: "From coupon usage",
+      redemptionsPerCoupon: "Redemptions per coupon",
+      thisMonth: "This month",
+      thisWeek: "This week",
+      today: "Today",
+      estimated: "Estimated"
+    },
+    search: {
+      placeholder: "Search shops, coupons, or categories...",
+      recentSearches: "Recent Searches",
+      suggestions: "Suggestions",
+      noSuggestions: "No suggestions found",
+      pressEnter: "Press Enter to search",
+      sortByRelevance: "Most Relevant",
+      sortByDiscount: "Highest Discount",
+      sortByPopular: "Most Popular",
+      sortByRecent: "Recently Added",
+      sortByExpiring: "Expiring Soon",
+      availability: "Availability",
+      allAvailable: "All",
+      activeOnly: "Active",
+      expiringSoon: "Expiring Soon",
+      minimumDiscount: "Minimum Discount",
+      discount: "Discount"
+    },
+    emptyStates: {
+      noShops: "No shops found",
+      noShopsDescription: "There are no shops available in this area yet",
+      noCoupons: "No coupons yet",
+      noCouponsDescription: "Start creating coupons to attract customers and boost sales",
+      noUsers: "No users yet",
+      noUsersDescription: "Start inviting team members to collaborate on campaigns",
+      createFirstCoupon: "Create your first coupon",
+      inviteUsers: "Invite users",
+      browseAll: "Browse all"
+    },
     Kobonz: "Kobonz",
     English: "English",
     "by store": "by store",
@@ -351,103 +442,139 @@ export const translations = {
   },
   ar: {
     common: {
-      loading: "جاري التحميل...",
-      credits: "الرصيد",
+      loading: "جارٍ التحميل...",
+      credits: "الأرصدة",
       copy: "نسخ",
-      copied: "تم النسخ!",
+      copied: "تم النسخ بنجاح!",
       delete: "حذف",
-      areYouSure: "هل أنت متأكد؟",
+      areYouSure: "هل أنت متأكد من ذلك؟",
       actionCannotBeUndone: "لا يمكن التراجع عن هذا الإجراء.",
       deleteConfirm: "نعم، احذف",
-      optional: "اختياري"
+      optional: "اختياري",
+      search: "بحث",
+      filter: "تصفية",
+      filters: "التصفيات",
+      sort: "ترتيب",
+      sortBy: "ترتيب حسب",
+      clear: "مسح",
+      clearAll: "مسح الكل",
+      clearFilters: "مسح التصفيات",
+      noResults: "لا توجد نتائج",
+      noResultsDescription: "جرّب تعديل البحث أو التصفيات",
+      backToTop: "العودة للأعلى",
+      success: "نجح!",
+      error: "خطأ",
+      tryAgain: "حاول مرة أخرى",
+      retry: "إعادة المحاولة",
+      close: "إغلاق",
+      cancel: "إلغاء",
+      save: "حفظ",
+      edit: "تعديل",
+      view: "عرض",
+      viewAll: "عرض الكل",
+      showMore: "عرض المزيد",
+      showLess: "عرض أقل",
+      loadMore: "تحميل المزيد",
+      apply: "تطبيق",
+      reset: "إعادة تعيين",
+      submit: "إرسال",
+      continue: "متابعة",
+      previous: "السابق",
+      next: "التالي",
+      total: "المجموع",
+      active: "نشط",
+      inactive: "غير نشط",
+      all: "الكل",
+      recent: "الأحدث",
+      popular: "الأكثر شهرة"
     },
     header: {
-      marketplace: "السوق",
-      partner: "شراكة معنا",
-      affiliate: "شبكة التسويق",
+      marketplace: "المتجر",
+      partner: "الشراكات",
+      affiliate: "التسويق بالعمولة",
       dashboard: "لوحة التحكم",
-      logout: "تسجيل خروج",
-      loginSignup: "دخول / تسجيل"
+      logout: "تسجيل الخروج",
+      loginSignup: "تسجيل الدخول"
     },
     home: {
       hero: {
-        title: "اقتصاد الإحالة B2B، معاد تصميمه.",
-        subtitle: "أنشئ حملات قسائم قوية وطور شبكة أعمالك من خلال نظام الائتمان المدفوع بالشراكة.",
-        badge: "موثوق من قبل فرق النمو في جميع أنحاء العالم",
-        primaryCta: "ابدأ حملتك",
-        secondaryCta: "استكشف السوق"
+        title: "منصة الكوبونات والعروض الذكية",
+        subtitle: "أنشئ حملات كوبونات احترافية وطوّر شبكة أعمالك من خلال نظام شراكات مبتكر",
+        badge: "موثوق من آلاف الشركات حول العالم",
+        primaryCta: "ابدأ حملتك الآن",
+        secondaryCta: "تصفح المتجر"
       },
       generator: {
-        title: "أنشئ قسيمة الآن",
+        title: "أنشئ كوبونك الآن",
         placeholder1: "اسم متجرك",
         placeholder2: "بريدك الإلكتروني",
-        button: "ابدأ وأنشئ قسيمة"
+        button: "ابدأ وأنشئ الكوبون"
       },
       metrics: {
-        shops: "متاجر معتمدة",
-        coupons: "قسائم مطلقة",
-        redemptions: "استردادات ناجحة"
+        shops: "متجر موثوق",
+        coupons: "كوبون فعّال",
+        redemptions: "عملية استخدام ناجحة"
       },
       benefits: {
-        title: "لماذا Kobonz",
-        description: "كل ما تحتاجه لإطلاق وقياس وتوسيع شراكات القسائم B2B من لوحة تحكم واحدة.",
+        title: "لماذا كوبونز؟",
+        description: "كل ما تحتاجه لإدارة الكوبونات والعروض بشكل احترافي من لوحة تحكم واحدة",
         items: [
           {
-            title: "إطلاق في دقائق",
-            description: "صمم تجارب قسائم متعددة اللغات مع تتبع الإحالة المدمج والمشاركة الجاهزة للـ QR."
+            title: "سهولة الاستخدام",
+            description: "أنشئ كوبونات متعددة اللغات مع رموز QR ومتابعة دقيقة في دقائق معدودة"
           },
           {
-            title: "كافئ شبكتك", 
-            description: "أتمت عمولات الشركاء التابعين ومكافآت المُحيلين بدون جداول بيانات أو دفعات يدوية."
+            title: "نظام مكافآت ذكي", 
+            description: "عمولات تلقائية للشركاء والمسوقين بدون تعقيدات أو عمليات يدوية"
           },
           {
-            title: "انموا معًا",
-            description: "توسع من خلال إحالات الشركاء مع تخصيص الائتمان التلقائي ورؤى الأداء."
+            title: "نمو مستدام",
+            description: "وسّع أعمالك من خلال شبكة شراكات قوية مع تقارير وتحليلات شاملة"
           }
         ]
       },
       howItWorks: {
-        title: "كيف يعمل",
+        title: "كيف تعمل المنصة؟",
         step1: {
           title: "أنشئ حملتك",
-          description: "قم بإعداد حملة القسائم الخاصة بك مع شروط وجوائز وخيارات استهداف مخصصة في دقائق."
+          description: "صمم كوبوناتك بشروط وعروض مخصصة واستهدف جمهورك بدقة في دقائق"
         },
         step2: {
           title: "شارك مع الشركاء",
-          description: "وزع حملاتك من خلال شبكة التسويق التابع ونظام الشركاء للوصول الأقصى."
+          description: "انشر حملاتك عبر شبكة واسعة من المسوقين والشركاء لأقصى انتشار ممكن"
         },
         step3: {
-          title: "تتبع وحسن",
-          description: "راقب الأداء في الوقت الفعلي وحسن حملاتك بناءً على التحليلات التفصيلية."
+          title: "تابع وحلّل",
+          description: "راقب نتائج حملاتك لحظياً وحسّن أداءك بناءً على بيانات دقيقة ومفصلة"
         }
       },
       workflow: {
-        title: "سير عمل B2B بسيط",
-        description: "من الإنشاء إلى التحويل، منصتنا تتعامل مع دورة حياة القسيمة بأكملها بسلاسة."
+        title: "إدارة سهلة ومتكاملة",
+        description: "من الإنشاء إلى الاستخدام، منصتنا تدير الكوبونات بشكل كامل وسلس"
       },
       ctaSection: {
-        highlight: "مستعد للنمو؟",
+        highlight: "جاهز للبدء؟",
         title: "ابدأ حملتك اليوم",
-        subtitle: "انضم إلى الآلاف من الشركات التي تنمو بالفعل من خلال الشراكات الاستراتيجية",
+        subtitle: "انضم إلى آلاف الشركات التي تنمو بنجاح من خلال منصتنا",
         primary: "ابدأ مجاناً",
-        secondary: "احجز عرضاً توضيحياً"
+        secondary: "احجز عرضاً تجريبياً"
       }
     },
     loginPage: {
-      title: "انضم إلى Kobonz",
-      subtitle: "ادخل إلى لوحة التحكم أو أنشئ حساب جديد",
-      toggleToSignup: "تحتاج حساب؟ سجل",
-      toggleToLogin: "لديك حساب بالفعل؟ سجل دخول",
+      title: "انضم إلى كوبونز",
+      subtitle: "سجّل دخولك أو أنشئ حساباً جديداً",
+      toggleToSignup: "ليس لديك حساب؟ سجّل الآن",
+      toggleToLogin: "لديك حساب؟ سجّل دخولك",
       emailLabel: "البريد الإلكتروني",
       passwordLabel: "كلمة المرور",
       nameLabel: "الاسم الكامل",
       shopNameLabel: "اسم المتجر",
-      categoryLabel: "فئة العمل",
-      countryLabel: "البلد",
+      categoryLabel: "نوع النشاط التجاري",
+      countryLabel: "الدولة",
       cityLabel: "المدينة",
       roleLabel: "نوع الحساب",
-      loginButton: "تسجيل دخول",
-      signupButton: "إنشاء حساب",
+      loginButton: "تسجيل الدخول",
+      signupButton: "إنشاء الحساب",
       processing: "جاري المعالجة...",
       referred: "تم إحالتك من قبل: {{referrer}}",
       dontHaveAccount: "ليس لديك حساب؟",
@@ -660,38 +787,93 @@ export const translations = {
         title: "لا توجد قسائم متاحة حتى الآن"
       }
     },
-    Kobonz: "Kobonz",
+    Kobonz: "كوبونز",
     English: "العربية",
-    "by store": "من المتجر",
-    "Customer earns": "العميل يكسب",
-    "Credits on redemption": "ائتمانات عند الاسترداد",
+    "by store": "حسب المتجر",
+    "Customer earns": "يحصل العميل على",
+    "Credits on redemption": "أرصدة عند الاستخدام",
     "Cost:": "التكلفة:",
-    "credits per coupon": "ائتمانات لكل قسيمة",
-    "Each coupon you create will cost exactly 50 credits regardless of settings": "كل قسيمة تنشئها ستكلف بالضبط 50 ائتماناً بغض النظر عن الإعدادات",
-    "Customer Reward Points": "نقاط مكافأة العميل",
-    "Points credited to customer when they redeem this coupon": "النقاط المضافة للعميل عندما يستردي هذه القسيمة",
+    "credits per coupon": "رصيد لكل كوبون",
+    "Each coupon you create will cost exactly 50 credits regardless of settings": "تكلفة كل كوبون تنشئه هي 50 رصيداً بغض النظر عن الإعدادات",
+    "Customer Reward Points": "نقاط المكافأة للعميل",
+    "Points credited to customer when they redeem this coupon": "النقاط التي يحصل عليها العميل عند استخدام الكوبون",
     "mm/dd/yyyy": "يوم/شهر/سنة",
     affiliateNetwork: {
-      title: "انضم إلى شبكة التسويق التابع",
-      subtitle: "اشترك معنا لتكسب عمولات من خلال الترويج للعروض والقسائم المذهلة لجمهورك. ابني مصدر دخلك بينما تساعد العملاء في توفير المال.",
+      title: "انضم إلى شبكة التسويق بالعمولة",
+      subtitle: "اكسب عمولات مجزية من خلال الترويج لأفضل العروض والكوبونات لجمهورك. اصنع مصدر دخل إضافي بينما تساعد الآخرين على التوفير.",
       whyJoin: {
-        title: "لماذا تنضم إلى شبكتنا؟",
-        description: "كشريك تسويق تابع، ستكسب عمولات سخية لكل قسيمة يتم استردادها من خلال روابط الإحالة الفريدة الخاصة بك. تتبع أداءك واحصل على المواد التسويقية واحصل على المدفوعات بانتظام لجهودك الترويجية."
+        title: "لماذا تنضم لشبكتنا؟",
+        description: "كمسوق بالعمولة، ستحصل على عمولات مجزية عن كل كوبون يُستخدم من خلال روابطك الخاصة. تابع أداءك واحصل على أدوات تسويقية واستلم أرباحك بانتظام."
       },
-      ctaButton: "ابدأ كمسوق تابع"
+      ctaButton: "ابدأ التسويق بالعمولة"
     },
     partner: {
-      title: "شراكة معنا",
-      subtitle: "انضم إلى منصتنا كشريك تجاري واكتشف فرص جديدة لتنمية قاعدة عملائك وزيادة المبيعات من خلال نظام القسائم البيئي الخاص بنا.",
+      title: "كن شريكاً معنا",
+      subtitle: "انضم لمنصتنا كشريك تجاري واكتشف فرصاً جديدة لتنمية قاعدة عملائك وزيادة مبيعاتك من خلال منظومة الكوبونات المتكاملة.",
       feature1: {
-        title: "وسع نطاق وصولك",
-        description: "تواصل مع آلاف العملاء الباحثين عن الصفقات ووسع حضورك في السوق من خلال منصتنا الراسخة وشبكة التسويق التابع."
+        title: "وسّع انتشارك",
+        description: "تواصل مع آلاف العملاء المهتمين بالعروض ووسّع وجودك في السوق من خلال منصتنا وشبكة المسوقين الواسعة"
       },
       feature2: {
-        title: "عزز مبيعاتك",
-        description: "جذب المزيد من الزيارات إلى عملك مع العروض الترويجية المستهدفة وحملات القسائم التي تحول المتصفحين إلى مشترين."
+        title: "ضاعف مبيعاتك",
+        description: "اجذب المزيد من الزوار لمتجرك من خلال عروض ترويجية مستهدفة وكوبونات فعّالة تحوّل الزوار إلى مشترين"
       },
-      ctaButton: "ابدأ الشراكة"
+      ctaButton: "ابدأ الشراكة الآن"
+    },
+    analytics: {
+      title: "لوحة التحليلات",
+      overview: "نظرة عامة",
+      performance: "الأداء",
+      geographic: "التوزيع الجغرافي",
+      activity: "النشاطات",
+      totalCoupons: "إجمالي الكوبونات",
+      activeCoupons: "الكوبونات النشطة",
+      redemptions: "عمليات الاستخدام",
+      revenue: "الإيرادات المتوقعة",
+      conversionRate: "معدل التحويل",
+      topPerformers: "الكوبونات الأكثر نجاحاً",
+      geographicDistribution: "التوزيع الجغرافي",
+      recentActivity: "النشاطات الأخيرة",
+      noData: "لا توجد بيانات",
+      noDataDescription: "ستظهر البيانات عند وجود نشاط",
+      couponCreated: "تم إنشاء كوبون",
+      couponRedeemed: "تم استخدام كوبون",
+      couponExpired: "انتهت صلاحية كوبون",
+      fromCouponUsage: "من استخدام الكوبونات",
+      redemptionsPerCoupon: "استخدام لكل كوبون",
+      thisMonth: "هذا الشهر",
+      thisWeek: "هذا الأسبوع",
+      today: "اليوم",
+      estimated: "تقديري"
+    },
+    search: {
+      placeholder: "ابحث عن المتاجر، الكوبونات، أو الفئات...",
+      recentSearches: "عمليات البحث الأخيرة",
+      suggestions: "اقتراحات",
+      noSuggestions: "لا توجد اقتراحات",
+      pressEnter: "اضغط Enter للبحث",
+      sortByRelevance: "الأكثر صلة",
+      sortByDiscount: "أعلى خصم",
+      sortByPopular: "الأكثر شهرة",
+      sortByRecent: "الأحدث",
+      sortByExpiring: "قرب انتهاء الصلاحية",
+      availability: "التوفر",
+      allAvailable: "الكل",
+      activeOnly: "النشط فقط",
+      expiringSoon: "قرب الانتهاء",
+      minimumDiscount: "الحد الأدنى للخصم",
+      discount: "خصم"
+    },
+    emptyStates: {
+      noShops: "لا توجد متاجر",
+      noShopsDescription: "لا توجد متاجر متاحة في هذه المنطقة حالياً",
+      noCoupons: "لا توجد كوبونات بعد",
+      noCouponsDescription: "ابدأ بإنشاء كوبونات لجذب العملاء وزيادة مبيعاتك",
+      noUsers: "لا يوجد مستخدمون بعد",
+      noUsersDescription: "ابدأ بدعوة أعضاء الفريق للتعاون في حملاتك",
+      createFirstCoupon: "أنشئ كوبونك الأول",
+      inviteUsers: "دعوة مستخدمين",
+      browseAll: "تصفح الكل"
     }
   }
 };
