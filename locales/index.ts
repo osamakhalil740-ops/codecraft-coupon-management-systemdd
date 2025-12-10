@@ -118,6 +118,56 @@ export const translations = {
         subtitle: "Join thousands of businesses already growing through strategic partnerships",
         primary: "Get Started Free",
         secondary: "Book a Demo"
+      },
+      chooseYourPath: {
+        title: "🚀 Choose Your Path",
+        subtitle: "Start earning today! Join our ecosystem and unlock your potential. Whether you're a business owner, affiliate marketer, or customer - there's a perfect role for you.",
+        shopOwner: {
+          title: "Shop Owner",
+          description: "Create and manage coupons for your business. Track redemptions and grow your customer base with complete data visibility.",
+          features: [
+            "Create unlimited coupons",
+            "Track customer redemptions",
+            "Full customer data visibility",
+            "Affiliate partnership tracking",
+            "Complete redemption analytics"
+          ],
+          cta: "Start Your Business"
+        },
+        affiliate: {
+          title: "Affiliate Marketer",
+          description: "Promote business coupons and earn commissions on every successful redemption. Access complete customer data.",
+          features: [
+            "Earn commission per redemption",
+            "Access to all active coupons",
+            "View customer redemption data",
+            "Real-time performance tracking",
+            "Complete analytics dashboard"
+          ],
+          cta: "Start Earning"
+        },
+        customer: {
+          title: "Customer",
+          description: "Discover amazing deals, redeem coupons, and earn reward points with every purchase from local businesses.",
+          features: [
+            "Access exclusive discounts",
+            "Earn reward points",
+            "Easy coupon redemption",
+            "Discover local businesses",
+            "Personalized deal recommendations"
+          ],
+          cta: "Explore Deals"
+        },
+        newUser: "New to the platform?",
+        getStarted: "Get Started Free →"
+      },
+      globalCoverage: {
+        title: "🌍 Global Coverage, Local Deals",
+        subtitle: "Discover amazing deals from 25+ countries, 150+ cities, and 1000+ local areas worldwide",
+        countries: "Countries",
+        cities: "Major Cities",
+        areas: "Local Areas",
+        exploreButton: "Explore All Locations"
       }
     },
     loginPage: {
@@ -558,6 +608,56 @@ export const translations = {
         subtitle: "انضم إلى آلاف الشركات التي تنمو بنجاح من خلال منصتنا",
         primary: "ابدأ مجاناً",
         secondary: "احجز عرضاً تجريبياً"
+      },
+      chooseYourPath: {
+        title: "🚀 اختر مسارك",
+        subtitle: "ابدأ الكسب اليوم! انضم لمنظومتنا واطلق إمكانياتك. سواء كنت صاحب متجر، مسوق بالعمولة، أو عميل - هناك دور مثالي لك.",
+        shopOwner: {
+          title: "صاحب متجر",
+          description: "أنشئ وأدِر كوبونات متجرك. تابع عمليات الاستخدام وطوّر قاعدة عملائك مع رؤية كاملة للبيانات.",
+          features: [
+            "إنشاء كوبونات غير محدودة",
+            "تتبع استخدام العملاء",
+            "رؤية كاملة لبيانات العملاء",
+            "تتبع شراكات التسويق بالعمولة",
+            "تحليلات شاملة للاستخدام"
+          ],
+          cta: "ابدأ متجرك"
+        },
+        affiliate: {
+          title: "مسوّق بالعمولة",
+          description: "روّج لكوبونات الشركات واكسب عمولات على كل عملية استخدام ناجحة. احصل على بيانات العملاء الكاملة.",
+          features: [
+            "اكسب عمولة عن كل استخدام",
+            "الوصول لجميع الكوبونات النشطة",
+            "مشاهدة بيانات استخدام العملاء",
+            "تتبع الأداء في الوقت الفعلي",
+            "لوحة تحليلات شاملة"
+          ],
+          cta: "ابدأ الكسب"
+        },
+        customer: {
+          title: "عميل",
+          description: "اكتشف عروضاً مذهلة، استخدم الكوبونات، واكسب نقاط مكافآت مع كل عملية شراء من المتاجر المحلية.",
+          features: [
+            "الوصول لخصومات حصرية",
+            "كسب نقاط المكافآت",
+            "استخدام سهل للكوبونات",
+            "اكتشاف المتاجر المحلية",
+            "توصيات عروض مخصصة"
+          ],
+          cta: "استكشف العروض"
+        },
+        newUser: "جديد على المنصة؟",
+        getStarted: "ابدأ مجاناً ←"
+      },
+      globalCoverage: {
+        title: "🌍 تغطية عالمية، عروض محلية",
+        subtitle: "اكتشف عروضاً مذهلة من أكثر من 25 دولة، و150 مدينة، و1000 منطقة محلية حول العالم",
+        countries: "دولة",
+        cities: "مدينة رئيسية",
+        areas: "منطقة محلية",
+        exploreButton: "استكشف جميع المواقع"
       }
     },
     loginPage: {

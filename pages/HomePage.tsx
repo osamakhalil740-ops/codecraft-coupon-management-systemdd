@@ -33,12 +33,6 @@ const HomePage: React.FC = () => {
         { label: t('home.metrics.coupons'), value: '12,500+' },
         { label: t('home.metrics.redemptions'), value: '57,800+' },
     ];
-    
-    const locationStats = [
-        { icon: <GlobeAltIcon className="h-8 w-8" />, label: 'Countries', value: '25+', color: 'blue' },
-        { icon: <MapPinIcon className="h-8 w-8" />, label: 'Major Cities', value: '150+', color: 'purple' },
-        { icon: <MapPinIcon className="h-8 w-8" />, label: 'Local Areas', value: '1000+', color: 'pink' },
-    ];
 
     const benefits = [
         {
@@ -103,9 +97,9 @@ const HomePage: React.FC = () => {
             {/* CRITICAL: Choose Your Path - TOP PRIORITY SECTION - Moved to top */}
             <section className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-10 mb-8 shadow-xl border border-indigo-200">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold text-gray-800 mb-4">🚀 Choose Your Path</h2>
+                    <h2 className="text-4xl font-bold text-gray-800 mb-4">{t('home.chooseYourPath.title')}</h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        <strong>Start earning today!</strong> Join our ecosystem and unlock your potential. Whether you're a business owner, affiliate marketer, or customer - there's a perfect role for you.
+                        {t('home.chooseYourPath.subtitle')}
                     </p>
                 </div>
 
@@ -116,22 +110,22 @@ const HomePage: React.FC = () => {
                             <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="text-3xl">🏪</span>
                             </div>
-                            <h3 className="text-2xl font-bold text-blue-800 mb-4">Shop Owner</h3>
+                            <h3 className="text-2xl font-bold text-blue-800 mb-4">{t('home.chooseYourPath.shopOwner.title')}</h3>
                             <p className="text-base text-gray-600 mb-6">
-                                Create and manage coupons for your business. Track redemptions and grow your customer base with complete data visibility.
+                                {t('home.chooseYourPath.shopOwner.description')}
                             </p>
                             <ul className="text-sm text-gray-600 space-y-2 mb-8 text-left">
-                                <li>✓ Create unlimited coupons</li>
-                                <li>✓ Track customer redemptions</li>
-                                <li>✓ Full customer data visibility</li>
-                                <li>✓ Affiliate partnership tracking</li>
-                                <li>✓ Complete redemption analytics</li>
+                                <li>✓ {t('home.chooseYourPath.shopOwner.features.0')}</li>
+                                <li>✓ {t('home.chooseYourPath.shopOwner.features.1')}</li>
+                                <li>✓ {t('home.chooseYourPath.shopOwner.features.2')}</li>
+                                <li>✓ {t('home.chooseYourPath.shopOwner.features.3')}</li>
+                                <li>✓ {t('home.chooseYourPath.shopOwner.features.4')}</li>
                             </ul>
                             <Link 
                                 to="/login?role=shop-owner"
                                 className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-bold hover:bg-blue-700 transition-colors inline-block text-center text-lg"
                             >
-                                Start Your Business
+                                {t('home.chooseYourPath.shopOwner.cta')}
                             </Link>
                         </div>
                     </div>
@@ -142,22 +136,22 @@ const HomePage: React.FC = () => {
                             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="text-3xl">📈</span>
                             </div>
-                            <h3 className="text-2xl font-bold text-green-800 mb-4">Affiliate Marketer</h3>
+                            <h3 className="text-2xl font-bold text-green-800 mb-4">{t('home.chooseYourPath.affiliate.title')}</h3>
                             <p className="text-base text-gray-600 mb-6">
-                                Promote business coupons and earn commissions on every successful redemption. Access complete customer data.
+                                {t('home.chooseYourPath.affiliate.description')}
                             </p>
                             <ul className="text-sm text-gray-600 space-y-2 mb-8 text-left">
-                                <li>✓ Earn commission per redemption</li>
-                                <li>✓ Access to all active coupons</li>
-                                <li>✓ View customer redemption data</li>
-                                <li>✓ Real-time performance tracking</li>
-                                <li>✓ Complete analytics dashboard</li>
+                                <li>✓ {t('home.chooseYourPath.affiliate.features.0')}</li>
+                                <li>✓ {t('home.chooseYourPath.affiliate.features.1')}</li>
+                                <li>✓ {t('home.chooseYourPath.affiliate.features.2')}</li>
+                                <li>✓ {t('home.chooseYourPath.affiliate.features.3')}</li>
+                                <li>✓ {t('home.chooseYourPath.affiliate.features.4')}</li>
                             </ul>
                             <Link 
                                 to="/login?role=affiliate"
                                 className="w-full bg-green-600 text-white py-4 px-6 rounded-lg font-bold hover:bg-green-700 transition-colors inline-block text-center text-lg"
                             >
-                                Start Earning
+                                {t('home.chooseYourPath.affiliate.cta')}
                             </Link>
                         </div>
                     </div>
@@ -168,22 +162,22 @@ const HomePage: React.FC = () => {
                             <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="text-3xl">🎁</span>
                             </div>
-                            <h3 className="text-2xl font-bold text-purple-800 mb-4">Customer</h3>
+                            <h3 className="text-2xl font-bold text-purple-800 mb-4">{t('home.chooseYourPath.customer.title')}</h3>
                             <p className="text-base text-gray-600 mb-6">
-                                Discover amazing deals, redeem coupons, and earn reward points with every purchase from local businesses.
+                                {t('home.chooseYourPath.customer.description')}
                             </p>
                             <ul className="text-sm text-gray-600 space-y-2 mb-8 text-left">
-                                <li>✓ Access exclusive discounts</li>
-                                <li>✓ Earn reward points</li>
-                                <li>✓ Easy coupon redemption</li>
-                                <li>✓ Discover local businesses</li>
-                                <li>✓ Personalized deal recommendations</li>
+                                <li>✓ {t('home.chooseYourPath.customer.features.0')}</li>
+                                <li>✓ {t('home.chooseYourPath.customer.features.1')}</li>
+                                <li>✓ {t('home.chooseYourPath.customer.features.2')}</li>
+                                <li>✓ {t('home.chooseYourPath.customer.features.3')}</li>
+                                <li>✓ {t('home.chooseYourPath.customer.features.4')}</li>
                             </ul>
                             <Link 
                                 to="/marketplace"
                                 className="w-full bg-purple-600 text-white py-4 px-6 rounded-lg font-bold hover:bg-purple-700 transition-colors inline-block text-center text-lg"
                             >
-                                Explore Deals
+                                {t('home.chooseYourPath.customer.cta')}
                             </Link>
                         </div>
                     </div>
@@ -191,12 +185,12 @@ const HomePage: React.FC = () => {
 
                 <div className="text-center mt-12">
                     <div className="inline-flex items-center gap-4 bg-white px-8 py-4 rounded-full shadow-lg border border-gray-200">
-                        <span className="text-sm font-medium text-gray-600">New to the platform?</span>
+                        <span className="text-sm font-medium text-gray-600">{t('home.chooseYourPath.newUser')}</span>
                         <Link 
                             to="/login" 
                             className="text-blue-600 hover:text-blue-700 font-bold text-sm bg-blue-50 px-4 py-2 rounded-full hover:bg-blue-100 transition-all"
                         >
-                            Get Started Free →
+                            {t('home.chooseYourPath.getStarted')}
                         </Link>
                     </div>
                 </div>
@@ -222,23 +216,35 @@ const HomePage: React.FC = () => {
             <section className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-3xl p-10 md:p-16">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                        🌍 Global Coverage, Local Deals
+                        {t('home.globalCoverage.title')}
                     </h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Discover amazing deals from <strong>25+ countries</strong>, <strong>150+ cities</strong>, and <strong>1000+ local areas</strong> worldwide
+                        {t('home.globalCoverage.subtitle')}
                     </p>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    {locationStats.map((stat) => (
-                        <div key={stat.label} className="bg-white rounded-2xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                            <div className={`inline-flex p-4 rounded-full bg-${stat.color}-100 text-${stat.color}-600 mb-4`}>
-                                {stat.icon}
-                            </div>
-                            <div className="text-4xl font-bold text-gray-800 mb-2">{stat.value}</div>
-                            <div className="text-gray-600 font-medium">{stat.label}</div>
+                    <div className="bg-white rounded-2xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                        <div className="inline-flex p-4 rounded-full bg-blue-100 text-blue-600 mb-4">
+                            <GlobeAltIcon className="h-8 w-8" />
                         </div>
-                    ))}
+                        <div className="text-4xl font-bold text-gray-800 mb-2">25+</div>
+                        <div className="text-gray-600 font-medium">{t('home.globalCoverage.countries')}</div>
+                    </div>
+                    <div className="bg-white rounded-2xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                        <div className="inline-flex p-4 rounded-full bg-purple-100 text-purple-600 mb-4">
+                            <MapPinIcon className="h-8 w-8" />
+                        </div>
+                        <div className="text-4xl font-bold text-gray-800 mb-2">150+</div>
+                        <div className="text-gray-600 font-medium">{t('home.globalCoverage.cities')}</div>
+                    </div>
+                    <div className="bg-white rounded-2xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                        <div className="inline-flex p-4 rounded-full bg-pink-100 text-pink-600 mb-4">
+                            <MapPinIcon className="h-8 w-8" />
+                        </div>
+                        <div className="text-4xl font-bold text-gray-800 mb-2">1000+</div>
+                        <div className="text-gray-600 font-medium">{t('home.globalCoverage.areas')}</div>
+                    </div>
                 </div>
                 
                 <div className="text-center">
@@ -247,7 +253,7 @@ const HomePage: React.FC = () => {
                         className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                     >
                         <MapPinIcon className="h-6 w-6" />
-                        Explore All Locations
+                        {t('home.globalCoverage.exploreButton')}
                     </Link>
                 </div>
                 
