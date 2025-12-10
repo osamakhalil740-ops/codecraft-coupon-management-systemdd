@@ -6,7 +6,7 @@ import { Role } from '../types';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { LogoIcon } from '../components/icons/LogoIcon';
 import { useTranslation } from '../hooks/useTranslation';
-import { getAllCountries, getCitiesForCountry, getDistrictsForCity } from '../utils/countryData';
+import { getAllCountries, getCitiesForCountryAsync, getDistrictsForCity } from '../utils/countryData';
 
 const LoginPage: React.FC = () => {
   const { t } = useTranslation();
@@ -60,11 +60,16 @@ const LoginPage: React.FC = () => {
   // Handle country change
   useEffect(() => {
     if (country) {
-      const cities = getCitiesForCountry(country);
-      setAvailableCities(cities);
-      setCity('');
-      setDistrict('');
-      setAvailableDistricts([]);
+      const loadCities = async () => {
+        const cities = await getCitiesForCountryAsync(country);
+        setAvailableCities(cities);
+        setCity('');
+        setDistrict('');
+        setAvailableDistricts([]);
+      };
+      loadCities();
+    } else {
+      setAvailableCities([]);
     }
   }, [country]);
 
