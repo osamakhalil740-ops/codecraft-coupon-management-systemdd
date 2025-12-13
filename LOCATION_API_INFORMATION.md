@@ -56,20 +56,25 @@ GeoNames is a geographical database that covers all countries and contains over 
 
 ## 💰 Pricing & Plans
 
-### Free Plan (Current)
-- **Cost:** $0/month
+### Free Plan (Currently Using) ✅
+- **Cost:** $0/month - Completely FREE forever
 - **Daily Limit:** 20,000 requests
 - **Hourly Limit:** 1,000 requests
+- **Access:** All location data included
 - **Perfect for:** Small to medium applications
+- **No credit card required**
+- **No expiration**
 
-### Premium Plans (If Needed)
-If you need higher limits, GeoNames offers premium plans:
+### Paid Plans (Optional - Only if Needed)
+GeoNames also offers **paid plans** for applications requiring higher limits:
 
-- **Premium Plan:** Higher request limits
-- **Enterprise:** Unlimited requests
-- **Custom Solutions:** Tailored to your needs
+- **Premium Plan:** Higher request limits for heavy usage
+- **Enterprise:** Unlimited requests for large-scale applications
+- **Custom Solutions:** Tailored to specific business needs
 
-**To upgrade:** Visit https://www.geonames.org/commercial-webservices.html
+**Note:** The free plan is **completely sufficient** for this project's current needs.
+
+**To upgrade (if needed in future):** Visit https://www.geonames.org/commercial-webservices.html
 
 ---
 
@@ -207,11 +212,14 @@ With caching, most repeat queries don't hit the API, so actual usage is minimal.
 ## 📝 Summary
 
 **Service:** GeoNames (www.geonames.org)  
-**Cost:** FREE  
+**Plan Type:** FREE Plan (completely free, no charges)  
+**Cost:** $0 - No payment required  
 **Current Usage:** ~100-400 requests/day  
 **Daily Limit:** 20,000 requests/day  
-**Status:** Well within free tier limits  
-**Recommendation:** Current free plan is sufficient
+**Status:** Well within free tier limits ✅  
+**Recommendation:** Current free plan is completely sufficient for project needs
+
+**Note:** Paid plans are available but **NOT needed** for this project. The free plan provides all necessary features.
 
 ### Action Required:
 1. ✅ Login to https://www.geonames.org/login
