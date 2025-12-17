@@ -80,23 +80,39 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }
 
   useEffect(() => {
+    // Set a timeout to prevent infinite loading
+    const loadingTimeout = setTimeout(() => {
+      logger.warn('Auth initialization timeout - rendering app anyway');
+      setLoading(false);
+    }, 5000); // 5 second timeout
+    
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-         const appUser = await fetchUserData(firebaseUser);
-         if (appUser) {
-           setUser(appUser);
-         } else {
+      try {
+        if (firebaseUser) {
+          const appUser = await fetchUserData(firebaseUser);
+          if (appUser) {
+            setUser(appUser);
+          } else {
             logger.error("User details not found in Firestore!");
             setUser(null);
             signOut(auth);
-         }
-      } else {
+          }
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        logger.error('Error in auth state change:', error);
         setUser(null);
+      } finally {
+        clearTimeout(loadingTimeout);
+        setLoading(false);
       }
-      setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      clearTimeout(loadingTimeout);
+      unsubscribe();
+    };
   }, []);
   
   const refreshUser = async () => {

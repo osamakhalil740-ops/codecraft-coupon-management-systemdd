@@ -41,25 +41,7 @@
         }
       }
     </script>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6",
-    "@heroicons/react/": "https://aistudiocdn.com/@heroicons/react@^2.2.0/",
-    "qrcode.react": "https://aistudiocdn.com/qrcode.react@^4.2.0",
-    "firebase/app": "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js",
-    "firebase/auth": "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js",
-    "firebase/firestore": "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js",
-    "firebase/functions": "https://www.gstatic.com/firebasejs/12.6.0/firebase-functions.js",
-    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/",
-    "firebase-functions": "https://aistudiocdn.com/firebase-functions@^7.0.0",
-    "firebase-admin": "https://aistudiocdn.com/firebase-admin@^13.6.0"
-  }
-}
-</script>
+  <!-- Import maps removed - using bundled dependencies instead -->
 <link rel="stylesheet" href="/index.css">
     <link rel="stylesheet" href="/marketplace-premium.css">
     <link rel="stylesheet" href="/homepage-premium.css">
@@ -73,11 +55,31 @@
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>
-      // Register Service Worker for PWA
+      // Register Service Worker for PWA with better error handling
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => console.log('SW registered:', registration))
+          // Unregister old service workers first
+          navigator.serviceWorker.getRegistrations().then(registrations => {
+            registrations.forEach(registration => {
+              if (registration.active && registration.active.scriptURL.includes('service-worker.js')) {
+                registration.unregister().then(() => {
+                  console.log('Old service worker unregistered');
+                });
+              }
+            });
+          });
+          
+          // Register new service worker
+          navigator.serviceWorker.register('/service-worker.js', {
+            updateViaCache: 'none' // Always fetch fresh service worker
+          })
+            .then(registration => {
+              console.log('SW registered:', registration);
+              // Check for updates every 30 seconds
+              setInterval(() => {
+                registration.update();
+              }, 30000);
+            })
             .catch(error => console.log('SW registration failed:', error));
         });
       }

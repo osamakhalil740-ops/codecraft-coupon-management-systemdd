@@ -31,14 +31,18 @@ try {
   db = getFirestore(app);
   functions = getFunctions(app);
 
-  // Enable offline persistence for better UX
-  enableIndexedDbPersistence(db).catch((err) => {
+  // Enable offline persistence for better UX (don't block on this)
+  enableIndexedDbPersistence(db, { 
+    forceOwnership: false // Allow multiple tabs without error
+  }).catch((err) => {
     if (err.code === 'failed-precondition') {
       // Multiple tabs open, persistence can only be enabled in one tab at a time
       logger.warn('Firebase persistence failed: Multiple tabs open');
     } else if (err.code === 'unimplemented') {
       // The current browser doesn't support persistence
       logger.warn('Firebase persistence not supported in this browser');
+    } else {
+      logger.warn('Firebase persistence setup failed:', err);
     }
   });
 
