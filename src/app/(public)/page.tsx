@@ -5,17 +5,32 @@ import { Button } from '@/components/ui/button';
 import { Search, TrendingUp, Store, Tag, ArrowRight } from 'lucide-react';
 
 async function getFeaturedContent() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/public/featured`, {
-    cache: 'no-store',
-  });
+  try {
+    // Use relative URL for server-side fetches to avoid SSL/DNS issues
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const apiUrl = baseUrl.startsWith('http') 
+      ? `${baseUrl}/api/public/featured`
+      : `https://${baseUrl}/api/public/featured`;
+    
+    const res = await fetch(apiUrl, {
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  if (!res.ok) {
+    if (!res.ok) {
+      console.error('Featured content fetch failed:', res.status, res.statusText);
+      return { featuredCoupons: [], trendingStores: [], categories: [] };
+    }
+
+    const data = await res.json();
+    return data.data || { featuredCoupons: [], trendingStores: [], categories: [] };
+  } catch (error) {
+    console.error('Error fetching featured content:', error);
+    // Return empty data instead of crashing
     return { featuredCoupons: [], trendingStores: [], categories: [] };
   }
-
-  const data = await res.json();
-  return data.data;
 }
 
 export default async function HomePage() {

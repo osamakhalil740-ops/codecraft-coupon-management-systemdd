@@ -3,11 +3,10 @@ import { successResponse, errorResponse } from '@/lib/api-response';
 import { getFeaturedCoupons, getTrendingStores } from '@/lib/search';
 import { prisma } from '@/lib/prisma';
 
-/**
-
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
 
+/**
  * GET /api/public/featured - Get featured content for homepage
  */
 export async function GET(request: NextRequest) {
@@ -43,6 +42,11 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Get featured content error:', error);
-    return errorResponse(error as Error);
+    // Return empty data instead of error to prevent page crash
+    return successResponse({
+      featuredCoupons: [],
+      trendingStores: [],
+      categories: [],
+    });
   }
 }

@@ -47,10 +47,17 @@ export async function middleware(request: NextRequest) {
   }
 
   // Get token from request
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+  let token;
+  try {
+    token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET,
+    });
+  } catch (error) {
+    // If token parsing fails, continue without authentication
+    console.error('Token parsing failed:', error);
+    token = null;
+  }
 
   // Check if route is protected
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
@@ -125,8 +132,9 @@ export const config = {
      * - api routes (handled separately)
      * - _next/static (static files)
      * - _next/image (image optimization)
-     * - favicon.ico, robots.txt, sitemap.xml
+     * - favicon.ico, robots.txt, sitemap.xml, manifest.json
+     * - public folder assets (icons, images, etc.)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
+    '/((?!api|_next/static|_next/image|favicon\\.ico|favicon\\.svg|robots\\.txt|sitemap\\.xml|manifest\\.json|icons/|sw\\.js|workbox-).*)',
   ],
 };
