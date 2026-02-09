@@ -4,6 +4,10 @@ import { shouldApproveCommission } from '@/lib/utils/affiliate';
 import { errorResponse, successResponse } from '@/lib/api-response';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * POST /api/affiliate/approve-commissions
  * Cron job to approve pending commissions after 30 days
  * This moves commissions from pending to available balance

@@ -6,6 +6,10 @@ import { Role, StoreStatus } from '@prisma/client';
 import { NotFoundError, ValidationError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * POST /api/admin/stores/[id]/reject - Reject a store
  * Requires SUPER_ADMIN role
  */

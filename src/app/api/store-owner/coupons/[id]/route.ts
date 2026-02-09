@@ -7,6 +7,10 @@ import { NotFoundError, ForbiddenError, ValidationError } from '@/lib/errors';
 import { updateCouponSchema } from '@/lib/validations/coupon';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/store-owner/coupons/[id] - Get coupon details
  * Requires STORE_OWNER role
  */

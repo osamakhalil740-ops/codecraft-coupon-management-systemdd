@@ -1,4 +1,8 @@
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * Loyalty Account API
  * Get user's loyalty account information
  */

@@ -7,6 +7,10 @@ import { SubscriptionPlan } from '@prisma/client';
 import { apiResponse } from '@/lib/api-response';
 import { z } from 'zod';
 
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 const subscriptionCheckoutSchema = z.object({
   plan: z.nativeEnum(SubscriptionPlan),
 });

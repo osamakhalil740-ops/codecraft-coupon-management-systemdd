@@ -5,6 +5,10 @@ import { prisma } from '@/lib/prisma';
 import { successResponse, errorResponse } from '@/lib/api-response';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * POST /api/notifications/subscribe
  * Subscribe to push notifications
  */

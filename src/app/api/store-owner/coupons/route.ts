@@ -9,6 +9,10 @@ import { ValidationError, NotFoundError, ForbiddenError } from '@/lib/errors';
 import { slugify } from '@/lib/utils/slugify';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/store-owner/coupons - Get coupons for user's stores
  * Requires STORE_OWNER role
  */

@@ -7,6 +7,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { UnauthorizedError, ValidationError, ConflictError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * POST /api/affiliate/register
  * Register as an affiliate
  */

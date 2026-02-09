@@ -4,6 +4,9 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { prisma } from '@/lib/prisma';
 import { Role } from '@prisma/client';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/store-owner/stores - Get stores owned by current user
  * Requires STORE_OWNER role

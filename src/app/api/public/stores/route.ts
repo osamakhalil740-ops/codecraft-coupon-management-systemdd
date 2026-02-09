@@ -3,6 +3,9 @@ import { successResponse, errorResponse } from '@/lib/api-response';
 import { searchStores } from '@/lib/search';
 import { getPaginationParams } from '@/lib/utils/pagination';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/public/stores - Public store listing with search and filters
  */

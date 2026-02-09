@@ -6,6 +6,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { NotFoundError, ValidationError } from '@/lib/errors';
 import { z } from 'zod';
 
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 const resetPasswordSchema = z.object({
   token: z.string().min(1, 'Token is required'),
   password: z

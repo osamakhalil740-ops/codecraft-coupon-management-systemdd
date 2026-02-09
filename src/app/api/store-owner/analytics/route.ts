@@ -5,6 +5,10 @@ import { prisma } from '@/lib/prisma';
 import { Role, CouponStatus } from '@prisma/client';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/store-owner/analytics - Get store owner analytics
  * Requires STORE_OWNER role
  */

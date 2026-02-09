@@ -5,6 +5,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { NotFoundError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/analytics/[couponId]
  * Get real-time analytics for a specific coupon
  */

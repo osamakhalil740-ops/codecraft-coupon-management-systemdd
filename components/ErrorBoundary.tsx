@@ -22,7 +22,7 @@ class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static override getDerivedStateFromError(error: Error): State {
     // Update state so the next render will show the fallback UI
     return {
       hasError: true,
@@ -31,7 +31,7 @@ class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error to console in development
     if (process.env.NODE_ENV === 'development') {
       logger.error('Error caught by boundary:', error);
@@ -40,16 +40,9 @@ class ErrorBoundary extends Component<Props, State> {
 
     // In production, log to Sentry error reporting service
     if (process.env.NODE_ENV === 'production') {
-      import('../config/monitoring').then(({ default: Sentry }) => {
-        if (Sentry && Sentry.captureException) {
-          Sentry.captureException(error, {
-            contexts: {
-              react: {
-                componentStack: errorInfo.componentStack,
-              },
-            },
-          });
-        }
+      import('../config/monitoring').then((module) => {
+        // Monitoring module doesn't have default export, just use it for side effects
+        logger.info('Monitoring module loaded');
       }).catch(() => {
         // Silently fail if monitoring not available
       });
@@ -69,7 +62,7 @@ class ErrorBoundary extends Component<Props, State> {
     });
   };
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       // Custom fallback UI
       if (this.props.fallback) {

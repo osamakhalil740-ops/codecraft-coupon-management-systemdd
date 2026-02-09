@@ -5,6 +5,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { UnauthorizedError, ValidationError, NotFoundError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * POST /api/admin/affiliate/payouts/[id]/approve
  * Approve a payout request (admin only)
  */

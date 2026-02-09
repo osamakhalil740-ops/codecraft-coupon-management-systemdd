@@ -4,6 +4,10 @@ import { sendWelcomeEmail } from '@/lib/email';
 import { errorResponse, successResponse } from '@/lib/api-response';
 import { NotFoundError, ValidationError } from '@/lib/errors';
 
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { token } = await request.json();

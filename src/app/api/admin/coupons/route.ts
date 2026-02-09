@@ -5,6 +5,9 @@ import { prisma } from '@/lib/prisma';
 import { Role, CouponStatus } from '@prisma/client';
 import { getPaginationParams } from '@/lib/utils/pagination';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/admin/coupons - List all coupons with filters
  * Requires SUPER_ADMIN role

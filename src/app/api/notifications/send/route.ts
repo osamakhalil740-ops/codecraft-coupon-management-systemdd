@@ -6,6 +6,10 @@ import { successResponse, errorResponse } from '@/lib/api-response';
 import webpush from 'web-push';
 
 // Configure web-push with VAPID keys
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   webpush.setVapidDetails(
     process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',

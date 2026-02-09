@@ -4,6 +4,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { prisma } from '@/lib/prisma';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/users/me - Get current user profile
  * Requires authentication
  */

@@ -1,4 +1,8 @@
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * ML User Preferences API
  * Get and update user preferences for recommendations
  */

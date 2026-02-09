@@ -6,6 +6,10 @@ import { SubscriptionStatus, SubscriptionPlan } from '@prisma/client';
 import { getPlanConfig } from '@/lib/stripe-config';
 import Stripe from 'stripe';
 
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const signature = headers().get('stripe-signature');

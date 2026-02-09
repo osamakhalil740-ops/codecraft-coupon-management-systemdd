@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MagnifyingGlassIcon, FunnelIcon, XMarkIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, XMarkIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 
 interface SearchSuggestion {
   id: string;

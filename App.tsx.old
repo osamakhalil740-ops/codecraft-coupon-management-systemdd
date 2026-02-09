@@ -1,0 +1,151 @@
+
+import React, { lazy, Suspense, useEffect } from 'react';
+import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth';
+import { Role } from './types';
+import { isSuperAdmin as checkIsSuperAdmin } from './config/constants';
+import { analytics } from './config/monitoring';
+
+import Header from './components/Header';
+import CookieBanner from './components/CookieBanner';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+import { LoadingScreen } from './components/LoadingState';
+
+// Eagerly loaded pages (critical for initial load)
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+
+// Lazy loaded pages (code splitting for better performance)
+// Use webpackPrefetch for likely-to-navigate pages
+const ShopOwnerDashboard = lazy(() => import(/* webpackPrefetch: true */ './pages/ShopOwnerDashboard'));
+const AffiliateDashboard = lazy(() => import(/* webpackPrefetch: true */ './pages/AffiliateDashboard'));
+const AdminDashboard = lazy(() => import(/* webpackPrefetch: true */ './pages/AdminDashboard'));
+const UserDashboard = lazy(() => import(/* webpackPrefetch: true */ './pages/UserDashboard'));
+const SuperAdminDashboard = lazy(() => import('./pages/SuperAdminDashboard'));
+const ValidationPortalPage = lazy(() => import('./pages/ValidationPortalPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const ReferralHandlerPage = lazy(() => import('./pages/ReferralHandlerPage'));
+const MarketplacePage = lazy(() => import(/* webpackPrefetch: true */ './pages/MarketplacePage'));
+const PartnerPage = lazy(() => import('./pages/PartnerPage'));
+const AffiliateNetworkPage = lazy(() => import('./pages/AffiliateNetworkPage'));
+const LegalPage = lazy(() => import('./pages/LegalPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const PublicCouponPage = lazy(() => import('./pages/PublicCouponPage'));
+const LocationBrowser = lazy(() => import('./components/LocationBrowser'));
+const LocationCouponsPage = lazy(() => import('./pages/LocationCouponsPage'));
+
+// Analytics tracker component
+const AnalyticsTracker: React.FC = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    analytics.pageView(location.pathname);
+  }, [location]);
+
+  return null;
+};
+
+const App: React.FC = () => {
+  const { user, isSuperAdmin } = useAuth();
+
+  const isAdminUser = user?.roles.includes('admin') && user.email && checkIsSuperAdmin(user.email);
+
+  const DashboardRedirect: React.FC = () => {
+    if (!user) return <Navigate to="/login" />;
+    
+    // Super admin gets priority access
+    if (isSuperAdmin) {
+      return <Navigate to="/super-admin" />;
+    }
+    
+    // Clear role-based routing - no mixing between roles
+    if (isAdminUser) {
+      return <Navigate to="/admin" replace />;
+    }
+    if (user.roles.includes('shop-owner')) {
+      return <Navigate to="/shop-owner" replace />;
+    }
+    if (user.roles.includes('affiliate')) {
+      return <Navigate to="/affiliate" replace />;
+    }
+    if (user.roles.includes('user')) {
+      return <Navigate to="/customer" replace />;
+    }
+    
+    return <Navigate to="/login" />;
+  };
+
+  const ProtectedRoute: React.FC<{ roles: Role[], children: React.ReactNode }> = ({ roles, children }) => {
+    const location = useLocation();
+
+    if (!user) {
+      return (
+        <Navigate
+          to="/login"
+          state={{ from: location.pathname + location.search }}
+          replace
+        />
+      );
+    }
+    const requiresAdmin = roles.includes('admin');
+    const hasRequiredRole = roles.some(role => user.roles.includes(role));
+
+    if (requiresAdmin && !isAdminUser) {
+      return <Navigate to="/dashboard" />;
+    }
+
+    return hasRequiredRole ? <>{children}</> : <Navigate to="/dashboard" />;
+  };
+
+  return (
+    <HashRouter>
+      <AnalyticsTracker />
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-grow container mx-auto px-4 py-8">
+          <Suspense fallback={<LoadingScreen message="Loading page..." />}>
+            <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={user ? <DashboardRedirect /> : <LoginPage />} />
+            <Route path="/refer/:shopId" element={<ReferralHandlerPage />} />
+            
+            <Route path="/shop-owner" element={<ProtectedRoute roles={['shop-owner']}><ShopOwnerDashboard /></ProtectedRoute>} />
+            <Route path="/affiliate" element={<ProtectedRoute roles={['affiliate']}><AffiliateDashboard /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/super-admin" element={<SuperAdminDashboard />} />
+            <Route path="/customer" element={<ProtectedRoute roles={['user']}><UserDashboard /></ProtectedRoute>} />
+            
+            {/* Legacy routes for backward compatibility */}
+            <Route path="/marketer" element={<ProtectedRoute roles={['affiliate']}><AffiliateDashboard /></ProtectedRoute>} />
+            <Route path="/user" element={<ProtectedRoute roles={['user']}><UserDashboard /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute roles={['shop-owner']}><ProfilePage /></ProtectedRoute>} />
+
+
+            <Route path="/dashboard" element={<DashboardRedirect />} />
+            
+            <Route path="/coupon/:id" element={<PublicCouponPage />} />
+            <Route path="/validate/:id" element={<ProtectedRoute roles={['shop-owner', 'user', 'affiliate']}><ValidationPortalPage /></ProtectedRoute>} />
+            
+            <Route path="/partner-with-us" element={<PartnerPage />} />
+            <Route path="/affiliate-network" element={<AffiliateNetworkPage />} />
+            <Route path="/marketplace" element={<MarketplacePage />} />
+            <Route path="/legal" element={<LegalPage />} />
+            
+            {/* Location Browser Routes */}
+            <Route path="/locations" element={<LocationBrowser />} />
+            <Route path="/locations/:country" element={<LocationCouponsPage />} />
+            <Route path="/locations/:country/:city" element={<LocationCouponsPage />} />
+            <Route path="/locations/:country/:city/:area" element={<LocationCouponsPage />} />
+
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+          </Suspense>
+        </main>
+        <CookieBanner />
+        <PWAInstallPrompt />
+      </div>
+    </HashRouter>
+  );
+};
+
+export default App;

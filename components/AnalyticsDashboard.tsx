@@ -4,20 +4,15 @@ import {
   ChartBarIcon,
   UserGroupIcon,
   TicketIcon,
-  TrendingUpIcon,
   ArrowUpIcon,
   ArrowDownIcon,
   MapPinIcon,
-  CalendarIcon,
   ClockIcon,
   CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 import { api } from '../services/api';
-import { logger } from '../utils/logger';
 import LoadingSkeleton, { StatCardSkeleton } from './LoadingSkeleton';
-import { logger } from '../utils/logger';
 import EmptyState from './EmptyState';
-import { logger } from '../utils/logger';
 
 interface AnalyticsData {
   totalCoupons: number;

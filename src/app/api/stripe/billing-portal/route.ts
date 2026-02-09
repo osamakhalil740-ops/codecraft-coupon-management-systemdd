@@ -5,6 +5,10 @@ import { createBillingPortalSession } from '@/lib/stripe';
 import { apiResponse } from '@/lib/api-response';
 import { prisma } from '@/lib/prisma';
 
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

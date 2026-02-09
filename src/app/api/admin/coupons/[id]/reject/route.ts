@@ -6,6 +6,10 @@ import { Role, CouponStatus } from '@prisma/client';
 import { NotFoundError, ValidationError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * POST /api/admin/coupons/[id]/reject - Reject a coupon
  * Requires SUPER_ADMIN role
  */

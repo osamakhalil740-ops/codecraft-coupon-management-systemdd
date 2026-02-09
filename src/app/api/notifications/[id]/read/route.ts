@@ -5,6 +5,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { UnauthorizedError, NotFoundError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * POST /api/notifications/[id]/read
  * Mark notification as read
  */

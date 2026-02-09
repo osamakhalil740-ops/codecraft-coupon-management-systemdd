@@ -41,7 +41,7 @@ export const APP_VERSION = '2.0.0';
 /**
  * Monitoring Configuration
  */
-export const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN || '';
+export const SENTRY_DSN = process.env['NEXT_PUBLIC_SENTRY_DSN'] || '';
 export const ANALYTICS_ENABLED = IS_PROD;
 
 /**

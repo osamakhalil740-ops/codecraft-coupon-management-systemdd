@@ -5,6 +5,10 @@ import { cancelSubscription } from '@/lib/stripe';
 import { getUserSubscription } from '@/lib/subscription-helpers';
 import { apiResponse } from '@/lib/api-response';
 
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

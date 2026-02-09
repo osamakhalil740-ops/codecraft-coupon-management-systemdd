@@ -1,4 +1,8 @@
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * ML Behavior Tracking API
  * Track user behavior for ML model training
  */

@@ -5,6 +5,10 @@ import { errorResponse } from '@/lib/api-response';
 import { NotFoundError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/go/[code]
  * Track affiliate click and redirect to coupon page
  */

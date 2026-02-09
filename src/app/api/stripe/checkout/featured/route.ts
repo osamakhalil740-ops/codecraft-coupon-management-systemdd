@@ -7,6 +7,10 @@ import { apiResponse } from '@/lib/api-response';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 const featuredCheckoutSchema = z.object({
   type: z.enum(['featured_coupon', 'featured_store']),
   resourceId: z.string(),

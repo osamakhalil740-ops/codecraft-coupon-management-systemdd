@@ -6,6 +6,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { UnauthorizedError } from '@/lib/errors';
 import { nanoid } from 'nanoid';
 
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     // Get refresh token from cookie or body

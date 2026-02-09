@@ -5,6 +5,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { UnauthorizedError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/notifications
  * Get user's notifications
  */

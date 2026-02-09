@@ -3,6 +3,10 @@ import { scheduleAnalyticsAggregation } from '@/lib/queue';
 import { errorResponse, successResponse } from '@/lib/api-response';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * POST /api/analytics/aggregate
  * Trigger analytics aggregation (cron job)
  */

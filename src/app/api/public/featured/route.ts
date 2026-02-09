@@ -4,6 +4,10 @@ import { getFeaturedCoupons, getTrendingStores } from '@/lib/search';
 import { prisma } from '@/lib/prisma';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/public/featured - Get featured content for homepage
  */
 export async function GET(request: NextRequest) {

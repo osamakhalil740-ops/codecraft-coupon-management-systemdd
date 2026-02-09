@@ -4,6 +4,10 @@ import { authOptions } from '@/lib/auth';
 import { getUserLimits } from '@/lib/subscription-helpers';
 import { apiResponse } from '@/lib/api-response';
 
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

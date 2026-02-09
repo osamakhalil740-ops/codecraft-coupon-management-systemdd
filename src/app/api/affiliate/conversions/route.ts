@@ -7,6 +7,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { ValidationError, NotFoundError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * POST /api/affiliate/conversions
  * Track an affiliate conversion (internal API - called when user makes a purchase)
  */

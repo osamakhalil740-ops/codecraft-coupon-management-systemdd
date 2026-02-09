@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { prisma } from '@/lib/prisma';
 import {
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
   trackCouponView,
   trackCouponCopy,
   trackCouponClick,

@@ -1,4 +1,8 @@
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * ML Recommendations API
  * Returns personalized coupon recommendations
  */

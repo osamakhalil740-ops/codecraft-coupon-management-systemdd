@@ -1,4 +1,37 @@
+# Build outputs
 .next
 node_modules
 .git
+
+# Examples and mobile app
 examples
+mobile
+firebase/functions
+
+# Legacy files and backups
+*.old
+**/*.old
+pages-old-backup
+App.tsx.old
+index.tsx.old
+index.html.old
+
+# Build logs and artifacts
+*.log
+build.log
+build-output.txt
+.DS_Store
+
+# Development files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Testing
+coverage
+.nyc_output
+
+# Documentation (if you don't want to deploy docs)
+*.md
+!README.md

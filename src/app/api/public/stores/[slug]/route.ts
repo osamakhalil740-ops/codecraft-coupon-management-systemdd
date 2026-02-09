@@ -5,6 +5,10 @@ import { NotFoundError } from '@/lib/errors';
 import { StoreStatus, CouponStatus } from '@prisma/client';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/public/stores/[slug] - Get store profile by slug
  */
 export async function GET(

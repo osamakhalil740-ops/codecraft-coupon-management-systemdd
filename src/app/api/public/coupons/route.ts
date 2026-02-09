@@ -6,6 +6,10 @@ import { getCacheOrSet } from '@/lib/cache';
 import { withRateLimit } from '@/lib/api-middleware';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/public/coupons - Public coupon listing with search and filters
  */
 export async function GET(request: NextRequest) {

@@ -6,6 +6,10 @@ import { Role } from '@prisma/client';
 import { NotFoundError, ForbiddenError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/store-owner/stores/[id] - Get store details
  * Requires STORE_OWNER role
  */

@@ -4,7 +4,7 @@
  */
 
 import * as Sentry from '@sentry/react';
-import { IS_PROD, IS_DEV } from './constants';
+import { IS_PROD } from './constants';
 
 // Add global flag to prevent double initialization
 declare global {
@@ -20,12 +20,9 @@ export const initSentry = () => {
   if (IS_PROD && !window.__SENTRY_INITIALIZED__) {
     window.__SENTRY_INITIALIZED__ = true;
     Sentry.init({
-      dsn: process.env.NEXT_PUBLIC_SENTRY_DSN || '',
+      dsn: process.env['NEXT_PUBLIC_SENTRY_DSN'] || '',
       integrations: [
-        Sentry.browserTracingIntegration({
-          // Reduce performance overhead
-          tracingOrigins: ['localhost', /^\//],
-        }),
+        Sentry.browserTracingIntegration(),
         Sentry.replayIntegration({
           maskAllText: true,
           blockAllMedia: true,
@@ -39,7 +36,7 @@ export const initSentry = () => {
       // Environment
       environment: IS_PROD ? 'production' : 'development',
       // Release tracking
-      release: `kobonz@${process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0'}`,
+      release: `kobonz@${process.env['NEXT_PUBLIC_APP_VERSION'] || '1.0.0'}`,
       // Ignore certain errors
       ignoreErrors: [
         'ResizeObserver loop limit exceeded',
@@ -147,8 +144,8 @@ class AnalyticsService {
       }
 
       // Custom analytics endpoint (if you have one)
-      if (process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT) {
-        fetch(process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT, {
+      if (process.env['NEXT_PUBLIC_ANALYTICS_ENDPOINT']) {
+        fetch(process.env['NEXT_PUBLIC_ANALYTICS_ENDPOINT'], {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),

@@ -5,6 +5,10 @@ import { invalidateAllUserSessions } from '@/lib/redis';
 import { successResponse, errorResponse } from '@/lib/api-response';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * POST /api/auth/logout - Logout user and invalidate all sessions
  */
 export async function POST(request: NextRequest) {

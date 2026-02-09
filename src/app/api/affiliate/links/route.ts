@@ -7,6 +7,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { UnauthorizedError, ValidationError, NotFoundError } from '@/lib/errors';
 
 /**
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
  * GET /api/affiliate/links
  * Get all affiliate links for the current user
  */
