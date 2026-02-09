@@ -80,10 +80,10 @@ const LazyImage: React.FC<LazyImageProps> = memo(({
       className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
       onLoad={handleLoad}
       onError={handleError}
-      loading=\"lazy\"
-      decoding=\"async\"
-      width=\"auto\"
-      height=\"auto\"
+      loading="lazy"
+      decoding="async"
+      width="auto"
+      height="auto"
       style={{ contentVisibility: 'auto' }}
     />
   );
