@@ -4,7 +4,6 @@ import {
   ArrowTrendingUpIcon, 
   UsersIcon, 
   CurrencyDollarIcon,
-  MapPinIcon,
   ClockIcon,
 } from '@heroicons/react/24/outline';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
