@@ -1,6 +1,18 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialization to avoid build-time errors when env vars are not set
+let resendClient: Resend | null = null;
+
+function getResendClient(): Resend {
+  if (!resendClient) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      throw new Error('RESEND_API_KEY environment variable is not set');
+    }
+    resendClient = new Resend(apiKey);
+  }
+  return resendClient;
+}
 
 const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@kobonz.com';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -15,7 +27,7 @@ export async function sendVerificationEmail(
 ): Promise<void> {
   const verificationUrl = `${APP_URL}/auth/verify-email?token=${token}`;
 
-  await resend.emails.send({
+  await getResendClient().emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: 'Verify your Kobonz account',
@@ -73,7 +85,7 @@ export async function sendPasswordResetEmail(
 ): Promise<void> {
   const resetUrl = `${APP_URL}/auth/reset-password?token=${token}`;
 
-  await resend.emails.send({
+  await getResendClient().emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: 'Reset your Kobonz password',
@@ -127,7 +139,7 @@ export async function sendPasswordResetEmail(
  * Send welcome email (after verification)
  */
 export async function sendWelcomeEmail(email: string, name: string): Promise<void> {
-  await resend.emails.send({
+  await getResendClient().emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: 'Welcome to Kobonz!',
@@ -183,7 +195,7 @@ export async function sendWelcomeEmail(email: string, name: string): Promise<voi
  * Send password changed notification
  */
 export async function sendPasswordChangedEmail(email: string, name: string): Promise<void> {
-  await resend.emails.send({
+  await getResendClient().emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: 'Your Kobonz password has been changed',

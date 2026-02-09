@@ -3,10 +3,17 @@ import Redis from 'ioredis';
 import { sendEmailNotification } from '@/lib/notifications';
 import { SendNotificationJob } from '@/lib/queue';
 
-// Create Redis connection for BullMQ worker
-const connection = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
-  maxRetriesPerRequest: null,
-});
+// Lazy initialization for Redis connection
+let connection: Redis | null = null;
+
+function getConnection(): Redis {
+  if (!connection) {
+    connection = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
+      maxRetriesPerRequest: null,
+    });
+  }
+  return connection;
+}
 
 /**
  * Notification Worker
@@ -46,7 +53,7 @@ const notificationWorker = new Worker<SendNotificationJob>(
     }
   },
   {
-    connection,
+    connection: getConnection(),
     concurrency: 5, // Process 5 notifications concurrently
     limiter: {
       max: 100,
@@ -72,14 +79,14 @@ notificationWorker.on('error', (err) => {
 process.on('SIGTERM', async () => {
   console.log('📴 Shutting down notification worker...');
   await notificationWorker.close();
-  await connection.quit();
+  if (connection) await connection.quit();
   process.exit(0);
 });
 
 process.on('SIGINT', async () => {
   console.log('📴 Shutting down notification worker...');
   await notificationWorker.close();
-  await connection.quit();
+  if (connection) await connection.quit();
   process.exit(0);
 });
 

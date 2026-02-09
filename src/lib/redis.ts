@@ -1,9 +1,29 @@
 import { Redis } from '@upstash/redis';
 
-// Initialize Upstash Redis client
-export const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+// Lazy initialization to avoid build-time errors when env vars are not set
+let redisInstance: Redis | null = null;
+
+function getRedis(): Redis {
+  if (!redisInstance) {
+    const url = process.env.UPSTASH_REDIS_REST_URL;
+    const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+    
+    if (!url || !token) {
+      throw new Error('UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN must be set');
+    }
+    
+    redisInstance = new Redis({ url, token });
+  }
+  return redisInstance;
+}
+
+// Export getter for backwards compatibility
+export const redis = new Proxy({} as Redis, {
+  get: (target, prop) => {
+    const client = getRedis();
+    const value = (client as any)[prop];
+    return typeof value === 'function' ? value.bind(client) : value;
+  }
 });
 
 // Session cache keys

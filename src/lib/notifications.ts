@@ -6,7 +6,19 @@ import CouponApprovedEmail from '../../emails/CouponApproved';
 import AffiliateConversionEmail from '../../emails/AffiliateConversion';
 import PayoutApprovedEmail from '../../emails/PayoutApproved';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialization to avoid build-time errors when env vars are not set
+let resendClient: Resend | null = null;
+
+function getResendClient(): Resend {
+  if (!resendClient) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      throw new Error('RESEND_API_KEY environment variable is not set');
+    }
+    resendClient = new Resend(apiKey);
+  }
+  return resendClient;
+}
 
 export interface NotificationData {
   userId: string;
@@ -146,7 +158,7 @@ export async function sendEmailNotification(data: NotificationData) {
     }
 
     // Send email via Resend
-    const result = await resend.emails.send({
+    const result = await getResendClient().emails.send({
       from: process.env.EMAIL_FROM || 'notifications@kobonz.com',
       to: user.email,
       subject: emailSubject,

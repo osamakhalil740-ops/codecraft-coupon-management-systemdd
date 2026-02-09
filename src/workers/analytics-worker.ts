@@ -8,10 +8,17 @@ import {
 import { redis as upstashRedis } from '@/lib/redis';
 import { AggregateAnalyticsJob } from '@/lib/queue';
 
-// Create Redis connection for BullMQ worker
-const connection = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
-  maxRetriesPerRequest: null,
-});
+// Lazy initialization for Redis connection
+let connection: Redis | null = null;
+
+function getConnection(): Redis {
+  if (!connection) {
+    connection = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
+      maxRetriesPerRequest: null,
+    });
+  }
+  return connection;
+}
 
 /**
  * Analytics Aggregation Worker
@@ -55,7 +62,7 @@ const analyticsWorker = new Worker<AggregateAnalyticsJob>(
     }
   },
   {
-    connection,
+    connection: getConnection(),
     concurrency: 1, // Process one job at a time
     limiter: {
       max: 10,
@@ -277,14 +284,14 @@ analyticsWorker.on('error', (err) => {
 process.on('SIGTERM', async () => {
   console.log('📴 Shutting down analytics worker...');
   await analyticsWorker.close();
-  await connection.quit();
+  if (connection) await connection.quit();
   process.exit(0);
 });
 
 process.on('SIGINT', async () => {
   console.log('📴 Shutting down analytics worker...');
   await analyticsWorker.close();
-  await connection.quit();
+  if (connection) await connection.quit();
   process.exit(0);
 });
 
