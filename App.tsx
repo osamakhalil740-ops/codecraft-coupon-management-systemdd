@@ -3,7 +3,7 @@ import React, { lazy, Suspense, useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import { Role } from './types';
-import { SUPER_ADMIN_EMAIL, isSuperAdmin as checkIsSuperAdmin } from './config/constants';
+import { isSuperAdmin as checkIsSuperAdmin } from './config/constants';
 import { analytics } from './config/monitoring';
 
 import Header from './components/Header';
