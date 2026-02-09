@@ -9,7 +9,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { logger } from './utils/logger';
 // Lazy load monitoring only in production during idle time
 // Delay longer to prioritize initial load performance
-if (import.meta.env.PROD) {
+if (process.env.NODE_ENV === 'production') {
   // Use requestIdleCallback to load analytics without blocking main thread
   const loadAnalytics = () => {
     import(/* webpackChunkName: "monitoring" */ './config/monitoring').then(({ initSentry }) => {

@@ -5,6 +5,9 @@ import { prisma } from '@/lib/prisma';
 import { Role, StoreStatus } from '@prisma/client';
 import { getPaginationParams } from '@/lib/utils/pagination';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/admin/stores - List all stores with filters
  * Requires SUPER_ADMIN role

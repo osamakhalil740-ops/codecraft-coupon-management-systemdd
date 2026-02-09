@@ -22,7 +22,7 @@ import { collection, doc, getDoc, setDoc, query, where, getDocs, serverTimestamp
 import { logger } from '../utils/logger';
 
 // GeoNames API Configuration
-const GEONAMES_USERNAME = import.meta.env.VITE_GEONAMES_USERNAME || 'demo'; // MUST BE REPLACED
+const GEONAMES_USERNAME = process.env.NEXT_PUBLIC_GEONAMES_USERNAME || 'demo'; // MUST BE REPLACED
 const GEONAMES_BASE_URL = 'https://secure.geonames.org'; // Using HTTPS to avoid mixed content errors
 
 // Cache duration: 30 days (location data doesn't change often)

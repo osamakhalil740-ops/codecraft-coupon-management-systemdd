@@ -28,8 +28,8 @@ export interface ErrorReport {
  * In production, this should integrate with monitoring services like Sentry
  */
 function logError(error: ErrorReport): void {
-  const isDev = import.meta.env.DEV;
-  const isProd = import.meta.env.PROD;
+  const isDev = process.env.NODE_ENV === 'development';
+  const isProd = process.env.NODE_ENV === 'production';
 
   if (isDev) {
     console.group(`🔴 Error: ${error.message}`);

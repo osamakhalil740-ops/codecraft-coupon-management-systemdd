@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { CouponType } from '@prisma/client';
 
-export const createCouponSchema = z.object({
+const baseCouponSchema = z.object({
   code: z
     .string()
     .min(3, 'Coupon code must be at least 3 characters')
@@ -21,7 +21,9 @@ export const createCouponSchema = z.object({
   categoryId: z.string().optional(),
   imageUrl: z.string().url().optional().or(z.literal('')),
   thumbnailUrl: z.string().url().optional().or(z.literal('')),
-}).refine((data) => data.expiryDate > data.startDate, {
+});
+
+export const createCouponSchema = baseCouponSchema.refine((data) => data.expiryDate > data.startDate, {
   message: 'Expiry date must be after start date',
   path: ['expiryDate'],
 }).refine((data) => {
@@ -34,7 +36,7 @@ export const createCouponSchema = z.object({
   path: ['discountValue'],
 });
 
-export const updateCouponSchema = createCouponSchema.partial();
+export const updateCouponSchema = baseCouponSchema.partial();
 
 export type CreateCouponInput = z.infer<typeof createCouponSchema>;
 export type UpdateCouponInput = z.infer<typeof updateCouponSchema>;

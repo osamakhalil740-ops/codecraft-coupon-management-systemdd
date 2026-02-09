@@ -4,6 +4,10 @@ import { errorResponse, successResponse } from '@/lib/api-response';
 import { prisma } from '@/lib/prisma';
 import { Role, CouponStatus, StoreStatus } from '@prisma/client';
 
+// Force dynamic rendering for all API routes
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 /**
  * GET /api/admin/analytics - Get platform analytics
  * Requires SUPER_ADMIN role

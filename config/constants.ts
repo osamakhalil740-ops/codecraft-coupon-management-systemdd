@@ -10,7 +10,7 @@ import { logger } from '../utils/logger';
  * Validate required environment variables
  */
 function validateEnvVar(varName: string, fallback?: string): string {
-  const value = import.meta.env[varName];
+  const value = process.env[varName];
   
   if (!value) {
     if (fallback) {
@@ -29,9 +29,9 @@ function validateEnvVar(varName: string, fallback?: string): string {
 /**
  * Application mode
  */
-export const IS_DEV = import.meta.env.DEV;
-export const IS_PROD = import.meta.env.PROD;
-export const MODE = import.meta.env.MODE;
+export const IS_DEV = process.env.NODE_ENV === 'development';
+export const IS_PROD = process.env.NODE_ENV === 'production';
+export const MODE = process.env.NODE_ENV || 'development';
 
 /**
  * Application Version
@@ -41,7 +41,7 @@ export const APP_VERSION = '2.0.0';
 /**
  * Monitoring Configuration
  */
-export const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || '';
+export const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN || '';
 export const ANALYTICS_ENABLED = IS_PROD;
 
 /**

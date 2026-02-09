@@ -33,13 +33,13 @@ class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error to console in development
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV === 'development') {
       logger.error('Error caught by boundary:', error);
       logger.error('Error info:', errorInfo);
     }
 
     // In production, log to Sentry error reporting service
-    if (import.meta.env.PROD) {
+    if (process.env.NODE_ENV === 'production') {
       import('../config/monitoring').then(({ default: Sentry }) => {
         if (Sentry && Sentry.captureException) {
           Sentry.captureException(error, {
@@ -104,7 +104,7 @@ class ErrorBoundary extends Component<Props, State> {
               </p>
             </div>
 
-            {import.meta.env.DEV && this.state.error && (
+            {process.env.NODE_ENV === 'development' && this.state.error && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-left">
                 <p className="text-sm font-semibold text-red-800 mb-2">
                   Error Details (Development Only):
