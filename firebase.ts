@@ -1,9 +1,9 @@
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
-import { getFunctions } from 'firebase/functions';
+import { initializeApp, FirebaseApp } from 'firebase/app';
+import { getAuth, Auth } from 'firebase/auth';
+import { getFirestore, Firestore, enableIndexedDbPersistence } from 'firebase/firestore';
+import { getFunctions, Functions } from 'firebase/functions';
 import { logger } from './utils/logger';
 
 // Your web app's Firebase configuration
@@ -17,10 +17,10 @@ const firebaseConfig = {
   measurementId: "G-5T0WC2L3JD"
 };
 
-let app;
-let auth;
-let db;
-let functions;
+let app: FirebaseApp;
+let auth: Auth;
+let db: Firestore;
+let functions: Functions;
 
 try {
   // Initialize Firebase
