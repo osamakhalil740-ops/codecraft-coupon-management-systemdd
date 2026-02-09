@@ -2,10 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { prisma } from '@/lib/prisma';
 import {
-
-// Force dynamic rendering
-export const dynamic = 'force-dynamic';
-
   trackCouponView,
   trackCouponCopy,
   trackCouponClick,
@@ -15,6 +11,9 @@ export const dynamic = 'force-dynamic';
 import { errorResponse, successResponse } from '@/lib/api-response';
 import { ValidationError } from '@/lib/errors';
 import { z } from 'zod';
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
 
 const trackEventSchema = z.object({
   eventType: z.enum(['view', 'copy', 'click']),
