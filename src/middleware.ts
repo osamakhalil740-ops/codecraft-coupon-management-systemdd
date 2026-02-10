@@ -36,6 +36,8 @@ const publicRoutes = [
 const publicApiRoutes = [
   '/api/auth',
   '/api/public',
+  '/manifest.json',
+  '/manifest.webmanifest',
 ];
 
 export async function middleware(request: NextRequest) {
@@ -84,7 +86,7 @@ export async function middleware(request: NextRequest) {
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('Referrer-Policy', 'origin-when-cross-origin');
   response.headers.set('X-XSS-Protection', '1; mode=block');
-  
+
   // CSRF Protection - Add token to response headers
   if (token) {
     response.headers.set('X-User-Id', token.userId as string);
@@ -128,7 +130,7 @@ export async function middleware(request: NextRequest) {
   if (token && pathname.startsWith('/auth/')) {
     const publicAuthPages = ['/auth/verify-email', '/auth/reset-password'];
     const isPublicAuthPage = publicAuthPages.some((page) => pathname.startsWith(page));
-    
+
     if (!isPublicAuthPage) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
