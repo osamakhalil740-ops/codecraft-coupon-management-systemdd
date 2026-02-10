@@ -12,6 +12,7 @@ export default function RegisterPage() {
     email: '',
     password: '',
     confirmPassword: '',
+    role: 'USER',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -50,6 +51,7 @@ export default function RegisterPage() {
           name: formData.name,
           email: formData.email,
           password: formData.password,
+          role: formData.role,
         }),
       });
 
@@ -112,6 +114,45 @@ export default function RegisterPage() {
               <p className="text-sm text-red-800">{error}</p>
             </div>
           )}
+
+          {/* Account Type Selection */}
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, role: 'USER' })}
+              className={`p-3 text-center rounded-lg border-2 transition-all ${formData.role === 'USER'
+                ? 'border-brand-primary bg-brand-primary/5 text-brand-primary'
+                : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                }`}
+            >
+              <span className="block text-xl mb-1">👤</span>
+              <span className="text-xs font-bold block">Customer</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, role: 'STORE_OWNER' })}
+              className={`p-3 text-center rounded-lg border-2 transition-all ${formData.role === 'STORE_OWNER'
+                ? 'border-brand-primary bg-brand-primary/5 text-brand-primary'
+                : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                }`}
+            >
+              <span className="block text-xl mb-1">🏪</span>
+              <span className="text-xs font-bold block">Merchant</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, role: 'AFFILIATE' })}
+              className={`p-3 text-center rounded-lg border-2 transition-all ${formData.role === 'AFFILIATE'
+                ? 'border-brand-primary bg-brand-primary/5 text-brand-primary'
+                : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                }`}
+            >
+              <span className="block text-xl mb-1">📢</span>
+              <span className="text-xs font-bold block">Affiliate</span>
+            </button>
+          </div>
 
           <div className="rounded-md shadow-sm space-y-4">
             <div>

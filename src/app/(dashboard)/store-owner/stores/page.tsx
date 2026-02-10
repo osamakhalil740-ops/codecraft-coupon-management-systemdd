@@ -72,7 +72,7 @@ export default function StoreOwnerStoresPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <p className="text-muted-foreground mb-4">No stores yet</p>
-            <Button>Create Your First Store</Button>
+            <Button onClick={() => router.push('/store-owner/stores/create')}>Create Your First Store</Button>
           </CardContent>
         </Card>
       ) : (
