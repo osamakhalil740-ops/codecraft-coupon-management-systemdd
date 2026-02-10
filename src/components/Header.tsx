@@ -25,9 +25,9 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex lg:flex-1">
-            <Link href=\"/\" className=\"-m-1.5 p-1.5 flex items-center gap-2\">
+            <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
               <KobonzLogo />
-              <span className=\"text-2xl font-bold bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent\">
+              <span className="text-2xl font-bold bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">
                 Kobonz
               </span>
             </Link>
@@ -50,17 +50,17 @@ export default function Header() {
           </div>
 
           {/* Desktop navigation */}
-          <div className=\"hidden lg:flex lg:gap-x-8\">
-            <Link href=\"/\" className=\"text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors\">
+          <div className="hidden lg:flex lg:gap-x-8">
+            <Link href="/" className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors">
               {t('nav.home')}
             </Link>
-            <Link href=\"/coupons\" className=\"text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors\">
+            <Link href="/coupons" className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors">
               {t('nav.coupons')}
             </Link>
-            <Link href=\"/stores\" className=\"text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors\">
+            <Link href="/stores" className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors">
               {t('nav.stores')}
             </Link>
-            <Link href=\"/locations\" className=\"text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors\">
+            <Link href="/locations" className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors">
               {t('nav.locations')}
             </Link>
           </div>
