@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { Shop, Role } from '../types';
-import { auth, db } from '../firebase';
+import { Shop, Role } from '../../types';
+import { auth, db } from '../../firebase';
 import { 
   signInWithEmailAndPassword, 
   signOut, 

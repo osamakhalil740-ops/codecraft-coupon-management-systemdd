@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { translations, type Language, type Translations } from '../locales/index';
-import { logger } from '../utils/logger';
+import { translations, type Language, type Translations } from '../../locales/index';
+import { logger } from '../../utils/logger';
 
 interface I18nContextType {
   language: Language;
