@@ -141,13 +141,10 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except:
-     * - api routes (handled separately)
-     * - _next/static (static files)
-     * - _next/image (image optimization)
-     * - favicon.ico, robots.txt, sitemap.xml, manifest.json
-     * - public folder assets (icons, images, etc.)
-     * - service worker and PWA files
+     * - Static assets and public files
+     * - API routes
+     * - Next.js internals
      */
-    '/((?!api|_next/static|_next/image|favicon\\.ico|favicon\\.svg|robots\\.txt|sitemap\\.xml|manifest\\.json|manifest\\.webmanifest|icons/|sw\\.js|service-worker\\.js|workbox-.*\\.js|offline\\.html|.*\\.css|.*\\.js$).*)',
+    '/((?!_next/static|_next/image|_next/data|favicon.*|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|ttf|otf|eot)$|manifest.*\\.json|manifest.*\\.webmanifest|robots\\.txt|sitemap\\.xml|sw\\.js|service-worker\\.js|workbox.*\\.js|offline\\.html|icons/).*)',
   ],
 };

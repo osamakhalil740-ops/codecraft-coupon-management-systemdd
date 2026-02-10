@@ -20,8 +20,11 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
     return 'en';
   });
-  const [currentTranslations, setCurrentTranslations] = useState<Translations | null>(null);
-  const [loading, setLoading] = useState(true);
+  
+  // Initialize translations synchronously to avoid blocking SSR
+  const [currentTranslations, setCurrentTranslations] = useState<Translations>(
+    () => translations[language] || translations.en
+  );
 
   const dir = language === 'ar' ? 'rtl' : 'ltr';
 
@@ -32,23 +35,14 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       localStorage.setItem('language', language);
     }
 
-    const loadTranslations = () => {
-        setLoading(true);
-        try {
-            // Use statically imported translations
-            const data = translations[language] || translations.en;
-            setCurrentTranslations(data);
-        } catch (error) {
-            logger.error("Failed to load translations:", error);
-            // Fallback to English
-            setCurrentTranslations(translations.en);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    if (typeof window !== 'undefined') {
-      loadTranslations();
+    // Load translations when language changes
+    try {
+      const data = translations[language] || translations.en;
+      setCurrentTranslations(data);
+    } catch (error) {
+      logger.error("Failed to load translations:", error);
+      // Fallback to English
+      setCurrentTranslations(translations.en);
     }
   }, [language, dir]);
 
@@ -80,10 +74,6 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     return (typeof result === 'string' ? result : String(result)) || key;
   }, [currentTranslations]);
-  
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading Translations...</div>
-  }
 
   return (
     <I18nContext.Provider value={{ language, setLanguage, t, dir }}>
