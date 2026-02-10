@@ -48,6 +48,17 @@ export const translations = {
       recent: "Recent",
       popular: "Popular"
     },
+    nav: {
+      home: "Home",
+      coupons: "Coupons",
+      stores: "Stores",
+      locations: "Locations",
+      dashboard: "Dashboard",
+      login: "Login",
+      register: "Register",
+      logout: "Logout",
+      profile: "Profile"
+    },
     header: {
       marketplace: "Marketplace",
       partner: "Partner With Us",
@@ -484,7 +495,7 @@ export const translations = {
         description: "Connect with thousands of deal-seeking customers and expand your market presence through our established platform and affiliate network."
       },
       feature2: {
-        title: "Boost Your Sales", 
+        title: "Boost Your Sales",
         description: "Drive more traffic to your business with targeted promotions and coupon campaigns that convert browsers into buyers."
       },
       ctaButton: "Start Partnership"
@@ -574,7 +585,7 @@ export const translations = {
             description: "أنشئ كوبونز بلغات متعددة مع رمز QR في دقائق"
           },
           {
-            title: "نظام مكافآت ذكي", 
+            title: "نظام مكافآت ذكي",
             description: "عمولات تلقائية للمسوقين بدون تعقيد"
           },
           {
