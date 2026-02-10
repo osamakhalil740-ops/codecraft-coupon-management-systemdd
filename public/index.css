@@ -1,4 +1,4 @@
-﻿/* Fonts loaded via preload in HTML for better performance */
+﻿/* Fonts preloaded in index.html for optimal performance */
 
 :root {
   /* Professional & Balanced Color Palette */
@@ -55,11 +55,6 @@
   box-sizing: border-box;
 }
 
-html {
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
 body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--brand-soft);
@@ -70,6 +65,7 @@ body {
   background-attachment: fixed;
   color: var(--brand-dark);
   min-height: 100vh;
+  overflow-x: hidden;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -117,8 +113,8 @@ body::before {
 }
 
 .btn-primary {
-  background: #bf0000;
-  color: white !important;
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
   font-weight: 500;
   border-radius: 1.25rem;
   padding: 1rem 2.5rem;
@@ -130,10 +126,6 @@ body::before {
   border: none;
   font-size: 0.95rem;
   letter-spacing: 0.3px;
-}
-
-.btn-primary * {
-  color: white !important;
 }
 
 .btn-primary::before {
@@ -153,8 +145,8 @@ body::before {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 24px rgba(191, 0, 0, 0.3);
-  background: #9a0000;
+  box-shadow: var(--shadow-glow);
+  background: linear-gradient(135deg, var(--brand-purple), var(--brand-secondary));
 }
 
 .btn-primary:active {
@@ -410,7 +402,7 @@ body::before {
   background: linear-gradient(135deg, var(--brand-success), var(--brand-secondary));
   border: none;
   border-radius: 1.25rem;
-  color: white !important;
+  color: white;
   font-weight: 500;
   font-size: 0.95rem;
   letter-spacing: 0.3px;
@@ -426,10 +418,6 @@ body::before {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-}
-
-.btn-calm * {
-  color: white !important;
 }
 
 .btn-calm::before {
@@ -1776,81 +1764,12 @@ textarea:focus-visible,
   text-wrap: balance;
 }
 
-/* Global Text Overflow Prevention - Aggressive */
-.card,
-.glass-panel,
-[class*="card"],
-[class*="panel"] {
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  min-width: 0;
-  color: #1f2937;
-}
-
-/* Ensure text visibility on all backgrounds */
-.text-white {
-  color: #ffffff !important;
-}
-
-.text-gray-900,
-.text-dark-gray {
-  color: #1f2937 !important;
-}
-
-.text-gray-800 {
-  color: #262626 !important;
-}
-
-.text-gray-700 {
-  color: #404040 !important;
-}
-
-.text-gray-600 {
-  color: #525252 !important;
-}
-
-.text-gray-500 {
-  color: #737373 !important;
-}
-
-/* Force break extremely long strings everywhere */
-h1, h2, h3, h4, h5, h6,
-p, span, div, a, button {
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
-}
-
-/* Ensure flex containers can shrink */
-.flex,
-[class*="flex"] {
-  min-width: 0;
-}
-
-.flex > *,
-[class*="flex"] > * {
-  min-width: 0;
-}
-
 /* Line clamp utilities for proper text truncation */
-.line-clamp-1 {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
-  overflow-wrap: anywhere;
 }
 
 .line-clamp-3 {
@@ -1858,15 +1777,12 @@ p, span, div, a, button {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
-  overflow-wrap: anywhere;
 }
 
 /* Gentle Status Badges */
 .badge-success {
   background: linear-gradient(135deg, var(--brand-success), #7dd3fc);
-  color: white !important;
+  color: white;
   padding: 0.6rem 1.2rem;
   border-radius: 2rem;
   font-size: 0.85rem;
@@ -1879,13 +1795,9 @@ p, span, div, a, button {
   animation: gentlePulse 4s infinite;
 }
 
-.badge-success * {
-  color: white !important;
-}
-
 .badge-warning {
   background: linear-gradient(135deg, var(--brand-warning), #fbbf24);
-  color: white !important;
+  color: white;
   padding: 0.6rem 1.2rem;
   border-radius: 2rem;
   font-size: 0.85rem;
@@ -1895,15 +1807,11 @@ p, span, div, a, button {
   align-items: center;
   gap: 0.5rem;
   box-shadow: var(--shadow-soft);
-}
-
-.badge-warning * {
-  color: white !important;
 }
 
 .badge-calm {
   background: linear-gradient(135deg, var(--brand-muted), var(--brand-primary));
-  color: white !important;
+  color: white;
   padding: 0.6rem 1.2rem;
   border-radius: 2rem;
   font-size: 0.85rem;
@@ -1913,10 +1821,6 @@ p, span, div, a, button {
   align-items: center;
   gap: 0.5rem;
   box-shadow: var(--shadow-soft);
-}
-
-.badge-calm * {
-  color: white !important;
 }
 
 /* Responsive Enhancements */

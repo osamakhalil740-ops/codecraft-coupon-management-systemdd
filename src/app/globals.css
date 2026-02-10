@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import original index.css styles */
+@import url('/index.css');
+
+/* Import homepage premium styles */
+@import url('/homepage-premium.css');
+
 @layer base {
   :root {
     --background: 0 0% 100%;

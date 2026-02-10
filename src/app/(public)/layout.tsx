@@ -1,5 +1,6 @@
-import Link from 'next/link';
-import { Search, Home, Store, Tag, User } from 'lucide-react';
+'use client';
+
+import Header from '@/components/Header';
 
 export default function PublicLayout({
   children,
@@ -8,62 +9,8 @@ export default function PublicLayout({
 }) {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center justify-between">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2">
-              <Tag className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">Kobonz</span>
-            </Link>
-
-            {/* Navigation */}
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link
-                href="/"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                <Home className="h-4 w-4 inline mr-1" />
-                Home
-              </Link>
-              <Link
-                href="/coupons"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                <Tag className="h-4 w-4 inline mr-1" />
-                Coupons
-              </Link>
-              <Link
-                href="/stores"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                <Store className="h-4 w-4 inline mr-1" />
-                Stores
-              </Link>
-            </nav>
-
-            {/* Auth Links */}
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/auth/login"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Login
-              </Link>
-              <Link
-                href="/auth/register"
-                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-              >
-                Sign Up
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1">{children}</main>
+      <Header />
+      <main className="flex-1 container mx-auto px-4 py-8">{children}</main>
 
       {/* Footer */}
       <footer className="border-t bg-muted/50">
