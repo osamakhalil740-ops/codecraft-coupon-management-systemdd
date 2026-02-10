@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { translations, type Language, type Translations } from '../../locales/index';
 import { logger } from '../../utils/logger';
 
@@ -80,4 +80,12 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       {children}
     </I18nContext.Provider>
   );
+};
+
+export const useTranslation = () => {
+  const context = useContext(I18nContext);
+  if (context === undefined) {
+    throw new Error('useTranslation must be used within an I18nProvider');
+  }
+  return context;
 };

@@ -2,7 +2,7 @@
 
 import React, { memo, useMemo } from 'react';
 import Link from 'next/link';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslation } from '@/context/I18nContext';
 import { SparklesIcon, ShareIcon, RocketLaunchIcon, MapPinIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 
 const CouponGenerator: React.FC = memo(() => {

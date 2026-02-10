@@ -5,11 +5,10 @@ import { prisma } from '@/lib/prisma';
 import { Role } from '@prisma/client';
 import { getPaginationParams } from '@/lib/utils/pagination';
 
-/**
-
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
 
+/**
  * GET /api/admin/users - Get all users (Admin only)
  * Requires SUPER_ADMIN role
  */

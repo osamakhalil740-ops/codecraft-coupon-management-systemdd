@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslation } from '@/context/I18nContext';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import KobonzLogo from '@/components/KobonzLogo';
 
