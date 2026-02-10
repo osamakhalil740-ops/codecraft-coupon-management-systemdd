@@ -14,9 +14,10 @@ const protectedRoutes = [
 // Routes that require specific roles
 const roleRoutes = {
   '/admin': ['SUPER_ADMIN'],
+  '/store-owner': ['STORE_OWNER', 'SUPER_ADMIN'],
+  '/affiliate': ['AFFILIATE', 'SUPER_ADMIN'],
   '/stores/create': ['STORE_OWNER', 'SUPER_ADMIN'],
   '/stores/manage': ['STORE_OWNER', 'SUPER_ADMIN'],
-  '/affiliate': ['AFFILIATE', 'SUPER_ADMIN'],
 };
 
 // Public routes (no authentication required)

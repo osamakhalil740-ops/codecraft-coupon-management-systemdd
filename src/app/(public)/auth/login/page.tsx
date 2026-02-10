@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +31,29 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Invalid email or password');
       } else {
-        router.push(callbackUrl);
+        // Fetch user session to get role for redirect
+        const response = await fetch('/api/auth/session');
+        const session = await response.json();
+
+        // Role-based redirect
+        let redirectUrl = callbackUrl;
+        if (session?.user?.role) {
+          switch (session.user.role) {
+            case 'SUPER_ADMIN':
+              redirectUrl = '/admin';
+              break;
+            case 'STORE_OWNER':
+              redirectUrl = '/store-owner';
+              break;
+            case 'AFFILIATE':
+              redirectUrl = '/affiliate';
+              break;
+            default:
+              redirectUrl = '/';
+          }
+        }
+
+        router.push(redirectUrl);
         router.refresh();
       }
     } catch (err) {
