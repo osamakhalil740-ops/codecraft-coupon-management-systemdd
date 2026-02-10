@@ -25,9 +25,9 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex lg:flex-1">
-            <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
+            <Link href=\"/\" className=\"-m-1.5 p-1.5 flex items-center gap-2\">
               <KobonzLogo />
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <span className=\"text-2xl font-bold bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent\">
                 Kobonz
               </span>
             </Link>
@@ -50,17 +50,17 @@ export default function Header() {
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden lg:flex lg:gap-x-8">
-            <Link href="/" className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors">
+          <div className=\"hidden lg:flex lg:gap-x-8\">
+            <Link href=\"/\" className=\"text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors\">
               {t('nav.home')}
             </Link>
-            <Link href="/coupons" className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors">
+            <Link href=\"/coupons\" className=\"text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors\">
               {t('nav.coupons')}
             </Link>
-            <Link href="/stores" className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors">
+            <Link href=\"/stores\" className=\"text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors\">
               {t('nav.stores')}
             </Link>
-            <Link href="/locations" className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors">
+            <Link href=\"/locations\" className=\"text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors\">
               {t('nav.locations')}
             </Link>
           </div>
@@ -71,13 +71,13 @@ export default function Header() {
               <>
                 <Link
                   href="/dashboard"
-                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors"
+                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors"
                 >
                   {t('nav.dashboard')}
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors"
+                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors"
                 >
                   {t('nav.logout')}
                 </button>
@@ -86,13 +86,13 @@ export default function Header() {
               <>
                 <Link
                   href="/auth/login"
-                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary transition-colors"
+                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors"
                 >
                   {t('nav.login')}
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="btn-primary text-sm"
+                  className="btn-primary"
                 >
                   {t('nav.register')}
                 </Link>
@@ -165,7 +165,7 @@ export default function Header() {
                     </Link>
                     <Link
                       href="/auth/register"
-                      className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 bg-primary text-white hover:bg-primary/90 text-center mt-2"
+                      className="btn-primary block text-center mt-2"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {t('nav.register')}

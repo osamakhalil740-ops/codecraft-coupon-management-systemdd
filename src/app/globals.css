@@ -1,34 +1,35 @@
+/* Import original kobonz.site styles FIRST - before Tailwind */
+@import url('/index.css');
+@import url('/homepage-premium.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Import original index.css styles */
-@import url('/index.css');
-
-/* Import homepage premium styles */
-@import url('/homepage-premium.css');
-
 @layer base {
   :root {
+    /* Use kobonz.site brand colors from index.css */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
+    
+    /* Map to kobonz brand colors - these will be overridden by CSS variables */
+    --primary: 0 100% 37.5%; /* #bf0000 - brand-primary */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 255 88% 77%; /* #9c88ff - brand-secondary */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 214 19% 61%; /* #8e9aaf - brand-muted */
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --accent: 20 100% 73%; /* #ff9f73 - brand-accent */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 5 100% 75%; /* #ff8a80 - brand-danger */
+    --destructive-foreground: 0 0% 100%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --ring: 0 100% 37.5%;
     --radius: 0.5rem;
   }
 
@@ -39,19 +40,19 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --primary: 0 100% 37.5%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 255 88% 77%;
+    --secondary-foreground: 0 0% 100%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --accent: 20 100% 73%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 5 100% 75%;
+    --destructive-foreground: 0 0% 100%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --ring: 0 100% 37.5%;
   }
 }
 
@@ -61,5 +62,35 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Ensure kobonz.site button styles take precedence */
+@layer components {
+  .btn-primary {
+    @apply relative overflow-hidden;
+    border-radius: 1.25rem;
+    padding: 1rem 2.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    background: linear-gradient(135deg, var(--brand-secondary), var(--brand-purple));
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+  }
+  
+  .btn-secondary {
+    @apply relative overflow-hidden;
+    border-radius: 1.25rem;
+    padding: 1rem 2.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: var(--transition-smooth);
   }
 }

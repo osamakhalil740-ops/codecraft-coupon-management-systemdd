@@ -17,30 +17,46 @@ const config: Config = {
     },
     extend: {
       colors: {
+        // Kobonz.site original brand colors
+        'brand-primary': '#bf0000',
+        'brand-secondary': '#9c88ff',
+        'brand-accent': '#ff9f73',
+        'brand-success': '#5fb3d3',
+        'brand-warning': '#ffbe73',
+        'brand-danger': '#ff8a80',
+        'brand-dark': '#2d3436',
+        'brand-light': '#fdfdfd',
+        'brand-purple': '#a8a8ff',
+        'brand-pink': '#ff9eb5',
+        'brand-muted': '#8e9aaf',
+        'brand-calm': '#e8f4fd',
+        'brand-soft': '#f7f9fc',
+        
+        // Keep shadcn/ui variables but map to kobonz colors
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "var(--brand-primary)",
+          foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "var(--brand-secondary)",
+          foreground: "#ffffff",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "var(--brand-danger)",
+          foreground: "#ffffff",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
+          DEFAULT: "var(--brand-muted)",
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "var(--brand-accent)",
+          foreground: "#ffffff",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
