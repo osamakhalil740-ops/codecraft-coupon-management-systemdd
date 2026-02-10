@@ -32,8 +32,21 @@ const publicRoutes = [
   '/coupons',
 ];
 
+// API routes that should be public (no auth required)
+const publicApiRoutes = [
+  '/api/manifest',
+  '/api/auth',
+  '/api/public',
+];
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+
+  // Skip middleware for public API routes
+  const isPublicApi = publicApiRoutes.some((route) => pathname.startsWith(route));
+  if (isPublicApi) {
+    return NextResponse.next();
+  }
 
   // Enforce HTTPS in production
   if (

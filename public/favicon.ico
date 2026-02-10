@@ -1,0 +1,25 @@
+<svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="kobonzGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#007AFF" />
+      <stop offset="50%" stop-color="#5856D6" />
+      <stop offset="100%" stop-color="#764BA2" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle with gradient -->
+  <circle cx="50" cy="50" r="48" fill="url(#kobonzGradient)" />
+  
+  <!-- Geometric K Shape -->
+  <!-- Vertical bar of K -->
+  <rect x="25" y="25" width="10" height="50" fill="white" rx="2" />
+  
+  <!-- Upper diagonal of K -->
+  <path d="M 35 45 L 70 25 L 75 30 L 40 50 Z" fill="white" />
+  
+  <!-- Lower diagonal of K -->
+  <path d="M 35 55 L 40 50 L 75 70 L 70 75 Z" fill="white" />
+  
+  <!-- Accent dot -->
+  <circle cx="72" cy="50" r="4" fill="white" />
+</svg>
