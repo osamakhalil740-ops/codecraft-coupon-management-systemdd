@@ -85,7 +85,7 @@ export default function HomePage() {
                         <Link href="/auth/login" className="btn-primary">
                             {t('home.hero.primaryCta')}
                         </Link>
-                        <Link href="/coupons" className="btn-secondary">
+                        <Link href="/marketplace" className="btn-secondary">
                             {t('home.hero.secondaryCta')}
                         </Link>
                         <Link href="/locations" className="btn-secondary bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90" style={{ color: 'white' }}>
@@ -95,7 +95,7 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* CRITICAL: Choose Your Path - TOP PRIORITY SECTION */}
+            {/* CRITICAL: Choose Your Path - TOP PRIORITY SECTION - Moved to top */}
             <section className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-10 mb-8 shadow-xl border border-indigo-200">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold text-gray-800 mb-4">{t('home.chooseYourPath.title')}</h2>
@@ -175,7 +175,7 @@ export default function HomePage() {
                                 <li>✓ {t('home.chooseYourPath.customer.features.4')}</li>
                             </ul>
                             <Link 
-                                href="/coupons"
+                                href="/marketplace"
                                 className="w-full bg-purple-600 text-white py-4 px-6 rounded-lg font-bold hover:bg-purple-700 transition-colors inline-block text-center text-lg"
                             >
                                 {t('home.chooseYourPath.customer.cta')}
@@ -213,7 +213,7 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Global Location Coverage Section */}
+            {/* NEW: Global Location Coverage Section */}
             <section className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-3xl p-10 md:p-16">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
@@ -257,6 +257,7 @@ export default function HomePage() {
                         {t('home.globalCoverage.exploreButton')}
                     </Link>
                 </div>
+                
             </section>
 
             <section className="space-y-12">
