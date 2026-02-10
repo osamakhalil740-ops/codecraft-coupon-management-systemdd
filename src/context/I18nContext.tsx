@@ -14,18 +14,23 @@ interface I18nContextType {
 export const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>(
-    (localStorage.getItem('language') as Language) || 'en'
-  );
+  const [language, setLanguageState] = useState<Language>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('language') as Language) || 'en';
+    }
+    return 'en';
+  });
   const [currentTranslations, setCurrentTranslations] = useState<Translations | null>(null);
   const [loading, setLoading] = useState(true);
 
   const dir = language === 'ar' ? 'rtl' : 'ltr';
 
   useEffect(() => {
-    document.documentElement.lang = language;
-    document.documentElement.dir = dir;
-    localStorage.setItem('language', language);
+    if (typeof window !== 'undefined') {
+      document.documentElement.lang = language;
+      document.documentElement.dir = dir;
+      localStorage.setItem('language', language);
+    }
 
     const loadTranslations = () => {
         setLoading(true);
@@ -42,7 +47,9 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
 
-    loadTranslations();
+    if (typeof window !== 'undefined') {
+      loadTranslations();
+    }
   }, [language, dir]);
 
   const setLanguage = (lang: Language) => {
