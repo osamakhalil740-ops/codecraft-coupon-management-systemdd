@@ -148,6 +148,6 @@ export const config = {
      * - public folder assets (icons, images, etc.)
      * - service worker and PWA files
      */
-    '/((?!api|_next/static|_next/image|favicon\\.ico|favicon\\.svg|robots\\.txt|sitemap\\.xml|manifest\\.json|icons/|sw\\.js|service-worker\\.js|workbox-.*\\.js|offline\\.html|.*\\.css|.*\\.js$).*)',
+    '/((?!api|_next/static|_next/image|favicon\\.ico|favicon\\.svg|robots\\.txt|sitemap\\.xml|manifest\\.json|manifest\\.webmanifest|icons/|sw\\.js|service-worker\\.js|workbox-.*\\.js|offline\\.html|.*\\.css|.*\\.js$).*)',
   ],
 };
