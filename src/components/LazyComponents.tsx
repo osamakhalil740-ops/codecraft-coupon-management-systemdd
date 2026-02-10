@@ -21,7 +21,7 @@ export const LazyAnalyticsDashboard = dynamic(
 );
 
 export const LazyAdvancedAnalytics = dynamic(
-  () => import('@/components/AdvancedAnalytics'),
+  () => import('@/legacy-components/AdvancedAnalytics'),
   {
     loading: () => <LoadingSpinner />,
     ssr: false,
@@ -29,7 +29,7 @@ export const LazyAdvancedAnalytics = dynamic(
 );
 
 export const LazyDashboardCharts = dynamic(
-  () => import('@/components/DashboardCharts'),
+  () => import('@/legacy-components/DashboardCharts'),
   {
     loading: () => <LoadingSpinner />,
     ssr: false,
@@ -45,7 +45,7 @@ export const LazyNotificationBell = dynamic(
 );
 
 export const LazyQRCodeModal = dynamic(
-  () => import('@/components/QRCodeModal'),
+  () => import('@/legacy-components/QRCodeModal'),
   {
     loading: () => <LoadingSpinner />,
     ssr: false,
@@ -54,7 +54,7 @@ export const LazyQRCodeModal = dynamic(
 
 // Lazy load chart libraries
 export const LazySimpleChart = dynamic(
-  () => import('@/components/SimpleChart'),
+  () => import('@/legacy-components/SimpleChart'),
   {
     loading: () => <div className="h-64 animate-pulse bg-muted rounded"></div>,
     ssr: false,

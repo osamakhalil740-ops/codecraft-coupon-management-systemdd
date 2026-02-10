@@ -616,7 +616,7 @@ export async function validateGeoNamesSetup(): Promise<boolean> {
     logger.error('Please ensure:');
     logger.error('1. You have registered at http://www.geonames.org/login');
     logger.error('2. You have enabled Free Web Services in your account');
-    logger.error('3. Your username is set in VITE_GEONAMES_USERNAME');
+    logger.error('3. Your username is set in NEXT_PUBLIC_GEONAMES_USERNAME or GEONAMES_USERNAME');
     return false;
   }
 }

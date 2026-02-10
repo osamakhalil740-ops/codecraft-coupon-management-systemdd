@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/components/*": ["./components/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/legacy-components/*": ["./components/*"],
       "@/hooks/*": ["./hooks/*"],
       "@/lib/*": ["./src/lib/*"],
       "@/types/*": ["./src/types/*"]
