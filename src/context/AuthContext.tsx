@@ -11,8 +11,8 @@ import {
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, addDoc, collection, serverTimestamp, updateDoc, arrayUnion } from 'firebase/firestore';
 import { FirebaseError } from 'firebase/app';
-import { CREDIT_CONFIG, isSuperAdmin } from '../config/constants';
-import { logger } from '../utils/logger';
+import { CREDIT_CONFIG, isSuperAdmin } from '../../config/constants';
+import { logger } from '../../utils/logger';
 
 interface ShopDetails {
     category: string;
