@@ -49,10 +49,10 @@ export const ANALYTICS_ENABLED = IS_PROD;
  * SECURITY: These emails should be set via environment variable
  * Supports multiple emails separated by comma
  */
-const ADMIN_EMAIL_STRING = validateEnvVar(
-  'VITE_ADMIN_EMAIL',
-  IS_DEV ? 'admin@kobonz.site' : undefined
-);
+// Next.js environment variables use NEXT_PUBLIC_ prefix or process.env
+const ADMIN_EMAIL_STRING = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 
+  process.env.ADMIN_EMAIL || 
+  'admin@kobonz.site';
 
 export const SUPER_ADMIN_EMAIL = ADMIN_EMAIL_STRING; // Keep for backward compatibility
 export const SUPER_ADMIN_EMAILS = ADMIN_EMAIL_STRING
@@ -72,10 +72,10 @@ export const isSuperAdmin = (email: string): boolean => {
 /**
  * GeoNames API Configuration
  */
-export const GEONAMES_USERNAME = validateEnvVar(
-  'VITE_GEONAMES_USERNAME',
-  IS_DEV ? 'demo' : undefined
-);
+// Next.js environment variables
+export const GEONAMES_USERNAME = process.env.NEXT_PUBLIC_GEONAMES_USERNAME || 
+  process.env.GEONAMES_USERNAME || 
+  'demo';
 
 /**
  * Application URLs

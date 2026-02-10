@@ -14,7 +14,7 @@
  * SETUP REQUIRED:
  * 1. Register at http://www.geonames.org/login
  * 2. Enable Free Web Services in your account
- * 3. Add your username to environment: VITE_GEONAMES_USERNAME
+ * 3. Add your username to environment: NEXT_PUBLIC_GEONAMES_USERNAME or GEONAMES_USERNAME
  */
 
 import { db } from '../firebase';
