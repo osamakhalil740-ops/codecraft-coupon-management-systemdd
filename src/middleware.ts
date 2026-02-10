@@ -34,7 +34,6 @@ const publicRoutes = [
 
 // API routes that should be public (no auth required)
 const publicApiRoutes = [
-  '/api/manifest',
   '/api/auth',
   '/api/public',
 ];
