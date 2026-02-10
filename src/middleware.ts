@@ -145,6 +145,6 @@ export const config = {
      * - API routes
      * - Next.js internals
      */
-    '/((?!_next/static|_next/image|_next/data|favicon.*|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|ttf|otf|eot)$|manifest.*\\.json|manifest.*\\.webmanifest|robots\\.txt|sitemap\\.xml|sw\\.js|service-worker\\.js|workbox.*\\.js|offline\\.html|icons/).*)',
+    '/((?!_next/static|_next/image|_next/data|favicon|manifest|robots|sitemap|sw\\.js|service-worker\\.js|workbox|offline\\.html|icons/|.*\\.(svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|ttf|otf|eot|json|xml)$).*)',
   ],
 };
