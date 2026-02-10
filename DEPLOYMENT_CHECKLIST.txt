@@ -1,0 +1,105 @@
+╔════════════════════════════════════════════════════════════╗
+║          VERCEL DEPLOYMENT CHECKLIST                       ║
+║          Runtime Fixes Applied ✅                          ║
+╚════════════════════════════════════════════════════════════╝
+
+STEP 1: COMMIT CHANGES
+□ git add .
+□ git commit -m "fix: resolve Link import and manifest 401 runtime errors"
+□ git push origin main
+
+STEP 2: VERIFY ENVIRONMENT VARIABLES IN VERCEL
+Go to: Vercel Dashboard → Your Project → Settings → Environment Variables
+
+CRITICAL VARIABLES (Required):
+□ NEXTAUTH_URL=https://your-domain.vercel.app
+□ NEXTAUTH_SECRET=<generate with: openssl rand -base64 32>
+□ JWT_SECRET=<generate with: openssl rand -base64 32>
+□ DATABASE_URL=postgresql://user:pass@host/db?sslmode=require
+□ NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
+□ NODE_ENV=production
+
+REDIS (Required for caching):
+□ UPSTASH_REDIS_REST_URL=https://xxx.upstash.io
+□ UPSTASH_REDIS_REST_TOKEN=xxx
+
+EMAIL (Required for notifications):
+□ RESEND_API_KEY=re_xxx
+□ EMAIL_FROM=noreply@yourdomain.com
+
+STRIPE (Required for payments):
+□ STRIPE_SECRET_KEY=sk_live_xxx
+□ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_xxx
+□ STRIPE_WEBHOOK_SECRET=whsec_xxx
+□ STRIPE_BASIC_PRICE_ID=price_xxx
+□ STRIPE_PRO_PRICE_ID=price_xxx
+□ STRIPE_ENTERPRISE_PRICE_ID=price_xxx
+
+OPTIONAL (OAuth):
+□ GOOGLE_CLIENT_ID=xxx
+□ GOOGLE_CLIENT_SECRET=xxx
+
+STEP 3: DEPLOY
+□ Push triggers auto-deploy OR
+□ Manual redeploy in Vercel dashboard
+
+STEP 4: TEST PRODUCTION SITE
+□ Visit https://your-domain.vercel.app
+□ Open DevTools Console (F12) - check for errors
+□ Navigate: Home → Coupons → Stores → Login
+□ Check Network tab - no 401 errors
+□ Visit /manifest.json - should load successfully
+□ Test PWA install prompt (mobile/Chrome)
+
+STEP 5: VERIFY FIXES
+□ No "Link is not defined" errors ✅
+□ No 401 errors for manifest ✅
+□ Service Worker registers successfully ✅
+□ All navigation works ✅
+□ PWA install prompt appears ✅
+
+╔════════════════════════════════════════════════════════════╗
+║  FIXES APPLIED                                             ║
+╠════════════════════════════════════════════════════════════╣
+║  ✅ Deleted components/Header.tsx (React Router conflict)  ║
+║  ✅ Fixed manifest path in src/app/layout.tsx              ║
+║  ✅ Deleted unnecessary src/app/api/manifest/route.ts      ║
+║  ✅ Build verified - no runtime errors                     ║
+╚════════════════════════════════════════════════════════════╝
+
+TROUBLESHOOTING:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If you still see errors:
+
+1. Database Connection Issues:
+   - Verify DATABASE_URL is correct
+   - Check ?sslmode=require is in connection string
+   - Ensure database allows Vercel IP connections
+
+2. Auth Not Working:
+   - Generate fresh secrets: openssl rand -base64 32
+   - Verify NEXTAUTH_URL matches your Vercel domain
+   - Check NEXTAUTH_SECRET and JWT_SECRET are set
+
+3. Manifest Still Fails:
+   - Clear browser cache
+   - Check /manifest.json loads (should be public)
+   - Verify file exists in public/ folder
+
+4. Service Worker Issues:
+   - PWA only works in production (HTTPS)
+   - Check /sw.js is accessible
+   - Clear Service Worker in DevTools → Application tab
+
+DOCUMENTATION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 FIXES_APPLIED_SUMMARY.md - High-level summary
+📄 VERCEL_RUNTIME_FIXES.md - Technical details
+📄 DEPLOYMENT_QUICK_FIX.md - Quick reference guide
+📄 .env.production.example - All environment variables
+
+REPOSITORY:
+https://github.com/osamakhalil740-ops/codecraft-coupon-management-systemdd.git
+
+STATUS: ✅ READY FOR DEPLOYMENT

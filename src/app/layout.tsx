@@ -75,7 +75,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#0070f3" />
         
         {/* PWA Manifest */}
-        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="manifest" href="/manifest.json" />
         
         {/* Favicon - using SVG which works at all sizes */}
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
