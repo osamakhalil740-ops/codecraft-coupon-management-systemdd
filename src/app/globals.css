@@ -1,6 +1,6 @@
 /* Import original kobonz.site styles FIRST - before Tailwind */
 @import url('/index.css');
-@import url('./homepage-red.css');
+@import url('./homepage-premium.css');
 /* Restored Red Branding */
 
 @tailwind base;

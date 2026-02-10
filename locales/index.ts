@@ -50,9 +50,10 @@ export const translations = {
     },
     nav: {
       home: "Home",
+      marketplace: "Marketplace",
+      locations: "Locations",
       coupons: "Coupons",
       stores: "Stores",
-      locations: "Locations",
       dashboard: "Dashboard",
       login: "Login",
       register: "Register",
@@ -551,6 +552,7 @@ export const translations = {
     },
     header: {
       marketplace: "السوق",
+      locations: "المواقع",
       partner: "الشراكات",
       affiliate: "التسويق بالعمولة",
       dashboard: "لوحة التحكم",

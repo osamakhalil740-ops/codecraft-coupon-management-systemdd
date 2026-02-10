@@ -1,5 +1,5 @@
 /* ========================================
-   RESTORED PREMIUM HOMEPAGE DESIGN (RED BRANDING)
+   RESTORED PREMIUM HOMEPAGE DESIGN (PURPLE BRANDING)
    Animated Backgrounds, Smooth Transitions
    ======================================== */
 
@@ -46,13 +46,13 @@
 
     0%,
     100% {
-        box-shadow: 0 0 20px rgba(191, 0, 0, 0.3);
-        /* Red glow */
+        box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+        /* Purple glow */
     }
 
     50% {
-        box-shadow: 0 0 40px rgba(191, 0, 0, 0.6);
-        /* Red glow */
+        box-shadow: 0 0 40px rgba(79, 70, 229, 0.6);
+        /* Purple glow */
     }
 }
 
@@ -94,8 +94,8 @@
 
 /* Hero Section - 3D Geometric Background */
 .homepage-hero {
-    background: linear-gradient(135deg, #bf0000 0%, #9a0000 100%);
-    /* RED BRANDING */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* PURPLE BRANDING */
     position: relative;
     overflow: hidden;
     color: white !important;
@@ -314,8 +314,8 @@
 
 .homepage-hero-buttons .btn-primary {
     background: white !important;
-    color: #bf0000 !important;
-    /* Red text */
+    color: #667eea !important;
+    /* Back to Purple text */
     font-weight: 700;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
@@ -327,13 +327,13 @@
 }
 
 .homepage-hero-buttons .btn-primary * {
-    color: #bf0000 !important;
+    color: #667eea !important;
 }
 
 /* Section Background Animations */
 .homepage-section-animated-bg {
-    background: linear-gradient(135deg, #bf0000 0%, #9a0000 100%);
-    /* RED */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* PURPLE */
     background-size: 200% 200%;
     animation: gradient-shift 10s ease infinite;
     position: relative;
@@ -439,8 +439,8 @@
 .homepage-metric-value {
     font-size: 3rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #bf0000, #9a0000);
-    /* RED */
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    /* Purple */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -469,7 +469,7 @@
 .homepage-benefit-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-    border-color: rgba(191, 0, 0, 0.2);
+    border-color: rgba(79, 70, 229, 0.2);
 }
 
 .homepage-benefit-icon {
@@ -479,14 +479,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(191, 0, 0, 0.1), rgba(154, 0, 0, 0.1));
-    color: #bf0000;
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(124, 58, 237, 0.1));
+    color: #4f46e5;
     margin-bottom: 1.25rem;
     transition: all 0.3s ease;
 }
 
 .homepage-benefit-card:hover .homepage-benefit-icon {
-    background: linear-gradient(135deg, #bf0000, #9a0000);
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
     color: white;
     transform: rotate(-5deg) scale(1.1);
 }
@@ -514,7 +514,7 @@
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 1rem;
-    background: linear-gradient(135deg, #bf0000, #9a0000);
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
     color: white;
     display: flex;
     align-items: center;
@@ -522,7 +522,7 @@
     font-size: 1.5rem;
     font-weight: 700;
     flex-shrink: 0;
-    box-shadow: 0 4px 15px rgba(191, 0, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
 }
 
 /* CTA Section */
@@ -543,8 +543,8 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(191, 0, 0, 0.05) 0%, transparent 70%);
-    /* Red tinge */
+    background: radial-gradient(circle, rgba(79, 70, 229, 0.05) 0%, transparent 70%);
+    /* Purple tinge */
     animation: float-up-down 20s ease-in-out infinite;
 }
 

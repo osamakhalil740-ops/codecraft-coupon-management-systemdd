@@ -10,7 +10,7 @@ import KobonzLogo from '@/components/KobonzLogo';
 
 export default function Header() {
   const { user, signOut } = useAuth();
-  const { t } = useTranslation();
+  const { t, language, setLanguage } = useTranslation();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -19,8 +19,13 @@ export default function Header() {
     router.push('/');
   };
 
+  const toggleLanguage = (lang: 'en' | 'ar') => {
+    setLanguage(lang);
+    setMobileMenuOpen(false); // Close mobile menu if open
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <nav className="container mx-auto px-4 py-4" aria-label="Global">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -50,54 +55,38 @@ export default function Header() {
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden lg:flex lg:gap-x-8">
-            <Link href="/" className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors">
-              {t('nav.home')}
+          <div className="hidden lg:flex lg:gap-x-8 items-center">
+            <Link href="/marketplace" className="text-sm font-medium leading-6 text-gray-600 hover:text-brand-primary transition-colors">
+              {t('nav.marketplace') || 'Marketplace'}
             </Link>
-            <Link href="/coupons" className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors">
-              {t('nav.coupons')}
-            </Link>
-            <Link href="/stores" className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors">
-              {t('nav.stores')}
-            </Link>
-            <Link href="/locations" className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors">
-              {t('nav.locations')}
+            <Link href="/locations" className="text-sm font-medium leading-6 text-gray-600 hover:text-brand-primary transition-colors flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
+              {t('nav.locations') || 'Locations'}
             </Link>
           </div>
 
-          {/* Auth buttons */}
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
-            {user ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors"
-                >
-                  {t('nav.dashboard')}
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors"
-                >
-                  {t('nav.logout')}
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/auth/login"
-                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-brand-primary transition-colors"
-                >
-                  {t('nav.login')}
-                </Link>
-                <Link
-                  href="/auth/register"
-                  className="btn-primary"
-                >
-                  {t('nav.register')}
-                </Link>
-              </>
-            )}
+          {/* Right Section: Language + Auth */}
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-6 items-center">
+            {/* Language Switcher */}
+            <div className="text-sm font-medium text-gray-500 flex items-center gap-2">
+              <button
+                onClick={() => toggleLanguage('en')}
+                className={`px-1.5 py-0.5 rounded text-xs font-bold transition-all ${language === 'en' ? 'bg-blue-100 text-blue-700' : 'hover:text-gray-900 text-gray-400'}`}
+              >
+                EN
+              </button>
+              <span className="text-gray-300">|</span>
+              <button
+                onClick={() => toggleLanguage('ar')}
+                className={`px-1.5 py-0.5 rounded text-xs font-bold transition-all ${language === 'ar' ? 'bg-blue-100 text-blue-700' : 'hover:text-gray-900 text-gray-400'}`}
+              >
+                ع
+              </button>
+            </div>
+
+            <Link href="/auth/login" className="text-sm font-semibold leading-6 text-gray-900 transition-colors">
+              Login / Signup
+            </Link>
           </div>
         </div>
 
@@ -106,72 +95,44 @@ export default function Header() {
           <div className="lg:hidden mt-4 pb-4">
             <div className="space-y-2">
               <Link
-                href="/"
+                href="/marketplace"
                 className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {t('nav.home')}
-              </Link>
-              <Link
-                href="/coupons"
-                className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {t('nav.coupons')}
-              </Link>
-              <Link
-                href="/stores"
-                className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {t('nav.stores')}
+                {t('nav.marketplace') || 'Marketplace'}
               </Link>
               <Link
                 href="/locations"
                 className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {t('nav.locations')}
+                {t('nav.locations') || 'Locations'}
               </Link>
-              
+
+              {/* Mobile Language Switcher */}
+              <div className="py-2 px-3 flex items-center gap-4">
+                <button
+                  onClick={() => toggleLanguage('en')}
+                  className={`text-sm font-bold ${language === 'en' ? 'text-blue-600' : 'text-gray-500'}`}
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => toggleLanguage('ar')}
+                  className={`text-sm font-bold ${language === 'ar' ? 'text-blue-600' : 'text-gray-500'}`}
+                >
+                  العربية
+                </button>
+              </div>
+
               <div className="border-t border-gray-200 pt-4 mt-4">
-                {user ? (
-                  <>
-                    <Link
-                      href="/dashboard"
-                      className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {t('nav.dashboard')}
-                    </Link>
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="block w-full text-left rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    >
-                      {t('nav.logout')}
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href="/auth/login"
-                      className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {t('nav.login')}
-                    </Link>
-                    <Link
-                      href="/auth/register"
-                      className="btn-primary block text-center mt-2"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {t('nav.register')}
-                    </Link>
-                  </>
-                )}
+                <Link
+                  href="/auth/login"
+                  className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Login / Signup
+                </Link>
               </div>
             </div>
           </div>
